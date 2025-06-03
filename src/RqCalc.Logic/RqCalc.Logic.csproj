@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<ItemGroup>
+	  <PackageReference Include="Luxoft.Framework.ExpressionParsers" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Framework.DataBase\Framework.DataBase.csproj" />
+		<ProjectReference Include="..\RqCalc.Domain\RqCalc.Domain.csproj" />
+	</ItemGroup>
+</Project>

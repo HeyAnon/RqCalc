@@ -1,0 +1,20 @@
+using RqCalc.Core;
+using RqCalc.Domain.Persistent._Base;
+
+namespace RqCalc.Domain.Persistent.BonusType;
+
+public interface IBonusType : IPersistentIdentityDomainObjectBase
+{
+    IEnumerable<IBonusTypeVariable> Variables { get; }
+
+    IEnumerable<IBonusTypeStat> Stats { get; }
+        
+
+    bool? IsMultiply { get; }
+
+    bool IsSingle { get; }
+
+    string Template { get; }
+
+    StampQualityInfo StampQuality { get; }
+}

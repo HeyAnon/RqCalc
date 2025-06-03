@@ -1,0 +1,15 @@
+<Solution>
+
+  <Folder Name="/__SolutionItems/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="__SolutionItems/CommonAssemblyInfo.cs" />
+  </Folder>
+  <Project Path="Framework.DataBase/Framework.DataBase.csproj" />
+  
+  <Project Path="RqCalc.Core/RqCalc.Core.csproj" />
+  <Project Path="RqCalc.Domain/RqCalc.Domain.csproj" />
+  <Project Path="RqCalc.Logic/RqCalc.Logic.csproj" />
+  <Project Path="RqCalc.Tests/RqCalc.Tests.csproj" />
+  
+</Solution>

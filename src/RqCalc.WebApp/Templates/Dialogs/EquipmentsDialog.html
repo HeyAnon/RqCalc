@@ -1,0 +1,100 @@
+﻿<div id="equipmentsModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content EquipmentWindow">
+            <div class="modal-body">
+                <div data-bind="with: dialogManager.equipmentsModel">
+
+
+                    <table>
+                        <tr>
+
+                            <td>
+                                <div data-bind="if: allowChangeType">
+                                    <input type="checkbox" data-bind="checked: isWeapon" /> <span class="TextColor">Экипировка/Оружие</span>
+                                </div>
+                            </td>
+
+                            <td class="modalEquipmentGrind">
+                                <span class="modalEquipmentTextColor">Заточка: </span>
+                                <select data-bind="options: upgrades, value: upgrade"></select>
+                            </td>
+                            
+
+                            <td>
+                                <div data-bind="if: singleElixir">
+                                    <input type="checkbox" data-bind="checked: selectedSingleEquipmentElixir" /> <span data-bind="text: singleElixir().name" class="TextColor"></span>
+                                </div>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td class="modalEquipment" rowspan="2">
+                                <div class="layerModalEquipment">
+
+                                    <table class="dialogModalEquipment">
+
+                                        <thead class="dialogTableHeader">
+                                            <tr>
+                                                <th class="dialogCenterHeader EquipmentHeader" colspan="2">Экипировка</th>
+                                                <th class="dialogCenterHeader EquipmentType">Тип</th>
+                                                <th class="dialogCenterHeader EquipmentLevelAttack">Уровень</th>
+                                                <th class="dialogCenterHeader EquipmentLevelAttack" data-bind="if: isWeapon, css: { invisibleColumn: !isWeapon() }">
+                                                    Атака
+                                                </th>
+                                                <th class="dialogCenterHeader EquipmentLevelAttack" data-bind="ifnot: isWeapon, css: { invisibleColumn: isWeapon }">
+                                                    Защита
+                                                </th>
+                                                <th class="dialogCenterHeader EquipmentProtection">Бонусы</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody data-bind="foreach: mainGrid.items">
+                                            <tr data-bind="click: selectRow, css: { selectedRow: isSelectedRow }">
+                                                <td class="dialogRow modalEquipmentIndent">
+                                                    <div class="dialogItemImage" data-bind="style: {'background-image': 'url('+ image +')'}"></div>
+                                                </td>
+                                                <td class="dialogRow2 pad-left" data-bind="text: name"></td>
+                                                <td class="dialogTextCenter" data-bind="text: type.name"></td>
+                                                <td class="dialogTextCenter" data-bind="text: level"></td>
+                                                <td data-bind="if: $parent.isWeapon, css: { invisibleColumn: !$parent.isWeapon() }">
+                                                    <div data-bind="with: info">
+                                                        <span data-bind="text: attack"></span>
+                                                    </div>
+                                                </td>
+                                                <td class="dialogTextCenter" data-bind="ifnot: $parent.isWeapon, css: { invisibleColumn: $parent.isWeapon }">
+                                                    <div data-bind="with: info">
+                                                        <span data-bind="text: defense"></span>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div data-bind="template: { name: 'BonusCollectionControl' }"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                            <td class="modalEquipment" data-bind="foreach: cards" colspan="2">
+                                <div data-bind="template: { name: 'CardControl' }"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="modalEquipmentStamp" colspan="2">
+                                <div class="borderStamp" data-bind="template: { name: 'EquipmentStampControl' }"></div>
+                            </td>
+                        </tr>
+
+                    </table>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button id="equipmentsBtnClear" class="btn btn-primary clearButton" data-dismiss="modal">Очистить</button>
+                    <button id="equipmentsBtnSuccess" class="btn btn-primary" data-dismiss="modal">Выбрать</button>
+                    <button id="equipmentsBtnCancel" class="btn btn-primary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,18 @@
+﻿<div id="talentsModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+
+                <div data-bind="with: dialogManager.talentsModel">
+                    <div data-bind="template: { name: 'TalentBuildControl' }"></div>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="talentsBtnClear" class="btn btn-primary clearButton">Очистить</button>
+                    <button id="talentsBtnSuccess" class="btn btn-primary" data-dismiss="modal">Выбрать</button>
+                    <button id="talentsBtnCancel" class="btn btn-primary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

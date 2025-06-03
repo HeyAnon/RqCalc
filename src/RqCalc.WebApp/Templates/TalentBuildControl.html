@@ -1,0 +1,41 @@
+﻿<table class="general_Table">
+    <tr>
+        <td>
+            <table>
+                <tr class="row_header">
+                    <td class="cell_header_label">Класс:</td>
+                    <td class="cell_header_value"><select data-bind="enable: !$data.isReadonly, options: $data.classes, optionsText: 'offsetName', value: $data.class" class="block_class"></select></td>
+                </tr>
+                <tr class="row_header">
+                    <td class="cell_header_label">Уровень:</td>
+                    <td class="cell_header_value">
+                        <input data-bind="enable: !$data.isReadonly, value: level, attr: { min: minLevel, max: maxLevel }" type="number" />
+                        <button data-bind="enable: !$data.isReadonly, click: maximizeLevel" class="button_number_max">^</button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+
+        <td>
+            <table>
+                <tr>
+                    <td class="cell_code_label"><a target="_blank" data-bind="attr: { href: 'talentBuild.html?code=' + code() }">Код:</a></td>
+                    <td class="cell_code_value" colspan="3"><textarea data-bind="value: code" style="height: 50px; width: 300px;" rows="12"></textarea></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<table>
+    <tbody data-bind="foreach: branches">
+        <tr>
+            <td data-bind="text: branch.name" style="color: white"></td>
+            <td class="ModalTalent">
+                <div data-bind="template: { name: 'TalentBranchBodyControl' }"></div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div data-bind="text: 'Нераспределенные очки талантов: ' + freeTalents()" style="color: limegreen"></div>

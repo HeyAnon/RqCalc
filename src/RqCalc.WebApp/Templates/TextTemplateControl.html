@@ -1,0 +1,5 @@
+﻿<span data-bind="with: template.header">
+    <span data-bind="text: $data + ': ', css: { TextTemplateHeader: !$parent.alt, TextTemplateHeaderAlt: $parent.alt }"></span>
+</span>
+
+<span data-bind="text: template.message, css: { TextTemplateMessage: !alt, TextTemplateMessageAlt: alt }"></span>

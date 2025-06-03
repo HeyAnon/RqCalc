@@ -1,0 +1,39 @@
+﻿<div id="collectionsModal" class="modal fade" tabindex="-1" role="dialog">
+    collection
+    <div class="modal-dialog" role="document">
+        <div class="modal-content ConsumableWindow">
+            <div class="modal-body">
+                
+
+                <div data-bind="with: dialogManager.collectionsModel">
+                    
+                    <div class="container_collection">
+                        <ul class="nav nav-tabs general_tabs_collectedGroup" data-bind="foreach: tabs">
+                            <li><a class="header_tabs" data-toggle="tab" data-bind="text: name, attr: { href: '#' + bindId }"></a></li>
+                        </ul>
+
+                        <div class="tab-content" data-bind="foreach: tabs">
+
+                            <div class="tab-pane fade in" data-bind="attr: { id: bindId }, css: { active : isFirst }">
+                                <div data-bind="template: { name: 'CollectedTabControl' }"></div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <div class="checkbox_selectedAll TextColor" data-bind="with: dialogManager.collectionsModel">
+                        <input type="checkbox" data-bind="checked: selectedAll, indeterminateValue: selectedAll() == null"/>Все элементы<br/>
+                    </div>
+
+                    <button id="collectionsBtnSuccess" class="btn btn-primary" data-dismiss="modal">Выбрать</button>
+                    <button id="collectionsBtnCancel" class="btn btn-primary" data-dismiss="modal">Отмена</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

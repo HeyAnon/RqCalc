@@ -1,0 +1,181 @@
+﻿<div class="general_cell">
+    <div class="container">
+        <ul class="nav nav-tabs general_tabs">
+            <li><a class="header_tabs" data-toggle="tab" href="#statsTab1">Основные</a></li>
+            <li><a class="header_tabs" data-toggle="tab" href="#statsTab2">Дополнительно</a></li>
+            <li><a class="header_tabs" data-toggle="tab" href="#statsTab3">Другое</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="statsTab1" class="tab-pane fade in active">
+                <table class="block_characteristics">
+                    
+                    <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Здоровье', null, 2, false) }"></tr>
+                    <tr class="Secondary_Background" data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('%energyStat%', null, 2, false) }"></tr>
+
+                    <tr><td class="stats_cell specifications" colspan="3">Параметры:</td></tr>
+                    <tr data-bind="template: { name: 'EditStatBodyControl', data: getEditStatByName('%primaryStat%') }"></tr>
+                    <tr class="Secondary_Background" data-bind="template: { name: 'EditStatBodyControl', data: getEditStatByName('Ловкость') }"></tr>
+                    <tr data-bind="template: { name: 'EditStatBodyControl', data: getEditStatByName('Выносливость') }"></tr>
+                    <tr class="Secondary_Background" data-bind="template: { name: 'EditStatBodyControl', data: getEditStatByName('Удача') }"></tr>
+                    
+                    <tr>
+                        <td class="FreeStats_Label stats_cell">
+                            Нераспределено очков:
+                        </td>
+                        <td class="FreeStats_Label stats_cell">
+                            <span data-bind="text: freeStats"></span>
+                        </td>
+                        <td class="stats_cell">
+                            <button data-bind="click: resetStats" class="button_reset">Сброс</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="stats_cell" colspan="3">
+                            <table class="table_div specifications">
+                                <tr>
+                                    <td class="stats_cell">
+                                        <div data-bind="template: { name: 'StatControl', data: getEditStatByName('%primaryStat%') }"></div>
+                                    </td>
+                                    <td class="stats_cell">
+                                        <div data-bind="template: { name: 'StatControl', data: getEditStatByName('Ловкость') }"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="stats_cell">
+                                        <div data-bind="template: { name: 'StatControl', data: getEditStatByName('Выносливость') }"></div>
+                                    </td>
+                                    <td class="stats_cell">
+                                        <div data-bind="template: { name: 'StatControl', data: getEditStatByName('Удача') }"></div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="specifications stats_cell" colspan="5">
+                            Характеристики:
+                        </td>
+                    </tr>
+                    <tr class="Secondary_Background" data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Атака', null, 2, false) }"></tr>
+                    <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Скорость атаки', null, 2, false) }"></tr>
+                    <tr class="Secondary_Background" data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Защита', null, 2, false) }"></tr>
+                    <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Попадание', null, 2, false) }"></tr>
+                    <tr class="Secondary_Background" data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Уворот', null, 2, false) }"></tr>
+                    <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Рейтинг шанса крита', null, 2, false) }"></tr>
+                    <tr class="Secondary_Background" data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Сила крит. удара', null, 2, false) }"></tr>
+                </table>
+            </div>
+            <div id="statsTab2" class="tab-pane fade">
+                <div class="layer">
+                    <table class="block_characteristicslayer">
+                        <tr class="Secondary_Background">
+                            <td class="stats_cell" colspan="2">
+                                Общее
+                            </td>
+                        </tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Получаемый опыт') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Получаемое золото') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Шанс получения предметов') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Скорость передвижения') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Дистанция атаки') }"></tr>
+
+                        <tr class="Secondary_Background">
+                            <td class="stats_cell" colspan="2">
+                                Выживание
+                            </td>
+                        </tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Восстановление ХП в бою') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('%restoreEnergyStat%') }"></tr>
+                        
+                        <tr class="Secondary_Background">
+                            <td class="stats_cell" colspan="2">
+                                PvP (Игрок против игрока)
+                            </td>
+                        </tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон (PvP)', 'Урон') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Устойчивость к урону (PvP)', 'Устойчивость к урону') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Устойчивость к контролю') }"></tr>
+                        
+                        <tr class="Secondary_Background">
+                            <td class="stats_cell" colspan="2">
+                                Элементальный урон
+                            </td>
+                        </tr>
+                        <tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон огнём', 'Огонь') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон водой', 'Вода') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон землёй', 'Земля') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон воздухом', 'Воздух') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон хаосом', 'Хаос') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон ядом', 'Яд') }"></tr>
+                        
+                        <tr class="Secondary_Background">
+                            <td class="stats_cell" colspan="2">Устойчивость к элементам</td>
+                        </tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Устойчивость к атакам огня', 'Огонь') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Устойчивость к атакам воды', 'Вода') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Устойчивость к атакам земли', 'Земля') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Устойчивость к атакам воздуха', 'Воздух') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Устойчивость к атакам хаоса', 'Хаос') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Устойчивость к атакам яда', 'Яд') }"></tr>
+
+                        <tr class="Secondary_Background">
+                            <td class="stats_cell" colspan="2">Устойчивость к урону от рас</td>
+                        </tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Устойчивость к атакам Гуманоидов', 'Гуманоиды') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Устойчивость к атакам Животных', 'Животные') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Устойчивость к атакам Растений', 'Растения') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Устойчивость к атакам Нежити', 'Нежить') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Устойчивость к атакам Орков', 'Орки') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Устойчивость к атакам Земноводных', 'Земноводные') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Устойчивость к атакам Магических существ', 'Магические') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Устойчивость к атакам Бесформенных существ', 'Бесформенные') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Устойчивость к атакам Чудовищ', 'Чудовища') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Устойчивость к атакам Насекомых', 'Насекомые') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Устойчивость к атакам Механизмов', 'Механизмы') }"></tr>
+                     
+                    </table>
+                </div>
+            </div>
+            <div id="statsTab3" class="tab-pane fade">
+                <div class="layer">
+                    <table class="block_characteristics">
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон в секунду') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Сила исцеления') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Сила получаемого исцеления') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Вампиризм') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('EHP') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('EHP (PvP)') }"></tr>
+
+                        <tr class="Secondary_Background">
+                            <td class="stats_cell" colspan="2">Урон по расам:</td>
+                        </tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон по Гуманоидам', 'Гуманоиды') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон по Животным', 'Животные') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон по Растениям', 'Растения') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон по Нежити', 'Нежить') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон по Оркам', 'Орки') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон по Земноводным', 'Земноводные') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон по Магическим существам', 'Магические') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон по Бесформенным существам', 'Бесформенные') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон по Чудовищам', 'Чудовища') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон по Насекомым', 'Насекомые') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон по Механизмам', 'Механизмы') }"></tr>
+
+                        <tr class="Secondary_Background">
+                            <td class="stats_cell" colspan="2">Урон по монстрам с элементом..</td>
+                        </tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон по монстрам Огня', 'Огонь') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон по монстрам Воды', 'Вода') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон по монстрам Земли', 'Земля') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон по монстрам Воздуха', 'Воздух') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон по монстрам Хаоса', 'Хаос') }"></tr>
+                        <tr data-bind="template: { name: 'DisplayStatBodyControl', data: getDisplayStatPair('Урон по монстрам Яда', 'Яд') }"></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

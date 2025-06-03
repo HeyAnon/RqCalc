@@ -1,0 +1,13 @@
+﻿<Window x:Class="Anon.RQ_Calc.WPF.CollectionsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Anon.RQ_Calc.WPF"
+        Title="Коллекции" Background="#30302C" ResizeMode="CanMinimize" FontFamily="Cambria" FontSize="14" WindowStartupLocation="CenterOwner" Height="710" Width="750">
+
+    <local:DialogControl Closed="DialogControl_OnClosed">
+
+        <local:CollectionsControl />
+
+    </local:DialogControl>
+
+</Window>

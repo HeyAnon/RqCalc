@@ -1,0 +1,30 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+using Anon.RQ_Calc.Domain;
+
+namespace Anon.RQ_Calc.DataBase.EntityFramework
+{
+    [Table("ClassLevelHpBonus")]
+    public partial class ClassLevelHpBonus
+    {
+        public virtual Class Class { get; set; }
+
+        public int Value { get; set; }
+
+
+        [Key]
+        [Column(Order = 1)]
+        public int Level { get; set; }
+
+
+        [Key]
+        [Column("Class_Id", Order = 0)]
+        public int? ClassId { get; set; }
+    }
+
+    public partial class ClassLevelHpBonus : IClassLevelHpBonus
+    {
+        IClass IClassObject.Class => this.Class;
+    }
+}

@@ -1,0 +1,95 @@
+﻿<UserControl x:Class="Anon.RQ_Calc.WPF.CardsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Anon.RQ_Calc.WPF"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             mc:Ignorable="d"
+             d:DesignHeight="500"
+             d:DesignWidth="930">
+    
+    <UserControl.Resources>
+        
+        <local:ImageDataObjectConverter x:Key="ImageDataObjectConverter" />
+
+        <local:CardDescriptionConverter x:Key="CardDescriptionConverter" />
+
+        <local:CompositeValueConverter x:Key="IsMultiCardGroupConverter">
+
+            <local:IsTypeConverter Type="local:MultiCardGroup" />
+            <BooleanToVisibilityConverter />
+
+        </local:CompositeValueConverter>
+
+    </UserControl.Resources>
+
+
+
+    <ListView ItemsSource="{Binding CardGroups}" SelectedItem="{Binding CardGroup}" Background="Wheat">
+
+        <i:Interaction.Behaviors>
+            <local:ScrollIntoViewForListBox />
+        </i:Interaction.Behaviors>
+
+        <ListView.View>
+
+            <GridView>
+
+                <GridViewColumn Header="Карта" Width="330">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+
+                            <StackPanel Orientation="Horizontal">
+
+                                <Image Source="{Binding ActiveCard.Type, Converter={StaticResource ImageDataObjectConverter}}" VerticalAlignment="Center" />
+
+                                <TextBlock Text="{Binding Name}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="10 10 2 10" />
+
+                                <ComboBox ItemsSource="{Binding Cards}" Height="20" Margin="10" SelectedItem="{Binding ActiveCard}" Visibility="{Binding DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource IsMultiCardGroupConverter}}" DisplayMemberPath="Group.Value" />
+
+                            </StackPanel>
+
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+
+                <GridViewColumn Header="Бонусы" Width="600">
+
+                    <GridViewColumn.CellTemplate>
+
+                        <DataTemplate>
+
+                            <local:CardDescriptionControl MessageForeground="#042271" BonusForeground="#042271">
+
+                                <local:CardDescriptionControl.Style>
+
+                                    <Style TargetType="FrameworkElement">
+                                        <Setter Property="DataContext">
+                                            <Setter.Value>
+                                                <MultiBinding Converter="{StaticResource CardDescriptionConverter}">
+                                                    <Binding Path="DataContext" RelativeSource="{RelativeSource AncestorType={x:Type FrameworkElement}}" />
+                                                    <Binding Path="DataContext" RelativeSource="{RelativeSource AncestorType={x:Type local:CardsControl}}" />
+                                                    <Binding Path="ActiveCard" />
+                                                </MultiBinding>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+
+                                </local:CardDescriptionControl.Style>
+                                
+                            </local:CardDescriptionControl>
+
+                        </DataTemplate>
+
+                    </GridViewColumn.CellTemplate>
+
+                </GridViewColumn>
+
+            </GridView>
+
+        </ListView.View>
+
+    </ListView>
+
+</UserControl>

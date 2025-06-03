@@ -1,0 +1,129 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+
+using Framework.Core;
+using Framework.Reactive;
+using Framework.Reactive.ObservableRecurse;
+
+using Anon.RQ_Calc.Domain;
+
+namespace Anon.RQ_Calc.WPF
+{
+    public interface ICardGroup
+    {
+        ICard ActiveCard { get; }
+
+        string Name { get; }
+
+        bool IsLegacy { get; }
+
+        IEnumerable<ICard> GetAvailableCards();
+
+        void RefreshSource();
+    }
+
+    public static class CardGroup
+    {
+        public static IEnumerable<ICardGroup> Create(IEnumerable<ICard> cards)
+        {
+            return from card in cards
+
+                   group card by card.Group?.Key ?? Guid.NewGuid().ToString() into g
+
+                   select g.Count() == 1 ? (ICardGroup)new SingleCardGroup(g.Single())
+
+                                         : new MultiCardGroup(g.Key, g);
+        }
+    }
+
+
+    public class SingleCardGroup : ICardGroup
+    {
+        public SingleCardGroup(ICard card)
+        {
+            if (card == null) throw new ArgumentNullException(nameof(card));
+
+            this.ActiveCard = card;
+        }
+
+
+        public ICard ActiveCard { get; set; }
+
+        public string Name => this.ActiveCard.Name;
+
+        public bool IsLegacy => this.ActiveCard.IsLegacy;
+
+
+        public IEnumerable<ICard> GetAvailableCards()
+        {
+            yield return this.ActiveCard;
+        }
+
+        public void RefreshSource()
+        {
+            
+        }
+    }
+
+
+    public class MultiCardGroup : NotifyModelBase, ICardGroup
+    {
+        private readonly ICard[] _baseCards;
+
+
+        public MultiCardGroup(string name, IEnumerable<ICard> cards)
+        {
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
+            if (cards == null) throw new ArgumentNullException(nameof(cards));
+            
+            this.Name = name;
+
+            this._baseCards = cards.OrderBy(card => card.Group.OrderKey).ToArray();
+
+            this.RefreshSource();
+
+            this.SubscribeExplicit(rule => rule.Subscribe(v => v.ShowLegacy, this.RefreshSource));
+        }
+
+
+        public string Name { get; }
+
+        public bool IsLegacy => this._baseCards.All(bc => bc.IsLegacy);
+
+        public ICard ActiveCard
+        {
+            get { return this.GetValue(v => v.ActiveCard); }
+            set { this.SetValue(v => v.ActiveCard, value); }
+        }
+        
+        public bool ShowLegacy
+        {
+            get { return this.GetValue(v => v.ShowLegacy); }
+            set { this.SetValue(v => v.ShowLegacy, value); }
+        }
+
+        public ObservableCollection<ICard> Cards
+        {
+            get { return this.GetValue(v => v.Cards); }
+            private set { this.SetValue(v => v.Cards, value); }
+        }
+
+
+        public IEnumerable<ICard> GetAvailableCards()
+        {
+            return this._baseCards;
+        }
+
+        public void RefreshSource()
+        {
+            this.Cards = this._baseCards.Where(card => !card.IsLegacy || this.ShowLegacy).ToObservableCollection();
+
+            if (this.ActiveCard == null)
+            {
+                this.ActiveCard = this.Cards.LastOrDefault();
+            }
+        }
+    }
+}

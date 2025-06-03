@@ -1,0 +1,47 @@
+﻿<div id="consumablesModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content ConsumableWindow">
+            <div class="modal-body">
+
+                <div data-bind="with: dialogManager.consumablesModel">
+                    <div class="layer2">
+                        <table class="dialogTable consumableTable">
+                            <thead class="dialogTableHeader">
+                            <tr>
+                                <th></th>
+                                <th class="dialogCenterHeader" colspan="2">Расходка</th>
+                                <th class="dialogCenterHeader">Бонусы</th>
+                            </tr>
+                            </thead>
+                            <tbody data-bind="foreach: mainGrid.items">
+                            <tr>
+                                <td class="dialogRow">
+                                    <input type="checkbox" data-bind="checked: active" />
+                                </td>
+                                <td>
+                                    <div class="dialogItemImage" data-bind="style: {'background-image': 'url('+ image +')'}"></div>
+                                </td>
+                                <td class="dialogRow2" data-bind="text: name"></td>
+                                <td class="dialogRow2">
+                                    <div data-bind="template: { name: 'BonusCollectionControl' }"></div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    
+                    <div class="checkbox_selectedAll TextColor" data-bind="with: dialogManager.consumablesModel">
+                        <input type="checkbox" data-bind="checked: selectedAll, indeterminateValue: selectedAll() == null" />Все элементы<br />
+                    </div>
+
+                    <button id="consumablesBtnSuccess" class="btn btn-primary" data-dismiss="modal">Выбрать</button>
+                    <button id="consumablesBtnCancel" class="btn btn-primary" data-dismiss="modal">Отмена</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

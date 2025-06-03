@@ -1,0 +1,38 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+using Anon.RQ_Calc.Domain;
+
+namespace Anon.RQ_Calc.DataBase.EntityFramework
+{
+    [Table("AuraBonus")]
+    public partial class AuraBonus : Bonus
+    {
+        public virtual Aura Aura { get; set; }
+
+        public virtual Version StartVersion { get; set; }
+
+        public virtual Version EndVersion { get; set; }
+
+
+        public decimal? SharedValue { get; set; }
+
+
+        [Key]
+        [Column("Aura_Id", Order = 0)]
+        public int? AuraId { get; set; }
+
+        [Column("StartVersion_Id")]
+        public int? StartVersionId { get; set; }
+
+        [Column("EndVersion_Id")]
+        public int? EndVersionId { get; set; }
+    }
+
+    public partial class AuraBonus : IAuraBonus
+    {
+        IVersion IVersionObject.StartVersion => this.StartVersion;
+
+        IVersion IVersionObject.EndVersion => this.EndVersion;
+    }
+}

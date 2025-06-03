@@ -1,0 +1,18 @@
+﻿<div class="borderWhite dialogRow2">
+    <span data-bind="with: stampVariant">
+        <span data-bind="text: 'Печать: ' + stamp.name, style: { color: color.argb }"></span>
+    </span>
+    <span data-bind="ifnot: stampVariant" style="color: white">
+        Нет печати
+    </span>
+</div>
+
+<div class="pure_table dialogRow3">
+    <div class="pure_row">
+        <div class="EquipmentStampImage pure_cell" data-bind="click: switchStamp, style: {'background-image': 'url('+ equipmentImage() +'), url('+ stampImage() +')'}" style="cursor: pointer"></div>
+
+        <div class="borderWhite pure_cell EquipmentStampText" data-bind="with:stampVariant">
+            <div data-bind="template: { name: 'BonusCollectionControl' }" style="color: peru"></div>
+        </div>
+    </div>
+</div>

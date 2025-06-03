@@ -1,0 +1,18 @@
+﻿<div class="modalEquipmentCards">
+    <div class="dialogRow3" data-bind="with:card">
+        <span data-bind="text:name"></span>
+    </div>
+    <div class="dialogRow3" data-bind="ifnot:card">
+        Нет карты
+    </div>
+
+    <div class="pure_table dialogRow3 EquipmentCardText">
+        <div class="pure_row">
+            <div class="dialogItemImage pure_cell" data-bind="click: switchCard, style: {'background-image': 'url(' + image() + ')'}" style="cursor: pointer"></div>
+
+            <div class="pure_cell" data-bind="with:description">
+                <div data-bind="template: { name: 'CardDescriptionControl', data: { model: $data, alt: false } }"></div>
+            </div>
+        </div>
+    </div>
+</div>

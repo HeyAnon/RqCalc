@@ -1,0 +1,39 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+using Anon.RQ_Calc.Domain;
+
+namespace Anon.RQ_Calc.DataBase.EntityFramework
+{
+    [Table("StatBonus")]
+    public partial class StatBonus
+    {
+        public virtual Stat Stat { get; set; }
+        
+        public virtual BonusType Type { get; set; }
+
+        public virtual Formula Formula { get; set; }
+
+
+        [Column("Formula_Id")]
+        public int? FormulaId { get; set; }
+        
+        [Key]
+        [Column("Stat_Id", Order = 0)]
+        public int? StatId { get; set; }
+
+        [Key]
+        [Column("Type_Id", Order = 1)]
+        public virtual int? TypeId { get; set; }
+    }
+
+
+    public partial class StatBonus : IStatBonus
+    {
+        IStat IStatBonus.Stat => this.Stat;
+
+        IFormula IStatBonus.Formula => this.Formula;
+
+        IBonusType Framework.Persistent.ITypeObject<IBonusType>.Type => this.Type;
+    }
+}

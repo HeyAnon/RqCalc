@@ -1,0 +1,39 @@
+using System;
+using System.IO;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+
+using Framework.Core;
+
+
+using Anon.RQ_Calc.Domain;
+
+namespace Anon.RQ_Calc.WPF
+{
+    public static class BitmapFrameExtensions
+    {
+        public static BitmapFrame TryToBitmapFrame(this Domain.IImageObject dataObject)
+        {
+            return dataObject.Maybe(v => v.Image.ToBitmapFrame());
+        }
+
+        public static BitmapFrame ToBitmapFrame(this IImage image)
+        {
+            if (image == null) throw new ArgumentNullException(nameof(image));
+
+            return BitmapFrame.Create(new MemoryStream(image.Data), BitmapCreateOptions.IgnoreImageCache, BitmapCacheOption.OnLoad);
+        }
+
+        public static BitmapSource ToGray(this BitmapSource source)
+        {
+            var graySource = new FormatConvertedBitmap();
+
+            graySource.BeginInit();
+            graySource.Source = source;
+            graySource.DestinationFormat = PixelFormats.Gray32Float;
+            graySource.EndInit();
+
+            return graySource;
+        }
+    }
+}

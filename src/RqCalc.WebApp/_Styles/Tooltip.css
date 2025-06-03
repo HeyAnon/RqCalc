@@ -1,0 +1,23 @@
+div.pop-container {
+
+}
+
+
+.popover  {
+    background: #30302C!important;
+    color: white;
+    
+    font-family: Cambria;
+
+    /*opacity: 0.9;*/
+
+    max-width: 500px;
+}
+
+.popover.bottom .arrow:after {
+  border-bottom-color: #30302C;
+}
+
+.popover.top > .arrow:after {
+     border-top-color:  #30302C;
+}

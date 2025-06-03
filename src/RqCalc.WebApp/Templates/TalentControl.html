@@ -1,0 +1,37 @@
+﻿<div class="talent pop-container" data-bind="click:switchActive, style: {'background-image': 'url('+ image() +')'}, css: { talentActivated: active, talentNotUltimate: !isUltimate }">
+    <div class="popover" style="display: none">
+        <div style="width: 280px; font-size: 13px">
+            
+            <div data-bind="text: talent.name" style="color: #FFD711"></div>
+
+            <div data-bind="if: talent.active" style="color: LimeGreen">
+                Активное умение
+            </div>
+
+            <div data-bind="ifnot: talent.active" style="color: White">
+                Пассивное умение
+            </div>
+
+            <div data-bind="template: { name: 'TalentDescriptionControl', data: mainDescription }"></div>
+
+            <div data-bind="with: talent.equipmentCondition">
+
+                <hr style="margin: 0" />
+
+                <div data-bind="text: 'Требуется: ' + $data" style="color: silver; margin: 10px 0 10px 0"></div>
+            </div>
+            
+            <div data-bind="with: passiveDescription">
+
+                <div style="color: LimeGreen">
+                    Пассивный бонус
+                </div>
+
+                <div data-bind="template: { name: 'TalentDescriptionControl' }"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>

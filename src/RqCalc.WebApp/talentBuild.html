@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>RQ Calc</title>
+
+    <link rel="shortcut icon" href="_Images/favicon.png">
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <link href="_Styles/Default.css" rel="stylesheet" type="text/css" />
+    <link href="_Styles/Tooltip.css" rel="stylesheet" type="text/css" />
+    <link href="_Styles/Modal.css" rel="stylesheet" type="text/css" />
+    
+    <script src="_Scripts/_Libs/analytics.js"></script>
+
+    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
+    
+    <script src="_Scripts/_Libs/jquery.blockUI.js"></script>
+    <script src="_Scripts/_Libs/ObjHelper.js"></script>
+    <script src="_Scripts/_Libs/Enumerable.js"></script>
+    <script src="_Scripts/_Libs/AsyncMonad.js"></script>
+    <script src="_Scripts/_Libs/LoadTemplates.js"></script>
+    
+    <script src="_Scripts/Models/MainHelper.js"></script>
+    <script src="_Scripts/Models/TextTemplateVariableType.js"></script>
+    
+    <script src="_Scripts/Models/UpdateModel.js"></script>
+    <script src="_Scripts/Models/TalentBranchModel.js"></script>
+    <script src="_Scripts/Models/TalentModel.js"></script>
+    
+    <script src="_Scripts/Models/Dialogs/TalentsWindowModel.js"></script>
+
+    <script src="_Scripts/Models/TalentDescriptionModel.js"></script>
+    <script src="_Scripts/Models/TextTemplateModel.js"></script>
+
+    <script src="_Scripts/TalentBuildApplicationContextBase.js"></script>
+    <script src="_Scripts/TalentBuildApplicationContext.js"></script>
+    <script src="_Scripts/Facade.js"></script>
+    <script src="_Scripts/Facade.Address.js"></script>
+    <script src="_Scripts/TalentBuildCalc.js"></script>
+
+</head>
+
+<body>
+    
+<div class="pure_table header-link">
+    <div class="pure_row">
+        <div class="pure_cell calk-link">
+            <a href="index.html">Калькулятор</a>
+        </div>
+        <div class="pure_cell calk-link">
+            <a href="talentBuild.html">Таланты</a>
+        </div>
+        <div class="pure_cell calk-link">
+            <a href="guildTalentBuild.html">Таланты гильдии</a>
+        </div>
+        <div class="pure_cell dow-link">
+
+                <a href="RqCalcWPF.zip">Скачать офлайн версию калькулятора</a>
+
+        </div>
+    </div>
+</div>
+
+
+<table class="general_Table">
+    <tr>
+        <td data-bind="template: { name: 'TalentBuildControl' }"></td>
+    </tr>
+    <tr>
+        <td>
+            <button class="clearButton" data-bind="click:clear" style="padding: 2px">Очистить</button>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

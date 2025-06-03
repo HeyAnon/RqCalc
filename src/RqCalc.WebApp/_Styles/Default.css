@@ -1,0 +1,827 @@
+﻿body {
+    background-color: #30302C;
+    font-family: Cambria;
+    font-size: 14px;
+}
+
+
+.Equipment_Table {
+    display: table;
+    padding: 0;
+    margin-top: 7px;
+    border-top: none;
+    border-spacing: 5px;
+    border-color: black;
+    background-repeat: no-repeat, no-repeat;
+    background-position: 50% 35%, 50% 97%;
+ }
+
+
+.Equipment_row {
+    display: table-row;
+    /*border-color: #B94A48;*/
+}
+
+.Equipment_cell {
+    display: table-cell;
+    width: 48px;
+    padding: 1px;
+}
+
+.ActiveImageControl {
+    border: 1px solid grey;
+    text-align: right;
+    vertical-align: top;
+    width: 48px;
+    height: 48px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    background-size: cover;
+}
+
+.active_checkbox {
+    position: relative;
+    float: right;
+    margin: -47px 1px 0 0;
+}
+
+.equipment_element{
+    background-repeat: no-repeat;
+    position: relative;
+    float: left;
+    margin: -19px 0 0 -1px;
+}
+
+input[type=checkbox], 
+input[type=radio] {
+    margin: -47px 1px 0 0;
+}
+
+table {
+    border-collapse: separate;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.table_header {
+    display: table;
+    padding: 0;
+    border-spacing: 0;
+}
+
+.row_header {
+    display: table-row;
+}
+
+.cell_header_label {
+    color: white;
+    padding: 0 5px;
+}
+
+.cell_header_value {
+    padding: 2px 5px;
+    border: none;
+}
+
+
+.table_pre_header {
+    display: table;
+    border-bottom: none;
+    width: 325px;
+    padding: 5px 0;
+}
+
+.row_pre_header {
+    display: table-row;
+}
+
+.cell_pre_header {
+    display: table-cell;
+}
+
+input[type='number'] {
+    width: 105px;
+    height: 23px;
+    vertical-align: middle;
+}
+
+.button_number_max {
+    width: 30px;
+    height: 23px;
+    vertical-align: middle;
+}
+
+.block_class {
+    width: 140px;
+}
+
+.button_NewChar {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+
+    background-image: url('../_Images/NewChar.png');
+    background-size: cover;
+}
+.button_About {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+
+    background-image: url('../_Images/About.png');
+    background-size: cover;
+}
+
+.general_Table {
+    margin: auto;
+    border-collapse: separate;
+    margin-top: 15px;
+}
+
+.general_row {
+    display: table-row;
+}
+
+.general_cell {
+    display: table-cell;
+    border: none;
+    vertical-align: top;
+}
+
+input[type='text'] {
+    color: black;
+    width: 550px;
+    margin: 10px 5px 5px 40px;
+}
+
+.container {
+    width: 320px;
+    /*height: 450px;*/
+}
+
+.Secondary_Background {
+    background-color: #DEB887;
+    font-size: 15px;
+}
+
+.layer {
+    overflow: auto;
+    width: 292px;
+    height: 430px;
+}
+
+.specifications {
+    color: #8B4513;
+}
+
+.indent_options {
+    padding-right: 15px;
+}
+
+.general_tabs {
+    font-size: 11px;
+    width: 289px;
+    font-weight: bold;
+}
+
+
+.div_stat {
+    border: 1px solid #8B4513;
+    width: 26px;
+    height: 26px;
+    margin: 5px 3px;
+    float: left;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position:relative;
+}
+
+.table_div {
+    border: 1px solid #8B4513;
+    width: 270px;
+    margin: 4px 12px 2px 2px;
+}
+
+.statProgress {
+    width: 94px;
+    height: 11px;
+    margin: 0 4px 3px 10px;
+}
+
+
+.stats_cell {
+    height: 20px;
+    padding: 0 0;
+    padding-left: 3px;
+    text-align: left;
+}
+
+.stats_cell_row {
+    width: 35px;
+}
+
+.FreeStats_Label {
+    color: #008000;
+}
+
+.tin-tack {
+    width: 22px;
+    height: 22px;
+    margin: 0 2px 2px 0;
+    vertical-align: middle;
+}
+
+.button_reset {
+    width: 70px;
+    /*height: 23px;*/
+    margin-top: 3px;
+}
+
+.max-stat {
+    background: url('../_Images/up.png') no-repeat 50% 50%;
+}
+
+.plus-stat {
+    background: url('../_Images/plus.png') no-repeat 50% 50%;
+}
+
+.minus-stat {
+    background: url('../_Images/minus.png') no-repeat 50% 50%;
+}
+
+
+.cell-1 {
+    width: 45px;
+}
+
+.cell-2 {
+    /*width: 6px;*/
+}
+
+.block_characteristics {
+    border-collapse: collapse;
+    background: #F5DEB3;
+    width: 275px;
+}
+
+.block_characteristicslayer {
+    border-collapse: collapse;
+    background: #F5DEB3;
+    width: 275px;
+}
+
+
+.additionals_header {
+    color: white;
+    display: table-cell;
+    padding-LEFT: 10PX;
+    padding-top: 10px;
+}
+
+.additionals_value {
+    margin: 5px 5px 5px 0;
+    border-spacing: 6px;
+}
+
+
+.additionals_cell {
+    display: table-cell;
+    width: 48px;
+    height: 48px;
+}
+
+.progress {
+    background: #E6E6E6;
+}
+
+
+.toolTipStampLogo {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+}
+
+.toolTipCard {
+    width: 12px;
+    height: 16px;
+    background-repeat: no-repeat;
+    background-size: 12px 16px;
+}
+
+/*-----------------------------------*/
+
+.pure_table {
+    display: table;
+    margin-bottom: 5px;
+}
+
+.pure_row {
+    display: table-row;
+}
+
+.pure_cell {
+    display: table-cell;
+    vertical-align: top;
+}
+
+.table_code {
+    padding: 0;
+    display: inline-block;
+}
+
+.row_code {
+    display: table-row;
+}
+
+.cell_code_label {
+    color: #FFF;
+    display: table-cell;
+    padding: 10px 5px;
+    /*vertical-align: top;*/
+}
+
+.cell_code_value {
+    display: table-cell;
+    padding: 5px;
+    width: 260px;
+}
+
+/*----------------------------------------------------------*/
+
+
+.selectedRow {
+    background-color: #E7E6E6;
+}
+
+.dialogTable {
+    border: 1px solid Wheat;
+    background: Wheat;
+    cursor: default;
+    width: 576px;
+}
+
+.consumableTable {
+    width: 650px;
+}
+
+.collectionTable {
+    width: 650px;
+}
+
+
+.dialogItemImage {
+    width: 64px;
+    height: 64px;
+    background-repeat: no-repeat;
+    background-size: 64px 64px;
+    margin: 0 0 3px 4px;
+}
+
+.nav > li > a {
+    padding: 5px 15px;
+}
+
+.modal-content {
+    width: 625px;
+} 
+
+.EquipmentWindow {
+    width: 1280px;
+    height: 610px;
+}
+
+.modal-footer {
+    padding: 15px 15px 0 0;
+    border: none;
+}
+
+.layer2 {
+    overflow: auto;
+    height: 395px;
+    border-bottom: 1px solid #E5E5E5;
+}
+
+.dialogTableHeader {
+    background-color: white;
+    /*text-align: center; */
+}
+
+.dialogRow {
+    padding-left: 4px;
+    text-align: center;
+}
+
+.dialogRow2 {
+    padding-left: 7px;
+}
+
+.dialogCenterHeader {
+    text-align: center;
+    border-right: 1px solid #E5E5E5;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.dialogImageBonuses {
+    width: 48px;
+    height: 48px;
+    margin: 10px 0 3px 4px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.dialogGuildTalents {
+    width: 330px;
+    margin-left: 20px;
+}
+
+.checkbox_showLegacy {
+    float: left;
+    padding-top: 5px;
+}
+
+.checkbox_selectedAll {
+     float: left;
+     padding-top: 5px;
+ }
+
+
+.header_tabs {
+    color: #E6E6E6;
+}
+
+.header_positive_buff_tabs {
+    font-size: 13px;
+    color: green;
+}
+
+.header_negative_buff_tabs {
+    font-size: 13px;
+    color: red;
+}
+
+.talent {
+    width: 48px;
+    height: 48px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-size: 48px, 48px;
+    border: 2px solid gray;
+
+    /*filter: grayscale(100%);*/
+}
+
+.guildTalent {
+    float: left;
+    position: relative;
+}
+
+.talentNotUltimate {
+    border-radius: 24px;
+}
+
+.talentActivated {
+    border: 2px solid limegreen;
+    /*filter: grayscale(0%);*/
+}
+
+.EquipmentWindow {
+    width: 1280px;
+    height: 600px;  
+    background-color: #30302C;  
+}
+
+.ConsumableWindow {
+    width: 699px;
+}
+
+
+.modal-dialog {
+    width: auto;
+}
+
+.EquipmentStampImage {    
+    width: 150px;
+    height: 150px;
+    display: table;
+    border-top: none;
+    border-color: black;
+    background-repeat: no-repeat, no-repeat;
+    background-position: 50% 50%, 50% 50%;
+    background-size: 36px 36px, 150px 150px;
+}
+
+.dialogModalEquipment {
+    border: 1px solid #F5DEB3;
+    background: #F5DEB3 none repeat scroll 0% 0%;
+    cursor: pointer;
+    width: 843px;    
+}
+
+.layerModalEquipment {
+    overflow: auto;
+    height: 510px;
+    border-bottom: 1px solid #E5E5E5;
+    width: 860px;  
+}
+
+.ModalTalent {
+    padding-left: 100px;
+}
+
+.ModalTalentImage {
+    padding: 3px;
+}
+
+.modalTalentBottom {
+    padding-bottom: 10px;
+}
+
+.modalEquipmentCards {
+    width: 375px;
+    margin-left: 15px;
+    border: 1px solid white;
+}
+
+.modalEquipment {
+    vertical-align: top;
+}
+
+.modalEquipmentGrind {
+    padding-bottom: 6px;
+}
+
+.borderWhite {
+    border: 1px solid white;
+}
+
+.borderStamp {
+    border: 1px solid white;
+    width: 375px;
+    margin-left: 15px;
+}
+
+.dialogRow3 {
+    color: white;
+    padding-left: 7px;
+   /* padding-bottom: 1px; отступ карт*/
+}
+
+.toolTipData {
+    width: 330px
+}
+.dialogLayerBuff {
+    overflow: auto;
+    height: 395px;
+    color: #FFF;
+}
+
+.dialogBuffBonuses {
+    margin-left: 20px;
+    width: 370px;
+    color: #000;
+}
+
+.block_event {
+    float: right;
+    margin-left: 20px;
+}
+
+.EquipmentClear {
+    clear: left;
+}
+	
+.ToolTipHead_cell {
+     float: left;
+     margin-bottom: 8px;
+     margin-top: 8px;
+}
+.ToolTipHead_cell2 {
+     float: right;
+     margin-bottom: 6px;
+     margin-top: 8px;
+}
+
+.ToolTipHeadHpBonus {
+     color: limegreen;
+     margin-bottom: 5px;
+     margin-top: 5px;    
+}
+
+.EquipmentCardText {
+    font-size: 13px;
+}
+
+.EquipmentStampText {
+    border: none;
+    font-size: 13px;
+    padding-left: 5px;
+}
+
+.aboutLogo {
+    background-image: url(../_Images/cat.jpg);
+    background-size: cover;
+    
+    width: 150px;
+    height: 150px;
+}
+
+.aboutText {
+    padding: 10px;
+    color: white
+}
+
+.modalEquipmentStamp {
+    vertical-align: bottom;
+}
+
+.invisibleColumn {
+    display:none;
+}
+
+.EquipmentHeader {
+    width: 290px;
+}
+
+.EquipmentType {
+    width: 130px;
+}
+
+.EquipmentLevelAttack {
+    width: 70px;
+}
+
+.EquipmentProtection {
+    width: 270px;
+}
+
+.dialogTextCenter {
+    text-align: center;
+}
+
+.modalNewPChar {
+    color: white;
+    text-align: center;
+    padding-top: 20px;
+}
+
+.dialogModalLink {
+    text-align: right;
+    float: right;
+}
+
+.dialogLayerTableCards {
+    overflow: auto;
+    border-bottom: 1px solid #E5E5E5;
+    height: 350px;
+
+}	
+	
+.dialogModal_ContentCards {
+    width: 925px;
+}
+	
+.dialogNameCards {
+    width: 200px;
+}
+
+.dialogTableCards {
+    background: #F5DEB3 none repeat scroll 0% 0%;
+    cursor: default;
+    width: 876px;
+    border: 1px solid #F5DEB3;
+}
+
+.topNavigateLink {
+    text-align:left;
+    padding: 10px;
+    font-size: 20px;
+    margin-bottom: -25px;
+}
+
+
+
+.toolTipImg {
+    color: limegreen;
+    margin-left: 3px;
+}
+
+.toolTipStamp {
+    color: rgb(255, 150, 0);
+    padding-left: 4px;
+}
+
+/*.toolTipEquipmentElixir {
+    color: rgb(255, 150, 0);
+    padding-left: 4px;
+}*/
+
+
+.TextTemplateHeader {
+    color: #f3a84a;
+}
+
+.TextTemplateMessage {
+    color: Beige;
+}
+
+.TextTemplateHeaderAlt {
+    color: #f3a84a;
+}
+
+.TextTemplateMessageAlt {
+    color: black;
+}
+
+.modalEquipmentIndent {
+    width: 64px;
+}
+
+
+.container_aura {
+    height: 400px;
+    margin-left: 0;
+}
+.modal-content_aura {
+    width: 750px;
+}
+
+.layer_aura {
+   overflow: auto;
+   height: 380px;
+/*border-bottom: 1px solid #E5E5E5;*/
+}
+.dialogTable_aura {
+    border: 1px solid Wheat;
+    background: Wheat;
+    cursor: default;
+    width: 720px;
+}
+
+.dialogCenterHeader_aura {
+    text-align: center;
+    border-right: 1px solid #E5E5E5;
+}
+.general_tabs_aura {
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.general_tabs_buff {
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.general_tabs_collectedGroup {
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.TextColor {
+    color: white;
+}
+.modalEquipmentTextColor {
+    color: white;
+    padding-left: 20px;
+}
+.modalIndent {
+    padding: 5px;
+}
+.dialogModal {
+    width: 100px;
+}
+.calk-link {
+    padding: 10px;
+    font-size: 20px;
+    float: left;
+}
+.dow-link {
+    padding: 10px;
+    font-size: 20px;
+    float: right;
+}
+.header-link {
+    width: 100%;
+}
+.img_elemen {
+    width: 16px;
+    height: 16px;
+    top: 3px;
+}
+
+.statistic_group {
+    color: black;
+    background: wheat;
+    padding: 15px;
+    margin: 15px;
+    border-color: red;
+    border-width: 22px;
+
+    margin-top: 7px;
+    border-top: none;
+    border-spacing: 5px;
+    border-color: black;
+}

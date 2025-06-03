@@ -1,0 +1,15 @@
+﻿<div class="dialogLayerBuff">
+    <table>
+        <tbody data-bind="foreach: items">
+            <tr>
+                <td>
+                    <div class="dialogImageBonuses" data-bind="style: {'background-image': 'url('+ buff.image +')'}"></div>
+                </td>
+                <td class="dialogRow2" data-bind="text: buff.name"></td>
+                <td>
+                    <select class="dialogBuffBonuses" data-bind="options: stacks, optionsText: 'text', optionsValue: 'index', value: value, optionsCaption: 'Нет'"></select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

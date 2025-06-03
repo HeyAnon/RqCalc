@@ -1,0 +1,66 @@
+using System;
+
+using Framework.Core;
+
+using Framework.Reactive;
+using Framework.Reactive.ObservableRecurse;
+
+using Anon.RQ_Calc.Domain;
+using Anon.RQ_Calc.Logic;
+
+namespace Anon.RQ_Calc.WPF
+{
+    public class EquipmentCardModel : ContextModel
+    {
+        public EquipmentCardModel(IApplicationContext context, int index)
+            : base(context)
+        {
+            this.Index = index;
+
+            this.SubscribeExplicit(rule => rule.Subscribe(model => model.Card, this.UpdateCard));
+
+            this.UpdateCard();
+        }
+
+        public int Index
+        {
+            get { return this.GetValue(v => v.Index); }
+            set { this.SetValue(v => v.Index, value); }
+        }
+
+        public ICard Card
+        {
+            get { return this.GetValue(v => v.Card); }
+            set { this.SetValue(v => v.Card, value); }
+        }
+
+        public bool HasCard
+        {
+            get { return this.GetValue(v => v.HasCard); }
+            private set { this.SetValue(v => v.HasCard, value); }
+        }
+
+        public IImage Image
+        {
+            get { return this.GetValue(v => v.Image); }
+            private set { this.SetValue(v => v.Image, value); }
+        }
+
+        public IImage ToolTipImage
+        {
+            get { return this.GetValue(v => v.ToolTipImage); }
+            private set { this.SetValue(v => v.ToolTipImage, value); }
+        }
+
+
+        private void UpdateCard()
+        {
+            this.HasCard = this.Card != null;
+
+            this.ToolTipImage = this.Card == null ? this.Context.ImageSourceService.GetStaticImage(StaticImageType.EquipmentToolTipCardEmpty)
+                                                  : this.Card.Type.ToolTipImage ?? this.Context.ImageSourceService.GetStaticImage(StaticImageType.EquipmentToolTipCard);
+
+            this.Image = this.Card.Maybe(card => card.Type.Image) ?? this.Context.ImageSourceService.GetStaticImage(StaticImageType.EmptyCard);
+        }
+    }
+}

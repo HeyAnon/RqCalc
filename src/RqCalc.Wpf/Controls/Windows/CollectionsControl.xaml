@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="Anon.RQ_Calc.WPF.CollectionsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Anon.RQ_Calc.WPF"
+             mc:Ignorable="d"
+             d:DesignHeight="600"
+             d:DesignWidth="630">
+
+    <TabControl Background="#30302C" ItemsSource="{Binding Groups}" Loaded="TabControl_OnLoaded">
+
+        <TabControl.ItemTemplate>
+            <DataTemplate>
+                <TextBlock Text="{Binding Group.Name}" />
+            </DataTemplate>
+        </TabControl.ItemTemplate>
+
+        <TabControl.ContentTemplate>
+            <DataTemplate>
+                <local:CollectedGroupControl />
+            </DataTemplate>
+        </TabControl.ContentTemplate>
+
+    </TabControl>
+    
+</UserControl>

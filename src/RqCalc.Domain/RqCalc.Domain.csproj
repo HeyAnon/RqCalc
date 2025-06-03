@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<ItemGroup>
+		<PackageReference Include="Luxoft.Framework.Core" />
+		<PackageReference Include="Luxoft.Framework.Persistent" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\RqCalc.Core\RqCalc.Core.csproj" />
+	</ItemGroup>
+
+</Project>

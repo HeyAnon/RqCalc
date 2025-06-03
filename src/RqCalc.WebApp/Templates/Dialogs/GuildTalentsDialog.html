@@ -1,0 +1,18 @@
+﻿<div id="guildTalentsModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+
+                <div data-bind="with: dialogManager.guildTalentsModel">
+                    <div data-bind="template: { name: 'GuildTalentBuildControl' }"></div>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="guildTalentsBtnClear" class="btn btn-primary clearButton">Очистить</button>
+                    <button id="guildTalentsBtnSuccess" class="btn btn-primary" data-dismiss="modal">Выбрать</button>
+                    <button id="guildTalentsBtnCancel" class="btn btn-primary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
