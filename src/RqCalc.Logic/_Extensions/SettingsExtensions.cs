@@ -1,10 +1,10 @@
 using Framework.Core;
 using Framework.DataBase;
-using RqCalc.Domain.Model;
-using RqCalc.Domain.Model.Impl;
-using RqCalc.Domain.Persistent;
-using RqCalc.Domain.Persistent._Base;
-using RqCalc.Domain.Persistent.Equipment;
+using RqCalc.Domain;
+using RqCalc.Domain._Base;
+using RqCalc.Domain.Equipment;
+using RqCalc.Model;
+using RqCalc.Model.Impl;
 
 namespace RqCalc.Logic._Extensions;
 

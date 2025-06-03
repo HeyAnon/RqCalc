@@ -1,19 +1,21 @@
 using System.Collections.ObjectModel;
+
 using Framework.Core;
 using Framework.HierarchicalExpand;
+using RqCalc.Domain;
+using RqCalc.Domain._Base;
 using RqCalc.Domain._Extensions;
-using RqCalc.Domain.Model;
-using RqCalc.Domain.Model.Impl;
-using RqCalc.Domain.Persistent;
-using RqCalc.Domain.Persistent._Base._Blocks;
-using RqCalc.Domain.Persistent._Legacy;
-using RqCalc.Domain.Persistent.Card;
-using RqCalc.Domain.Persistent.CollectedStatistic;
-using RqCalc.Domain.Persistent.Equipment;
-using RqCalc.Domain.Persistent.GuildTalent;
-using RqCalc.Domain.Persistent.Stamp;
-using RqCalc.Domain.Persistent.Talent;
+using RqCalc.Domain._Legacy;
+using RqCalc.Domain.Card;
+using RqCalc.Domain.CollectedStatistic;
+using RqCalc.Domain.Equipment;
+using RqCalc.Domain.GuildTalent;
+using RqCalc.Domain.Stamp;
+using RqCalc.Domain.Talent;
 using RqCalc.Logic.Serializer._Internal;
+using RqCalc.Model;
+using RqCalc.Model._Extensions;
+using RqCalc.Model.Impl;
 
 namespace RqCalc.Logic.Serializer.Character;
 
@@ -26,7 +28,7 @@ internal class CharacterVersionSerializer
     private readonly IIndexedDict<IState> _states;
     private readonly IIndexedDict<IEvent> _events;
     private readonly IIndexedDict<IElixir> _elixirs;
-    private readonly IIndexedDict<ILegacy_GuildBonus> _guildBonuses;
+    private readonly IIndexedDict<ILegacyGuildBonus> _guildBonuses;
     private readonly IIndexedDict<IConsumable> _consumables;
     private readonly IIndexedDict<IStampColor> _stampColors;
 
@@ -120,7 +122,7 @@ internal class CharacterVersionSerializer
         }
         else
         {
-            this._guildBonuses = IndexedDict.Create(this._context.DataSource.GetFullList<ILegacy_GuildBonus>(), false);
+            this._guildBonuses = IndexedDict.Create(this._context.DataSource.GetFullList<ILegacyGuildBonus>(), false);
         }
             
 

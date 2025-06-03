@@ -1,12 +1,11 @@
 ﻿using Framework.Core;
 using Framework.Core.Serialization;
 using Framework.DataBase;
-using RqCalc.Domain.Model;
-using RqCalc.Domain.Persistent;
-using RqCalc.Domain.Persistent._Base;
-using RqCalc.Domain.Persistent._Base._Blocks;
-using RqCalc.Domain.Persistent.Equipment;
+using RqCalc.Domain;
+using RqCalc.Domain._Base;
+using RqCalc.Domain.Equipment;
 using RqCalc.Logic.ImageSource;
+using RqCalc.Model;
 
 namespace RqCalc.Logic;
 

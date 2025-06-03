@@ -1,8 +1,7 @@
 ﻿using Framework.Core;
 using Framework.HierarchicalExpand;
-using RqCalc.Domain.Persistent;
-using RqCalc.Domain.Persistent.Equipment;
-using RqCalc.Domain.Model;
+
+using RqCalc.Domain.Equipment;
 
 namespace RqCalc.Domain._Extensions;
 
@@ -43,24 +42,6 @@ public static class EquipmentExtensions
 
         return !conditions.Any() || conditions.Contains(@class);
     }
-        
-    public static bool IsAllowed(this IEquipment equipment, ICharacterSourceBase character)
-    {
-        if (character == null) throw new ArgumentNullException(nameof(character));
-            
-        return equipment.Level <= character.Level
-               && (equipment.Gender == null || equipment.Gender == character.Gender)
-               && equipment.IsAllowed(character.Class)
-            //&& equipment.Type.WeaponInfo.Maybe(wi => wi.IsSingleHand)
-            ;
-    }
-
-    public static bool IsAllowed(this IEquipment equipment, ICharacterSourceBase character, IEquipmentSlot slot)
-    {
-        if (character == null) throw new ArgumentNullException(nameof(character));
-
-        return equipment.IsAllowed(character) && (equipment.Type.Slot == slot || (character.Class.AllowExtraWeapon && slot.IsExtraSlot() && equipment.Type.Slot == slot.PrimarySlot ));
-    }
 
     public static bool IsDoubleHand(this IEquipment equipment)
     {
@@ -69,14 +50,7 @@ public static class EquipmentExtensions
         return equipment.Type.WeaponInfo.Maybe(wi => !wi.IsSingleHand);
     }
 
-    public static CharacterEquipmentIdentity GetReverse(this CharacterEquipmentIdentity equipmentIdentity)
-    {
-        if (equipmentIdentity == null) throw new ArgumentNullException(nameof(equipmentIdentity));
-
-        return equipmentIdentity.Slot.GetReverse().Maybe(slot => new CharacterEquipmentIdentity (slot, equipmentIdentity.Index));
-    }
-
-    public static IEquipmentSlot GetReverse(this IEquipmentSlot equipmentSlot)
+    public static IEquipmentSlot? GetReverse(this IEquipmentSlot equipmentSlot)
     {
         if (equipmentSlot == null) throw new ArgumentNullException(nameof(equipmentSlot));
 
@@ -84,8 +58,6 @@ public static class EquipmentExtensions
             : equipmentSlot.IsExtraSlot() ? equipmentSlot.PrimarySlot
             : null;
     }
-
-        
 
     public static bool AllowWeapon(this IEquipmentSlot equipmentSlot, bool? doubleHand)
     {

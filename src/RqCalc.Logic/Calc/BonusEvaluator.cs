@@ -1,4 +1,4 @@
-using RqCalc.Domain.Persistent;
+using RqCalc.Domain;
 
 namespace RqCalc.Logic.Calc;
 

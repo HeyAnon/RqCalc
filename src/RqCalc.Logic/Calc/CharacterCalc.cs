@@ -1,15 +1,15 @@
 ﻿using Framework.Core;
 using Framework.HierarchicalExpand;
 using RqCalc.Core;
+using RqCalc.Domain;
+using RqCalc.Domain._Base;
 using RqCalc.Domain._Extensions;
-using RqCalc.Domain.Model;
-using RqCalc.Domain.Model.Impl;
-using RqCalc.Domain.Persistent;
-using RqCalc.Domain.Persistent._Base._Blocks;
-using RqCalc.Domain.Persistent.BonusType;
-using RqCalc.Domain.Persistent.Equipment;
-using RqCalc.Domain.Persistent.Formula;
+using RqCalc.Domain.BonusType;
+using RqCalc.Domain.Equipment;
+using RqCalc.Domain.Formula;
 using RqCalc.Logic._Extensions;
+using RqCalc.Model;
+using RqCalc.Model._Extensions;
 
 namespace RqCalc.Logic.Calc;
 
@@ -477,12 +477,12 @@ internal partial class CharacterCalc : ICharacterCalc
 
         
 
-    private ICharacterEquipmentData GetEquipmentData(CharacterEquipmentIdentity identity)
+    private ICharacterEquipmentData? GetEquipmentData(CharacterEquipmentIdentity identity)
     {
         return this._character.Equipments.GetValueOrDefault(identity);
     }
 
-    private ICharacterEquipmentData GetReverseEquipmentData(CharacterEquipmentIdentity identity)
+    private ICharacterEquipmentData? GetReverseEquipmentData(CharacterEquipmentIdentity identity)
     {
         return identity.GetReverse().Maybe(this.GetEquipmentData);
     }
@@ -570,7 +570,7 @@ internal partial class CharacterCalc : ICharacterCalc
     }
 
 
-    IClass IClassObject.Class => this._character.Class;
+    IClass IClassBuildSource.Class => this._character.Class;
 
     int ILevelObject.Level => this._character.Level;
 

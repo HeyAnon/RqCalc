@@ -1,5 +1,5 @@
 using RqCalc.Core;
-using RqCalc.Domain.Persistent;
+using RqCalc.Domain;
 
 namespace RqCalc.Logic.Calc;
 

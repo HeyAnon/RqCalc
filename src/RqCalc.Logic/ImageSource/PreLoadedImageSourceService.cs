@@ -1,13 +1,12 @@
 ﻿using Framework.Core;
 using Framework.DataBase;
-using RqCalc.Domain.Persistent;
-using RqCalc.Domain.Persistent._Base;
-using RqCalc.Domain.Persistent._Base._Blocks;
-using RqCalc.Domain.Persistent.Card;
-using RqCalc.Domain.Persistent.Equipment;
-using RqCalc.Domain.Persistent.GuildTalent;
-using RqCalc.Domain.Persistent.Stamp;
-using RqCalc.Domain.Persistent.Talent;
+using RqCalc.Domain;
+using RqCalc.Domain._Base;
+using RqCalc.Domain.Card;
+using RqCalc.Domain.Equipment;
+using RqCalc.Domain.GuildTalent;
+using RqCalc.Domain.Stamp;
+using RqCalc.Domain.Talent;
 
 namespace RqCalc.Logic.ImageSource;
 

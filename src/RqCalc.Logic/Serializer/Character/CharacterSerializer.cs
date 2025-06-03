@@ -1,10 +1,10 @@
 using Framework.Core;
 using Framework.Core.Serialization;
+using RqCalc.Domain;
 using RqCalc.Domain._Extensions;
-using RqCalc.Domain.Model;
-using RqCalc.Domain.Persistent;
 using RqCalc.Logic._Extensions;
 using RqCalc.Logic.Serializer._Internal;
+using RqCalc.Model;
 
 namespace RqCalc.Logic.Serializer.Character;
 

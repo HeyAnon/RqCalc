@@ -1,9 +1,9 @@
-﻿using RqCalc.Domain._Extensions;
-using RqCalc.Domain.Model;
-using RqCalc.Domain.Persistent;
-using RqCalc.Domain.Persistent.Equipment;
-using RqCalc.Domain.Persistent.Stamp;
-using RqCalc.Domain.Persistent.Talent;
+﻿using RqCalc.Domain;
+using RqCalc.Domain._Extensions;
+using RqCalc.Domain.Equipment;
+using RqCalc.Domain.Stamp;
+using RqCalc.Domain.Talent;
+using RqCalc.Model;
 
 namespace RqCalc.Logic._Extensions;
 

@@ -1,6 +1,5 @@
-using RqCalc.Domain.Persistent;
-using RqCalc.Domain.Persistent.Card;
-using RqCalc.Domain.Persistent.Equipment;
+using RqCalc.Domain.Card;
+using RqCalc.Domain.Equipment;
 
 namespace RqCalc.Domain._Extensions;
 

@@ -1,6 +1,6 @@
 using System.Collections;
 using Framework.Core;
-using RqCalc.Domain.Persistent._Base._Blocks;
+using RqCalc.Domain._Base;
 
 namespace RqCalc.Logic.Serializer._Internal;
 

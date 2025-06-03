@@ -1,7 +1,7 @@
-using RqCalc.Domain.Model;
-using RqCalc.Domain.Persistent;
-using RqCalc.Domain.Persistent.GuildTalent;
+using RqCalc.Domain;
+using RqCalc.Domain.GuildTalent;
 using RqCalc.Logic.Serializer._Internal;
+using RqCalc.Model;
 
 namespace RqCalc.Logic.Serializer.GuildTalent;
 

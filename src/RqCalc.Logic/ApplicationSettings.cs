@@ -1,5 +1,5 @@
-using RqCalc.Domain.Model;
-using RqCalc.Domain.Persistent;
+using RqCalc.Domain;
+using RqCalc.Model;
 
 namespace RqCalc.Logic;
 

@@ -1,6 +1,5 @@
-using RqCalc.Domain.Persistent;
-using RqCalc.Domain.Persistent._Base._Blocks;
-using RqCalc.Domain.Persistent.Talent;
+using RqCalc.Domain._Base;
+using RqCalc.Domain.Talent;
 
 namespace RqCalc.Domain._Extensions;
 

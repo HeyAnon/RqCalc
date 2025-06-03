@@ -6,6 +6,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Framework.DataBase\Framework.DataBase.csproj" />
-		<ProjectReference Include="..\RqCalc.Domain\RqCalc.Domain.csproj" />
+		<ProjectReference Include="..\RqCalc.Model\RqCalc.Model.csproj" />
 	</ItemGroup>
 </Project>

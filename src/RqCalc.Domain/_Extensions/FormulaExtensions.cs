@@ -1,4 +1,4 @@
-﻿using RqCalc.Domain.Persistent.Formula;
+﻿using RqCalc.Domain.Formula;
 
 namespace RqCalc.Domain._Extensions;
 

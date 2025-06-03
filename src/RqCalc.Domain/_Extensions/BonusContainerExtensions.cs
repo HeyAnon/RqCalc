@@ -1,6 +1,7 @@
 ﻿using Framework.Persistent;
-using RqCalc.Domain.Persistent._Base._Blocks;
-using RqCalc.Domain.Model.Impl;
+
+using RqCalc.Domain._Base;
+using RqCalc.Domain.VirtualBonus;
 
 namespace RqCalc.Domain._Extensions;
 
@@ -23,7 +24,7 @@ public static class BonusContainerExtensions
         {
             Type = bonus.Type,
 
-            Variables = new List<decimal> { bonus.SharedValue ?? bonus.Value }
+            Variables = [bonus.SharedValue ?? bonus.Value]
         };
     }
 }

@@ -1,8 +1,8 @@
 using Framework.Core;
 using Framework.Core.Serialization;
-using RqCalc.Domain.Model;
-using RqCalc.Domain.Persistent;
+using RqCalc.Domain;
 using RqCalc.Logic.Serializer._Internal;
+using RqCalc.Model;
 
 namespace RqCalc.Logic.Serializer.GuildTalent;
 

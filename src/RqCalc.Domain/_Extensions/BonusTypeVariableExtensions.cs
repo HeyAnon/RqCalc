@@ -1,4 +1,4 @@
-﻿using RqCalc.Domain.Persistent.BonusType;
+﻿using RqCalc.Domain.BonusType;
 
 namespace RqCalc.Domain._Extensions;
 

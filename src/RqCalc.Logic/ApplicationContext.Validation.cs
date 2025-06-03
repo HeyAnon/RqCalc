@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Framework.Core;
 using RqCalc.Domain._Extensions;
-using RqCalc.Domain.Model;
-using RqCalc.Domain.Persistent.GuildTalent;
+using RqCalc.Domain.GuildTalent;
 using RqCalc.Logic._Extensions;
+using RqCalc.Model;
+using RqCalc.Model._Extensions;
 
 namespace RqCalc.Logic;
 
@@ -179,14 +180,13 @@ public partial class ApplicationContext
                     if (stamp.Equipments.Any() && !stamp.Equipments.Select(e => e.Type).Contains(equipment.Type))
                     {
                         throw new ValidationException(
-                            "Invalid Equipment ({0}). Stamp ({1}) not allowed for type: {2}", equipment.Name,
-                            charEquipment.StampVariant.Stamp.Name, equipment.Type.Name);
+                            $"Invalid Equipment ({equipment.Name}). Stamp ({charEquipment.StampVariant.Stamp.Name}) not allowed for type: {equipment.Type.Name}");
                     }
                 }
 
                 if (charEquipment.Cards.Count > this.Settings.GetMaxCardCount(baseSlot))
                 {
-                    throw new ValidationException("Invalid Equipment ({0}). Card count: {1}", equipment.Name, charEquipment.Cards.Count);
+                    throw new ValidationException($"Invalid Equipment ({equipment.Name}). Card count: {charEquipment.Cards.Count}");
                 }
 
                 charEquipment.Cards.Foreach((card, index) =>
@@ -195,12 +195,12 @@ public partial class ApplicationContext
                     {
                         if (card.Type.Element != null && index != 0)
                         {
-                            throw new ValidationException("Invalid Equipment ({0}). Element {1} card must be firts", equipment.Name, card.Name);
+                            throw new ValidationException($"Invalid Equipment ({equipment.Name}). Element {card.Name} card must be firts");
                         }
 
                         if (!card.IsAllowed(equipment.Type, this.LastVersion, equipmentClass))
                         {
-                            throw new ValidationException("Invalid Equipment ({0}). Card slot: {1}", equipment.Name, card.Name);
+                            throw new ValidationException($"Invalid Equipment ({equipment.Name}). Card slot: {card.Name}");
                         }
                     }
                 });
@@ -208,37 +208,34 @@ public partial class ApplicationContext
 
                 if (equipment.PrimaryCard != null && charEquipment.Cards.ElementAt(0) != equipment.PrimaryCard)
                 {
-                    throw new ValidationException("Invalid Equipment ({0}) Primary Card: {1}", equipment.Name, charEquipment.Cards[0]);
+                    throw new ValidationException($"Invalid Equipment ({equipment.Name}) Primary Card: {charEquipment.Cards[0]}");
                 }
             }
         }
 
         if (character.Aura != null)
         {
-            if (!character.Class.IsSubsetOf(character.Aura))
+            if (!character.Class.IsSubsetOf(character.Aura.Class))
             {
-                throw new ValidationException("Invalid Aura ({0}) Class: {1}", character.Aura.Name,
-                    character.Aura.Class.Name);
+                throw new ValidationException($"Invalid Aura ({character.Aura.Name}) Class: {character.Aura.Class.Name}");
             }
 
             if (character.Aura.Level > character.Level)
             {
-                throw new ValidationException("Invalid Aura ({0}) Level: {1}", character.Aura.Name,
-                    character.Aura.Level);
+                throw new ValidationException($"Invalid Aura ({character.Aura.Name}) Level: {character.Aura.Level}");
             }
         }
 
         if (character.SharedAuras.Count > this.Settings.MaxPartySize - 1)
         {
-            throw new ValidationException("Invalid SharedAuras Count: {0}", character.SharedAuras.Count);
+            throw new ValidationException($"Invalid SharedAuras Count: {character.SharedAuras.Count}");
         }
 
         character.Consumables.GetDuplicates().ToList().Pipe(consumableDuplicates =>
         {
             if (consumableDuplicates.Any())
             {
-                throw new ValidationException("Invalid Consumables. Duplicate elements: {0}",
-                    consumableDuplicates.Join(", ", c => c.Name));
+                throw new ValidationException($"Invalid Consumables. Duplicate elements: {consumableDuplicates.Join(", ", c => c.Name)}");
             }
         });
 
@@ -246,8 +243,7 @@ public partial class ApplicationContext
         {
             if (buffDuplicates.Any())
             {
-                throw new ValidationException("Invalid Buffs. Duplicate elements: {0}",
-                    buffDuplicates.Join(", ", b => b.Name));
+                throw new ValidationException($"Invalid Buffs. Duplicate elements: {buffDuplicates.Join(", ", b => b.Name)}");
             }
         });
 
@@ -255,8 +251,7 @@ public partial class ApplicationContext
         {
             if (talentDuplicates.Any())
             {
-                throw new ValidationException("Invalid talents. Duplicate elements: {0}",
-                    talentDuplicates.Join(", ", t => t.Name));
+                throw new ValidationException($"Invalid talents. Duplicate elements: {talentDuplicates.Join(", ", t => t.Name)}");
             }
         });
 
@@ -268,38 +263,36 @@ public partial class ApplicationContext
             {
                 if (buff.Level > character.Level)
                 {
-                    throw new ValidationException("Invalid Buff ({0}) Level: {1}", buff.Name, buff.Level);
+                    throw new ValidationException($"Invalid Buff ({buff.Name}) Level: {buff.Level}");
                 }
 
                 if (!character.Class.IsSubsetOf(buff.Class))
                 {
-                    throw new ValidationException("Invalid Buff ({0}) Class: {1}", buff.Name, buff.Class.Name);
+                    throw new ValidationException($"Invalid Buff ({buff.Name}) Class: {buff.Class.Name}");
                 }
 
                 if (pair.Value < 0 || pair.Value > buff.MaxStackCount)
                 {
-                    throw new ValidationException("Invalid Buff \"{0}\". Out of range stacks: {1}", buff.Name,
-                        pair.Value);
+                    throw new ValidationException($"Invalid Buff \"{buff.Name}\". Out of range stacks: {pair.Value}");
                 }
 
-                if (buff.TalentCondition.Maybe(t => !character.Talents.Contains(t)))
+                if (buff.TalentCondition != null && !character.Talents.Contains(buff.TalentCondition))
                 {
-                    throw new ValidationException("Talent \"{0}\" for buff \"{1}\" not found",
-                        buff.TalentCondition.Name, buff.Name);
+                    throw new ValidationException($"Talent \"{buff.TalentCondition.Name}\" for buff \"{buff.Name}\" not found");
                 }
             }
             else if (buff.Card != null)
             {
                 if (!character.GetCardBuffs().Contains(buff))
                 {
-                    throw new ValidationException("Card for Buff \"{0}\" not found", buff.Name);
+                    throw new ValidationException($"Card for Buff \"{buff.Name}\" not found");
                 }
             }
             else if (buff.Stamp != null)
             {
                 if (!character.GetStampBuffs().Contains(buff))
                 {
-                    throw new ValidationException("Stamp for Buff \"{0}\" not found", buff.Name);
+                    throw new ValidationException($"Stamp for Buff \"{buff.Name}\" not found");
                 }
             }
         }
@@ -327,7 +320,7 @@ public partial class ApplicationContext
 
         if (character.Level < 1 || character.Level > (character.Class.Specialization.MaxLevel ?? this.LastVersion.MaxLevel))
         {
-            throw new ValidationException("Invalid Level. Out of range: {0}", character.Level);
+            throw new ValidationException($"Invalid Level. Out of range: {character.Level}");
         }
 
         character.Talents.GroupBy(tal => tal.Branch).ToList().Pipe(talentBranchGroups =>
@@ -336,10 +329,9 @@ public partial class ApplicationContext
             {
                 var branch = talentBranchGroup.Key;
 
-                if (!character.Class.IsSubsetOf(branch))
+                if (!character.Class.IsSubsetOf(branch.Class))
                 {
-                    throw new ValidationException("Invalid TalentBrunch \"{0}\" Class: {1}", branch.Name,
-                        branch.Class);
+                    throw new ValidationException($"Invalid TalentBrunch \"{branch.Name}\" Class: {branch.Class}");
                 }
 
                 foreach (var pair in branch.Talents.GroupBy(tal => tal.HIndex).OrderBy(g => g.Key)
@@ -349,15 +341,15 @@ public partial class ApplicationContext
                                      .Select(instance => instance.SingleOrDefault(dup => new Exception(
                                          $"To many talents ({dup.Join(", ", t => t.Name)}) in one vertical set {instance.Key}"))),
 
-                                 (defintion, talent) => new { Defintion = defintion, Talent = talent }))
+                                 (definition, talent) => new { Definition = definition, Talent = talent }))
                 {
-                    var definition = pair.Defintion;
+                    var definition = pair.Definition;
 
                     var talent = pair.Talent;
 
                     if (!definition.Contains(talent))
                     {
-                        throw new ValidationException("Invalid Talent \"{0}\" Position", talent.Name);
+                        throw new ValidationException($"Invalid Talent \"{talent.Name}\" Position");
                     }
                 }
             }
@@ -368,7 +360,7 @@ public partial class ApplicationContext
         {
             if (freeTalents < 0)
             {
-                throw new ValidationException("Invalid talents. Overflow usage talents: {0}", -freeTalents);
+                throw new ValidationException($"Invalid talents. Overflow usage talents: {-freeTalents}");
             }
         });
     }
@@ -383,22 +375,24 @@ public partial class ApplicationContext
         {
             if (guildBonusDuplicates.Any())
             {
-                throw new ValidationException("Invalid Guild Talents. Duplicate elements: {0}",
-                    guildBonusDuplicates.Join(", ", gb => gb.Name));
+                throw new ValidationException($"Invalid Guild Talents. Duplicate elements: {guildBonusDuplicates.Join(", ", gb => gb.Name)}");
             }
         });
 
         initializedTalents.GroupBy(pair => pair.Key.Branch, pair => pair.Key)
-            .Where(g => g.Count() > 1).Foreach(overflowGroup => throw new ValidationException($"More one guild talent ({overflowGroup.Join(", ")}) in branch \"{overflowGroup.Key}\""));
+            .Where(g => g.Count() > 1).Foreach(overflowGroup =>
+                throw new ValidationException($"More one guild talent ({overflowGroup.Join(", ")}) in branch \"{overflowGroup.Key}\""));
 
-        var missedBranches = this.DataSource.GetFullList<IGuildTalentBranch>().OrderById().Take(initializedTalents.Count).Except(initializedTalents.Select(t => t.Key.Branch)).ToList();
+        var missedBranches = this.DataSource.GetFullList<IGuildTalentBranch>().OrderById().Take(initializedTalents.Count).Except(initializedTalents.Select(t => t.Key.Branch))
+            .ToList();
 
         if (missedBranches.Any())
         {
             throw new ValidationException($"Missed Talent in Branches: {missedBranches.Join(", ")}");
         }
 
-        foreach (var pair in initializedTalents.OrderBy(tal => tal.Key.Branch.Id).Select((pair, index) => new { Talent = pair.Key, Points = pair.Value, IsLast = index == initializedTalents.Count - 1 }))
+        foreach (var pair in initializedTalents.OrderBy(tal => tal.Key.Branch.Id)
+                     .Select((pair, index) => new { Talent = pair.Key, Points = pair.Value, IsLast = index == initializedTalents.Count - 1 }))
         {
             if (pair.Points <= 0 || pair.Points > pair.Talent.Branch.MaxPoints)
             {

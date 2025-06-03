@@ -1,9 +1,10 @@
 using System.Collections.ObjectModel;
 using Framework.Core;
-using RqCalc.Domain.Model;
-using RqCalc.Domain.Persistent;
-using RqCalc.Domain.Persistent.Talent;
+using RqCalc.Domain;
+using RqCalc.Domain._Extensions;
+using RqCalc.Domain.Talent;
 using RqCalc.Logic.Serializer._Internal;
+using RqCalc.Model;
 
 namespace RqCalc.Logic.Serializer.Talent;
 

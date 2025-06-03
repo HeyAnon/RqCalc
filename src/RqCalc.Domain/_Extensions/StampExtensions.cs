@@ -1,8 +1,7 @@
 ﻿using Framework.HierarchicalExpand;
 using RqCalc.Core;
-using RqCalc.Domain.Persistent;
-using RqCalc.Domain.Persistent.Equipment;
-using RqCalc.Domain.Persistent.Stamp;
+using RqCalc.Domain.Equipment;
+using RqCalc.Domain.Stamp;
 
 namespace RqCalc.Domain._Extensions;
 

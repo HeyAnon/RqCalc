@@ -1,6 +1,5 @@
 ﻿using Framework.Core;
-using RqCalc.Domain.Persistent;
-using RqCalc.Domain.Persistent.Equipment;
+using RqCalc.Domain.Equipment;
 
 namespace RqCalc.Domain._Extensions;
 
@@ -31,6 +30,6 @@ public static class EquipmentSlotExtensions
     {
         if (equipmentSlot == null) throw new ArgumentNullException(nameof(equipmentSlot));
 
-        return equipmentSlot.Types.Any(t => t.WeaponInfo.Maybe(wi => wi.IsSingleHand) && @class.IsSubsetOf(t.Conditions));
+        return equipmentSlot.Types.Any(t => t.WeaponInfo.Maybe(wi => wi.IsSingleHand) && @class.IsSubsetOf(t.Conditions.Select(c => c.Class)));
     }
 }

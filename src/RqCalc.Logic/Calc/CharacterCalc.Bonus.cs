@@ -1,11 +1,10 @@
 ﻿using Framework.Core;
+using RqCalc.Domain._Base;
 using RqCalc.Domain._Extensions;
-using RqCalc.Domain.Model;
-using RqCalc.Domain.Model.Impl;
-using RqCalc.Domain.Persistent._Base._Blocks;
-using RqCalc.Domain.Persistent.BonusType;
-using RqCalc.Domain.Persistent.Card;
-using RqCalc.Domain.Persistent.Equipment;
+using RqCalc.Domain.BonusType;
+using RqCalc.Domain.Card;
+using RqCalc.Domain.Equipment;
+using RqCalc.Model;
 
 namespace RqCalc.Logic.Calc;
 

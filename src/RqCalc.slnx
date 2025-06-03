@@ -10,6 +10,7 @@
   <Project Path="RqCalc.Core/RqCalc.Core.csproj" />
   <Project Path="RqCalc.Domain/RqCalc.Domain.csproj" />
   <Project Path="RqCalc.Logic/RqCalc.Logic.csproj" />
+  <Project Path="RqCalc.Model/RqCalc.Model.csproj" />
   <Project Path="RqCalc.Tests/RqCalc.Tests.csproj" />
   
 </Solution>

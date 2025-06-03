@@ -2,12 +2,11 @@ using Framework.Core;
 using Framework.HierarchicalExpand;
 using Framework.Persistent;
 using RqCalc.Core;
-using RqCalc.Domain.Persistent;
-using RqCalc.Domain.Persistent._Base._Blocks;
-using RqCalc.Domain.Persistent.BonusType;
-using RqCalc.Domain.Persistent.Card;
-using RqCalc.Domain.Persistent.Stamp;
-using RqCalc.Domain.Model.Impl;
+using RqCalc.Domain._Base;
+using RqCalc.Domain.Card;
+using RqCalc.Domain.Stamp;
+using RqCalc.Domain.BonusType;
+using RqCalc.Domain.VirtualBonus;
 
 namespace RqCalc.Domain._Extensions;
 
@@ -67,10 +66,7 @@ public static class BonusExtensions
     {
         if (bonusContainer == null) throw new ArgumentNullException(nameof(bonusContainer));
 
-        return new VirtualBonusBaseContainer
-        {
-            Bonuses = bonusContainer.Bonuses.ToList(bonus => bonus.Multiply(count))
-        };
+        return new VirtualBonusBaseContainer(bonusContainer.Bonuses.ToList(bonus => bonus.Multiply(count)));
     }
 
     public static IBonusBase Multiply(this IBonusBase bonusBase, int count)

@@ -1,5 +1,4 @@
-using RqCalc.Domain.Persistent;
-using RqCalc.Domain.Persistent.CollectedStatistic;
+using RqCalc.Domain.CollectedStatistic;
 
 namespace RqCalc.Domain._Extensions;
 

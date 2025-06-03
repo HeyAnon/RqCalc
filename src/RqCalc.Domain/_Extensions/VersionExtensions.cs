@@ -1,5 +1,4 @@
-﻿using RqCalc.Domain.Persistent;
-using RqCalc.Domain.Persistent._Base._Blocks;
+﻿using RqCalc.Domain._Base;
 
 namespace RqCalc.Domain._Extensions;
 

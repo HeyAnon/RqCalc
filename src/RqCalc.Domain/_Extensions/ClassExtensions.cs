@@ -1,9 +1,7 @@
 ﻿using Framework.Core;
 using Framework.HierarchicalExpand;
-using RqCalc.Domain.Persistent;
-using RqCalc.Domain.Persistent._Base._Blocks;
-using RqCalc.Domain.Persistent.Equipment;
-using RqCalc.Domain.Persistent.Talent;
+using RqCalc.Domain.Equipment;
+using RqCalc.Domain.Talent;
 
 namespace RqCalc.Domain._Extensions;
 
@@ -17,14 +15,6 @@ public static class ClassExtensions
         return set.GetAllChildren().Contains(@class);
     }
 
-    public static bool IsSubsetOf(this IClass @class, IClassObject set)
-    {
-        if (@class == null) throw new ArgumentNullException(nameof(@class));
-        if (set == null) throw new ArgumentNullException(nameof(set));
-
-        return @class.IsSubsetOf(set.Class);
-    }
-
     public static bool IsSubsetOf(this IClass @class, IEnumerable<IClass> sets)
     {
         if (@class == null) throw new ArgumentNullException(nameof(@class));
@@ -32,12 +22,12 @@ public static class ClassExtensions
         return sets.Any(@class.IsSubsetOf);
     }
 
-    public static bool IsSubsetOf(this IClass @class, IEnumerable<IClassObject> sets)
-    {
-        if (@class == null) throw new ArgumentNullException(nameof(@class));
+    //public static bool IsSubsetOf(this IClass @class, IEnumerable<IClassObject> sets)
+    //{
+    //    if (@class == null) throw new ArgumentNullException(nameof(@class));
 
-        return @class.IsSubsetOf(sets.Select(obj => obj.Class));
-    }
+    //    return @class.IsSubsetOf(sets.Select(obj => obj.Class));
+    //}
 
     public static int GetLevelOffset(this IClass @class)
     {
@@ -87,7 +77,7 @@ public static class ClassExtensions
         if (@class == null) throw new ArgumentNullException(nameof(@class));
         if (slot == null) throw new ArgumentNullException(nameof(slot));
 
-        return slot.Types.Any(type => !type.Conditions.Any() || @class.IsSubsetOf(type.Conditions));
+        return slot.Types.Any(type => !type.Conditions.Any() || @class.IsSubsetOf(type.Conditions.Select(c => c.Class)));
     }
 
     public static IEnumerable<ITalentBranch> GetAllTalentBranches(this IClass @class)
