@@ -4,6 +4,7 @@ using RqCalc.Domain._Extensions;
 using RqCalc.Domain.BonusType;
 using RqCalc.Domain.Card;
 using RqCalc.Domain.Equipment;
+using RqCalc.Domain.VirtualBonus;
 using RqCalc.Model;
 
 namespace RqCalc.Logic.Calc;

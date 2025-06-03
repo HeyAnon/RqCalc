@@ -7,6 +7,7 @@ using RqCalc.Domain._Extensions;
 using RqCalc.Domain.BonusType;
 using RqCalc.Domain.Equipment;
 using RqCalc.Domain.Formula;
+using RqCalc.Domain.VirtualBonus;
 using RqCalc.Logic._Extensions;
 using RqCalc.Model;
 using RqCalc.Model._Extensions;
@@ -164,20 +165,16 @@ internal partial class CharacterCalc : ICharacterCalc
                 var dynamicVariables = from variable in multiplicityVars
 
                     let stat = variable.MultiplicityStat
-                                           
+
                     orderby variable.Index
 
                     let multiplicityCount = (int)stats.GetValueOrDefault(stat) / (int)bonus.Variables[1]
 
-                    let actualMultiplicityCount = variable.MultiplicityValue == null ? multiplicityCount
+                    let actualMultiplicityCount = variable.MultiplicityValue == null
+                        ? multiplicityCount
                         : 1 + Math.Min(1, multiplicityCount)
 
-                    select new VirtualBonusVariable
-                    {
-                        Index = variable.Index,
-
-                        Value = (int)bonus.Variables[0] * actualMultiplicityCount
-                    };
+                    select new VirtualBonusVariable(variable.Index, (int)bonus.Variables[0] * actualMultiplicityCount);
 
 
                 var var1 = bonus.Variables.Select((value, index) => (index, value)).ToDictionary();
@@ -412,10 +409,7 @@ internal partial class CharacterCalc : ICharacterCalc
             {
                 pair.Key,
 
-                StampVariant = (IBonusContainer<IBonusBase>)new VirtualBonusBaseContainer
-                {
-                    Bonuses = this.GetStampBonuses(equipmentInfo).ToList()
-                }
+                StampVariant = (IBonusContainer<IBonusBase>)new VirtualBonusBaseContainer(this.GetStampBonuses(equipmentInfo))
             };
 
         return request.ToDictionary(pair => pair.Key, pair => pair.StampVariant);
@@ -433,10 +427,8 @@ internal partial class CharacterCalc : ICharacterCalc
             {
                 pair.Key,
 
-                DynamicBonuses = (IBonusContainer<IBonusBase>)new VirtualBonusBaseContainer
-                {
-                    Bonuses = this.GetEquipmentBonuses(equipmentInfo.Equipment, true).ToList(this.EvaluateDynamicBonus)
-                }
+                DynamicBonuses = (IBonusContainer<IBonusBase>)
+                    new VirtualBonusBaseContainer(this.GetEquipmentBonuses(equipmentInfo.Equipment, true).Select(this.EvaluateDynamicBonus))
             };
 
         return request.ToDictionary(pair => pair.Key, pair => pair.DynamicBonuses);

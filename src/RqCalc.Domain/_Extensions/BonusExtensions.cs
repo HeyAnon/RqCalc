@@ -66,7 +66,7 @@ public static class BonusExtensions
     {
         if (bonusContainer == null) throw new ArgumentNullException(nameof(bonusContainer));
 
-        return new VirtualBonusBaseContainer(bonusContainer.Bonuses.ToList(bonus => bonus.Multiply(count)));
+        return new VirtualBonusBaseContainer(bonusContainer.Bonuses.Select(bonus => bonus.Multiply(count)));
     }
 
     public static IBonusBase Multiply(this IBonusBase bonusBase, int count)

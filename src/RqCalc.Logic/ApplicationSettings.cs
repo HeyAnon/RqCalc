@@ -73,7 +73,7 @@ public class ApplicationSettings : IApplicationSettings
 
     public IStat HpStat { get; }
 
-    public IVersion CustomLastVersion { get; }
+    public IVersion? CustomLastVersion { get; }
 }
 
 public interface IApplicationSettings : ISettings

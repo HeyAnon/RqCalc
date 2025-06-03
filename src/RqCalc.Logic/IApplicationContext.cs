@@ -1,6 +1,7 @@
 ﻿using Framework.Core;
 using Framework.Core.Serialization;
 using Framework.DataBase;
+
 using RqCalc.Domain;
 using RqCalc.Domain._Base;
 using RqCalc.Domain.Equipment;

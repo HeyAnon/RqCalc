@@ -12,6 +12,7 @@ using RqCalc.Domain.Equipment;
 using RqCalc.Domain.GuildTalent;
 using RqCalc.Domain.Stamp;
 using RqCalc.Domain.Talent;
+using RqCalc.Domain.VirtualBonus;
 using RqCalc.Logic.Serializer._Internal;
 using RqCalc.Model;
 using RqCalc.Model._Extensions;
@@ -201,9 +202,9 @@ internal class CharacterVersionSerializer
 
                 where aura.Contains(this.Version)
 
-                let bc1 = new VirtualBonusBaseContainer { Bonuses = aura.GetBonuses(this.Version, true, false).ToList() }
+                let bc1 = new VirtualBonusBaseContainer (aura.GetBonuses(this.Version, true, false))
 
-                let bc2 = new VirtualBonusBaseContainer { Bonuses = aura.GetBonuses(this.Version, true, true).ToList() }
+                let bc2 = new VirtualBonusBaseContainer (aura.GetBonuses(this.Version, true, true))
 
                 where bc1.Bonuses.Any() || bc2.Bonuses.Any()
 
