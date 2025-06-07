@@ -1,17 +1,14 @@
 using System.Linq.Expressions;
 using System.Reflection;
+
 using Framework.Core;
 
 namespace Framework.DataBase._Extensions;
 
 public static class DataSourceExtensions
 {
-    private class RootState<T> : Dictionary<Type, Dictionary<T, T>>
-    {
-        public RootState(IDictionary<Type, Dictionary<T, T>> dictionary) : base(dictionary)
-        {
-        }
-    }
+    private class RootState<T>(IDictionary<Type, Dictionary<T, T>> dictionary) : Dictionary<Type, Dictionary<T, T>>(dictionary)
+        where T : notnull;
 
     public static IDataSource<TPersistentDomainObjectBase> LoadToMemory<TPersistentDomainObjectBase>(this IDataSource<TPersistentDomainObjectBase> dataSource, MemoryTypeCache<TPersistentDomainObjectBase> memoryTypeCache)
         where TPersistentDomainObjectBase : class
@@ -20,7 +17,7 @@ public static class DataSourceExtensions
         if (memoryTypeCache == null) throw new ArgumentNullException(nameof(memoryTypeCache));
             
 
-        var createDictMethod = typeof(DataSourceExtensions).GetMethod(nameof(CreateDict), BindingFlags.Static | BindingFlags.NonPublic);
+        var createDictMethod = typeof(DataSourceExtensions).GetMethod(nameof(CreateDict), BindingFlags.Static | BindingFlags.NonPublic)!;
 
 
         var lists = memoryTypeCache.ImplTypes.ToList(pair => new
@@ -36,16 +33,17 @@ public static class DataSourceExtensions
 
         foreach (var pair in lists)
         {
-            var method = typeof(InitializeHelper<,,>).MakeGenericType(pair.DomainType, pair.ImplType, typeof(TPersistentDomainObjectBase)).GetMethod("Initialize", BindingFlags.Static | BindingFlags.Public);
+            var method = typeof(InitializeHelper<,,>).MakeGenericType(pair.DomainType, pair.ImplType, typeof(TPersistentDomainObjectBase))
+                .GetMethod("Initialize", BindingFlags.Static | BindingFlags.Public)!;
 
-            method.Invoke(null, new object[] { rootDict });
+            method.Invoke(null, [rootDict]);
         }
 
         InitializeHelper<TPersistentDomainObjectBase, TPersistentDomainObjectBase, TPersistentDomainObjectBase>.Initialize(rootDict);
 
         var implTypeResolver = TypeResolverHelper.Create(lists.ToDictionary(pair => pair.DomainType, pair => pair.ImplType));
 
-        return new MemoryDataSource<TPersistentDomainObjectBase>(implTypeResolver, rootDict.Values.SelectMany(v => v.Values));
+        return new MemCachedDataSource<TPersistentDomainObjectBase>(implTypeResolver, rootDict.Values.SelectMany(v => v.Values));
     }
 
 

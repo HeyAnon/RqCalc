@@ -1,5 +1,4 @@
 using Framework.Core;
-using RqCalc.Core;
 using RqCalc.Domain;
 using RqCalc.Domain._Base;
 using RqCalc.Domain.GuildTalent;
@@ -44,7 +43,7 @@ public static class TextTemplateExtensions
         {
             Body = talent.GetTextTemplate(points),
 
-            Buffs = new ITextTemplate[0]
+            Buffs = []
         };
     }
 
@@ -55,7 +54,11 @@ public static class TextTemplateExtensions
         return new TextTemplate
         {
             Message = talent.GetDescriptionTemplate(),
-            Variables = talent.Variables.Where(var => var.Points == points).ToArray(var => new TextTemplateVariable { Index = var.Index, Type = TextTemplateVariableType.Const, Value = var.Value })
+            Variables = talent
+                .Variables
+                .Where(var => var.Points == points)
+                .Select(var => new TextTemplateVariable { Index = var.Index, Type = TextTemplateVariableType.Const, Value = var.Value })
+                .ToList<ITextTemplateVariableBase>()
         };
     }
 
@@ -66,7 +69,7 @@ public static class TextTemplateExtensions
         return talent.Description ?? talent.Bonuses.Single().Type.Template;
     }
 
-    public static ITalentDescription GetPassiveDescription(this ITalent talent)
+    public static ITalentDescription? GetPassiveDescription(this ITalent talent)
     {
         if (talent == null) throw new ArgumentNullException(nameof(talent));
 
@@ -82,15 +85,15 @@ public static class TextTemplateExtensions
     public static ITextTemplate GetMainTextTemplate(this ITalent talent)
     {
         if (talent == null) throw new ArgumentNullException(nameof(talent));
-            
+
         return new TextTemplate
         {
             Message = talent.Description,
-            Variables = talent.Variables.ToArray()
+            Variables = talent.Variables.ToList<ITextTemplateVariableBase>()
         };
     }
 
-    public static ITextTemplate GetPassiveTextTemplate(this ITalent talent)
+    public static ITextTemplate? GetPassiveTextTemplate(this ITalent talent)
     {
         if (talent == null) throw new ArgumentNullException(nameof(talent));
 
@@ -103,7 +106,7 @@ public static class TextTemplateExtensions
             return new TextTemplate
             {
                 Message = talent.PassiveDescription,
-                Variables = talent.Variables.ToArray()
+                Variables = talent.Variables.ToList<ITextTemplateVariableBase>()
             };
         }
     }
@@ -122,7 +125,7 @@ public static class TextTemplateExtensions
         {
             Header = buffElement.Description.IsStack ? $"{template.Header}{multiplyCoeffStr}" : template.Header,
             Message = template.Message,
-            Variables = template.Variables.ToArray()
+            Variables = template.Variables.ToList()
         };
     }
 
@@ -137,21 +140,24 @@ public static class TextTemplateExtensions
 
             Message = buffDescription.Template,
 
-            Variables = buffDescription.Variables.ToDictionary(var => var.Index).ToArrayI()
+            Variables = buffDescription.Variables.ToDictionary(var => var.Index).Values.ToList<ITextTemplateVariableBase>()
         };
     }
 
     public static ITextTemplate Multiply(this ITextTemplate template, decimal value)
     {
         if (template == null) throw new ArgumentNullException(nameof(template));
-            
+
         return new TextTemplate
         {
             Header = template.Header,
 
             Message = template.Message,
 
-            Variables = template.Variables.ToArray(v => new VirtualTextTemplateVariableBase { Type = v.Type, Value = v.Value * value })
+            Variables = template
+                .Variables
+                .Select(v => new VirtualTextTemplateVariableBase { Type = v.Type, Value = v.Value * value })
+                .ToList<ITextTemplateVariableBase>()
         };
     }
 }

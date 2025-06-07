@@ -1,7 +1,6 @@
 using Framework.Core;
 using Framework.HierarchicalExpand;
 using Framework.Persistent;
-using RqCalc.Core;
 using RqCalc.Domain._Base;
 using RqCalc.Domain.Card;
 using RqCalc.Domain.Stamp;
@@ -99,12 +98,12 @@ public static class BonusExtensions
         {
             var mainVariable = cardBonus.Variables.Single();
 
-            return new List<decimal>
-            {
+            return
+            [
                 mainVariable.Value,
                 cardBonus.UpgradeEquipmentInfo.Step,
                 cardBonus.UpgradeEquipmentInfo.Condition
-            };
+            ];
         }
         else
         {

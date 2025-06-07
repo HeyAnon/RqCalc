@@ -1,5 +1,4 @@
-﻿using RqCalc.Core;
-using RqCalc.Domain._Base;
+﻿using RqCalc.Domain._Base;
 
 namespace RqCalc.Domain.Equipment;
 

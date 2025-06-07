@@ -4,7 +4,7 @@ namespace RqCalc.Model;
 
 public class TextTemplate : ITextTemplate
 {
-    public ITextTemplateVariableBase[] Variables { get; set; }
+    public List<ITextTemplateVariableBase> Variables { get; set; } = new();
 
 
     public string Header { get; set; }

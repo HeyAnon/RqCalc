@@ -1,5 +1,5 @@
 ﻿using Framework.Persistent;
-using RqCalc.Core;
+
 using RqCalc.Domain._Base;
 using RqCalc.Domain.Card;
 

@@ -6,7 +6,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\RqCalc.Core\RqCalc.Core.csproj" />
 	  <ProjectReference Include="..\RqCalc.Domain\RqCalc.Domain.csproj" />
 	</ItemGroup>
 

@@ -1,0 +1,5 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\RqCalc.Application\RqCalc.Application.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+
 using Framework.Core;
+
 using RqCalc.Domain;
 using RqCalc.Domain._Extensions;
 using RqCalc.Domain.CollectedStatistic;
@@ -10,10 +12,10 @@ namespace RqCalc.Model.Impl;
 public class CharacterSource : TalentBuildSource, ICharacterSource, IEquatable<CharacterSource>
 {
     [Required]
-    public IGender Gender { get; set; }
+    public IGender Gender { get; set; } = null!;
 
     [Required]
-    public IState State { get; set; }
+    public IState State { get; set; } = null!;
 
     public IEvent? Event { get; set; }
 
@@ -31,7 +33,7 @@ public class CharacterSource : TalentBuildSource, ICharacterSource, IEquatable<C
 
     public IElixir? Elixir { get; set; }
 
-    public List<IConsumable> Consumables { get; set; } = new();
+    public List<IConsumable> Consumables { get; set; } = [];
 
     public Dictionary<IGuildTalent, int> GuildTalents { get; set; } = new();
 
@@ -41,7 +43,7 @@ public class CharacterSource : TalentBuildSource, ICharacterSource, IEquatable<C
 
     public Dictionary<IBuff, int> Buffs { get; set; } = new();
 
-    public List<ICollectedItem> CollectedItems { get; set; } = new();
+    public List<ICollectedItem> CollectedItems { get; set; } = [];
 
 
     public bool EnableElixir { get; set; }

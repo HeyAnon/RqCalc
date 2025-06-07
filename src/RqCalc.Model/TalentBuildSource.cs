@@ -7,13 +7,12 @@ namespace RqCalc.Model;
 
 public class TalentBuildSource : ITalentBuildSource, IEquatable<TalentBuildSource>
 {
-    [Required]
-    public IClass Class { get; set; }
+    [Required] public IClass Class { get; set; } = null!;
 
     //[IntValueValidator(Min = 1, Max = 60)]
     public int Level { get; set; }
 
-    public List<ITalent> Talents { get; set; } = new List<ITalent>();
+    public List<ITalent> Talents { get; set; } = [];
 
 
     IReadOnlyList<ITalent> ITalentBuildSource.Talents => this.Talents;

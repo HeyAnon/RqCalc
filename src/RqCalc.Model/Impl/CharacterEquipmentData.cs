@@ -8,7 +8,7 @@ public class CharacterEquipmentData : ICharacterEquipmentData, IEquatable<Charac
 {      
     public CharacterEquipmentData()
     {
-        this.Cards = new List<ICard>();
+        this.Cards = [];
         this.Active = true;
     }
 

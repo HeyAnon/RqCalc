@@ -1,4 +1,3 @@
-using RqCalc.Core;
 using RqCalc.Domain._Base;
 
 namespace RqCalc.Domain.BonusType;

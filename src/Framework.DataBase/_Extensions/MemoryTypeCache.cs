@@ -7,9 +7,9 @@ public class MemoryTypeCache<TPersistentDomainObjectBase>
 {
     private readonly ITypeSource _typeSource;
 
-    private readonly object _locker = new object();
+    private readonly Lock _locker = new();
 
-    private IReadOnlyDictionary<Type, Type> _implTypes;
+    private IReadOnlyDictionary<Type, Type>? _implTypes;
 
 
     public MemoryTypeCache(ITypeSource typeSource)
@@ -36,16 +36,10 @@ public class MemoryTypeCache<TPersistentDomainObjectBase>
         {
             lock (this._locker)
             {
-                if (this._implTypes == null)
-                {
-                    this._implTypes = this._typeSource.GetTypes().ToDictionary(
-
-                        type => type,
-
-                        type => this.TypeBuilder.GetAnonymousType(new InterfaceTypeMap(type, $"Impl{type.Name.Skip("I")}", type.GetAllInterfaceProperties().ToDictionary(property => property.Name, property => property.PropertyType))));
-                }
-
-                return this._implTypes;
+                return this._implTypes ??= this._typeSource.GetTypes().ToDictionary(
+                    type => type,
+                    type => this.TypeBuilder.GetAnonymousType(new InterfaceTypeMap(type, $"Impl{type.Name.Skip("I")}",
+                        type.GetAllInterfaceProperties().ToDictionary(property => property.Name, property => property.PropertyType))));
             }
         }
     }

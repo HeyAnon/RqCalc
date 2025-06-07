@@ -1,4 +1,4 @@
-using RqCalc.Core;
+using RqCalc.Domain;
 using RqCalc.Domain._Base;
 
 namespace RqCalc.Model;

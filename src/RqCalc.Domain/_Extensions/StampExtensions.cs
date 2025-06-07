@@ -1,5 +1,4 @@
 ﻿using Framework.HierarchicalExpand;
-using RqCalc.Core;
 using RqCalc.Domain.Equipment;
 using RqCalc.Domain.Stamp;
 

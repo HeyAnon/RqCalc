@@ -5,7 +5,7 @@ namespace RqCalc.Model;
 
 public class GuildTalentBuildSource : IGuildTalentBuildSource, IEquatable<GuildTalentBuildSource>
 {
-    public Dictionary<IGuildTalent, int> GuildTalents { get; set; } = new Dictionary<IGuildTalent, int>();
+    public Dictionary<IGuildTalent, int> GuildTalents { get; set; } = new();
 
 
     IReadOnlyDictionary<IGuildTalent, int> IGuildTalentBuildSource.GuildTalents => this.GuildTalents;
