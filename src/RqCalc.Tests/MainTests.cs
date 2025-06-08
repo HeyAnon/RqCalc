@@ -110,11 +110,11 @@ public class MainTests : TestBase
 
                 group @class by equip;
 
-            var equip63_d = request.ToList();
+            var equip63D = request.ToList();
 
-            Assert.AreEqual(equip63_d.Count, idTypes.Length * 4);
+            Assert.AreEqual(equip63D.Count, idTypes.Length * 4);
 
-            foreach (var @classGroup in equip63_d)
+            foreach (var @classGroup in equip63D)
             {
                 if (@classGroup.Count() != 2)
                 {
@@ -140,11 +140,11 @@ public class MainTests : TestBase
 
                 group @class by equip;
 
-            var equip65_d = request.ToList();
+            var equip65D = request.ToList();
 
-            Assert.AreEqual(equip65_d.Count, idTypes.Length * 8);
+            Assert.AreEqual(equip65D.Count, idTypes.Length * 8);
 
-            foreach (var @classGroup in equip65_d)
+            foreach (var @classGroup in equip65D)
             {
                 if (@classGroup.Count() != 1)
                 {

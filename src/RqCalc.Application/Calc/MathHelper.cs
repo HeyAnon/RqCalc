@@ -21,15 +21,15 @@ public static class MathHelper
     {
         var period = (maxCoef - minCoef) / (maxLevel - minLevel);
 
-        var delta_level = Math.Max(0, internalLevel - minLevel);
+        var deltaLevel = Math.Max(0, internalLevel - minLevel);
 
-        var r_points = (minCoef + period * delta_level) * baseValue;
+        var rPoints = (minCoef + period * deltaLevel) * baseValue;
 
-        var c_points = Math.Ceiling(r_points);
+        var cPoints = Math.Ceiling(rPoints);
 
-        if (c_points - r_points < 0.98M)
-            return c_points;
+        if (cPoints - rPoints < 0.98M)
+            return cPoints;
         else
-            return Math.Truncate(r_points);
+            return Math.Truncate(rPoints);
     }
 }

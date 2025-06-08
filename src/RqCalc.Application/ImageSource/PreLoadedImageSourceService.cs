@@ -10,27 +10,25 @@ using RqCalc.Domain.Talent;
 
 namespace RqCalc.Application.ImageSource;
 
-public class PreLoadedImageSourceService : IImageSourceService
+public class PreLoadedImageSourceService(
+    ITypeResolver<string> typeResolver,
+    IDataSource<IPersistentDomainObjectBase> dataSource) : IImageSourceService
 {
-    private readonly IDictionary<string, IImageSource> _сache;
+    private readonly IDictionary<string, IImageSource> cache = CreateCache(typeResolver, dataSource).ToDictionary();
 
-
-    public PreLoadedImageSourceService(IDataSource<IPersistentDomainObjectBase> dbSession)
+    private static IEnumerable<ValueTuple<string, IImageSource>> CreateCache(ITypeResolver<string> typeResolver, IDataSource<IPersistentDomainObjectBase> dataSource)
     {
-        if (dbSession == null) throw new ArgumentNullException(nameof(dbSession));
-
-        this._сache = this.CreateCache(dbSession).ToDictionary();
-    }
-
-    private IEnumerable<KeyValuePair<string, IImageSource>> CreateCache(IDataSource<IPersistentDomainObjectBase> dbSession)
-    {
-        var createImageSourcePairMethod = new Func<IDataSource<IPersistentDomainObjectBase>, Func<IPersistentIdentityDomainObjectBase, IImage>, string, KeyValuePair<string, IImageSource>>(this.CreateImageSourcePair).Method.GetGenericMethodDefinition();
+        var createImageSourcePairMethod =
+            new Func<IDataSource<IPersistentDomainObjectBase>, Func<IPersistentIdentityDomainObjectBase, IImage>, string, ValueTuple<string, IImageSource>>(CreateImageSourcePair)
+                .Method.GetGenericMethodDefinition();
 
         var property = ExpressionHelper.Create((IImageObject source) => source.Image).GetProperty();
 
         var exceptTypes = new[] { typeof(IImageObject), typeof(IStaticImage), typeof(IImageDirectoryBase) };
 
-        var request = from type in TypeSource.FromSample<IPersistentIdentityDomainObjectBase>().GetSourceTypes().Except(exceptTypes)
+        var request =
+
+            from type in typeResolver.GetTypes().Except(exceptTypes)
 
             where typeof(IImageObject).IsAssignableFrom(type)
 
@@ -39,42 +37,39 @@ public class PreLoadedImageSourceService : IImageSourceService
             let lambda = lambdaExpr.Compile()
 
             select createImageSourcePairMethod.MakeGenericMethod(type)
-                .Invoke<KeyValuePair<string, IImageSource>>(this, dbSession, lambda, default(string));
+                .Invoke<ValueTuple<string, IImageSource>>(null, dataSource, lambda, default(string));
 
         foreach (var item in request)
         {
             yield return item;
         }
 
-        yield return "StaticImage".ToKeyValuePair(this.CreateImageSource(dbSession, (IStaticImage v) => v));
-        yield return "GrayTalent".ToKeyValuePair(this.CreateImageSource(dbSession, (ITalent v) => v.GrayImage));
-        yield return "GrayGuildTalent".ToKeyValuePair(this.CreateImageSource(dbSession, (IGuildTalent v) => v.GrayImage));
-        yield return "Costume".ToKeyValuePair(this.CreateImageSource(dbSession, (IEquipment v) => v.CostumeImage));
-        yield return "CardTypeToolTip".ToKeyValuePair(this.CreateImageSource(dbSession, (ICardType v) => v.ToolTipImage));
-        yield return "BigStampColor".ToKeyValuePair(this.CreateImageSource(dbSession, (IStampColor v) => v.BigImage));
+        yield return ("StaticImage", CreateImageSource(dataSource, (IStaticImage v) => v));
+        yield return ("GrayTalent", CreateImageSource(dataSource, (ITalent v) => v.GrayImage));
+        yield return ("GrayGuildTalent", CreateImageSource(dataSource, (IGuildTalent v) => v.GrayImage));
+        yield return ("Costume", CreateImageSource(dataSource, (IEquipment v) => v.CostumeImage));
+        yield return ("CardTypeToolTip", CreateImageSource(dataSource, (ICardType v) => v.ToolTipImage));
+        yield return ("BigStampColor", CreateImageSource(dataSource, (IStampColor v) => v.BigImage));
     }
 
-
-    private KeyValuePair<string, IImageSource> CreateImageSourcePair<T>(IDataSource<IPersistentDomainObjectBase> dbSession, Func<T, IImage> lambda, string name = null)
+    private static ValueTuple<string, IImageSource> CreateImageSourcePair<T>(IDataSource<IPersistentDomainObjectBase> dataSource, Func<T, IImage> lambda, string? name = null)
         where T : class, IPersistentIdentityDomainObjectBase
     {
-        var imageSource = this.CreateImageSource(dbSession, lambda);
+        var imageSource = CreateImageSource(dataSource, lambda);
 
-        return (name ?? typeof(T).Name.Skip("I", true)).ToKeyValuePair(imageSource);
+        return (name ?? typeof(T).Name.Skip("I", true), imageSource);
     }
 
-    private IImageSource CreateImageSource<T>(IDataSource<IPersistentDomainObjectBase> dbSession, Func<T, IImage> lambda)
+    private static IImageSource CreateImageSource<T>(IDataSource<IPersistentDomainObjectBase> dataSource, Func<T, IImage> lambda)
         where T : class, IPersistentIdentityDomainObjectBase
     {
-        var source = dbSession.GetFullList<T>().ToDictionary(v => v.Id, lambda);
+        var source = dataSource.GetFullList<T>().ToDictionary(v => v.Id, lambda);
 
-        return new ImageSourceFunc(id => source[id]);
+        return new FuncImageSource(id => source[id]);
     }
-
-
 
     public IImageSource GetImageSource(string typeName)
     {
-        return this._сache[typeName];
+        return this.cache[typeName];
     }
 }

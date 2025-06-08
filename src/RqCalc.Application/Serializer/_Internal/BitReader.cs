@@ -6,14 +6,14 @@ namespace RqCalc.Application.Serializer._Internal;
 
 internal class BitReader
 {
-    private readonly Queue<bool> _bits;
+    private readonly Queue<bool> bits;
 
 
     public BitReader(bool[] source)
     {
         if (source == null) throw new ArgumentNullException(nameof(source));
 
-        this._bits = new Queue<bool>(source);
+        this.bits = new Queue<bool>(source);
     }
 
     public BitReader(byte[] source)
@@ -24,13 +24,13 @@ internal class BitReader
 
         bitArray.CopyTo(bits, 0);
 
-        this._bits = new Queue<bool>(bits);
+        this.bits = new Queue<bool>(bits);
     }
 
 
     public bool Read()
     {
-        return this._bits.Dequeue();
+        return this.bits.Dequeue();
     }
 
     public int Read(int bitSize)

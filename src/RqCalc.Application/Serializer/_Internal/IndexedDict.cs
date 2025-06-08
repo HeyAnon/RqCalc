@@ -1,4 +1,5 @@
 using System.Collections;
+
 using Framework.Persistent;
 
 namespace RqCalc.Application.Serializer._Internal;
@@ -9,9 +10,9 @@ internal interface IIndexedDict<T> : IEnumerable<T>
 
     int Count { get; }
 
-    T this[int index] { get; }
+    T? this[int index] { get; }
 
-    int this[T value] { get; }
+    int this[T? value] { get; }
 }
 
 internal static class IndexedDict
@@ -32,65 +33,65 @@ internal static class IndexedDict
     private class Impl<T> : IIndexedDict<T>
         where T : class
     {
-        private readonly bool _allowNull;
+        private readonly bool allowNull;
 
-        private readonly T[] _source;
+        private readonly T[] source;
 
-        private readonly IReadOnlyDictionary<T, int> _reverseDict;
+        private readonly IReadOnlyDictionary<T, int> reverseDict;
 
 
         internal Impl(IEnumerable<T> orderedSource, bool allowNull)
         {
             if (orderedSource == null) throw new ArgumentNullException(nameof(orderedSource));
                 
-            this._source = orderedSource.ToArray();
-            this._allowNull = allowNull;
+            this.source = orderedSource.ToArray();
+            this.allowNull = allowNull;
                 
             this.BitSize = (this.Count - 1).GetBitSize();
 
-            this._reverseDict = this._source.Select((v, index) => (v, index)).ToDictionary();
+            this.reverseDict = this.source.Select((v, index) => (v, index)).ToDictionary();
         }
 
 
         public int BitSize { get; }
 
-        public int Count => this._source.Length + this.NullOffset;
+        public int Count => this.source.Length + this.NullOffset;
 
-        public T this[int index]
+        public T? this[int index]
         {
             get
             {
-                if (index == 0 && this._allowNull)
+                if (index == 0 && this.allowNull)
                 {
                     return null;
                 }
                 else
                 {
-                    return this._source[index - this.NullOffset];
+                    return this.source[index - this.NullOffset];
                 }
             }
         }
 
-        public int this[T value]
+        public int this[T? value]
         {
             get
             {
-                if (value == null && this._allowNull)
+                if (value == null && this.allowNull)
                 {
                     return 0;
                 }
                 else
                 {
-                    return this._reverseDict[value] + this.NullOffset;
+                    return this.reverseDict[value!] + this.NullOffset;
                 }
             }
         }
 
-        private int NullOffset => this._allowNull ? 1 : 0;
+        private int NullOffset => this.allowNull ? 1 : 0;
 
         public IEnumerator<T> GetEnumerator()
         {
-            return ((IEnumerable<T>)this._source).GetEnumerator();
+            return ((IEnumerable<T>)this.source).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

@@ -1,9 +1,6 @@
-﻿using System.Linq.Expressions;
-
-using Framework.Core;
+﻿using Framework.Core;
 using Framework.Core.Serialization;
 using Framework.DataBase;
-using Framework.ExpressionParsers;
 
 using RqCalc.Application._Extensions;
 using RqCalc.Application.Calc;
@@ -25,45 +22,42 @@ namespace RqCalc.Application;
 
 public partial class ApplicationContext : IApplicationContext
 {
-    private readonly INativeExpressionParser _nativeParser;
+    //private readonly INativeExpressionParser _nativeParser;
 
-    internal readonly IReadOnlyList<IStat> BaseStats;
+    //internal readonly IReadOnlyList<IStat> BaseStats;
 
-    internal readonly IReadOnlyList<IStat> EditStats;
+    //internal readonly IReadOnlyList<IStat> EditStats;
 
-    internal readonly IReadOnlyList<IReadOnlyList<IStat>> DependencyStatLayers;
+    //internal readonly IReadOnlyList<IReadOnlyList<IStat>> DependencyStatLayers;
 
-    internal readonly IReadOnlyDictionary<IStat, int> StatPriority;
+    //internal readonly IReadOnlyDictionary<IStat, int> StatPriority;
 
-    internal readonly IReadOnlyList<IReadOnlyList<IBonusType>> DependencyBonusTypeLayers;
+    //internal readonly IReadOnlyList<IReadOnlyList<IBonusType>> DependencyBonusTypeLayers;
 
-    internal readonly IReadOnlyDictionary<IBonusType, int> BonusTypePriority;
-
-
-    internal readonly IReadOnlyList<IStat> SourcesStats;
-
-    internal readonly IReadOnlyList<IBonusType> AttackBonusTypes;
+    //internal readonly IReadOnlyDictionary<IBonusType, int> BonusTypePriority;
 
 
-    private readonly IEquipmentSlot _primaryWeaponSlot;
-
-    internal readonly IReadOnlyList<IEquipmentForgeData> EquipmentForges;
-
-    internal readonly IReadOnlyDictionary<Tuple<int, int>, int> EquipmentLevelForges;
-
-    internal readonly IReadOnlyDictionary<IClass, IReadOnlyList<int>> ClassLevelHpBonuses;
-
-    private readonly ICharacterSource _defaultCharacter;
+    //internal readonly IReadOnlyList<IBonusType> AttackBonusTypes;
 
 
-    internal readonly IReadOnlyDictionary<IFormula, Func<ICalcState, decimal>> Formulas;
+    //private readonly IEquipmentSlot _primaryWeaponSlot;
+
+    //internal readonly IReadOnlyList<IEquipmentForgeData> EquipmentForges;
+
+    //internal readonly IReadOnlyDictionary<Tuple<int, int>, int> EquipmentLevelForges;
+
+    //internal readonly IReadOnlyDictionary<IClass, IReadOnlyList<int>> ClassLevelHpBonuses;
+
+    //private readonly ICharacterSource _defaultCharacter;
+
+
+    //internal readonly IReadOnlyDictionary<IFormula, Func<ICalcState, decimal>> Formulas;
 
 
     public ApplicationContext(
 
         ApplicationSettings applicationSettings,
         IDataSource<IPersistentDomainObjectBase> dataSource,
-        INativeExpressionParser nativeParser,
         ISerializer<string, byte[]> urlSerializer,
         ITypeResolver<string> typeResolver,
         IImageSourceService imageSourceService)
@@ -72,26 +66,14 @@ public partial class ApplicationContext : IApplicationContext
 
         this.DataSource = dataSource ?? throw new ArgumentNullException(nameof(dataSource));
 
-        this._nativeParser = nativeParser ?? throw new ArgumentNullException(nameof(nativeParser));
-
 
         //this.Settings = Anon.RQ_Calc.Domain.Settings.Create(this.DataSource.GetFullList<ISetting>()).ToApplicationSettings(this.DataSource);
 
-
-        var classStats = from @class in this.DataSource.GetFullList<IClass>()
-
-            from stat in @class.GetStats()
-
-            select stat;
 
 
         var stats = this.DataSource.GetFullList<IStat>();
 
         {
-            this.DependencyStatLayers = this.GetDependencyStatLayers(stats);
-            this.StatPriority = this.DependencyStatLayers.SelectMany((layer, layerIndex) => layer.Select(stat => new { Stat = stat, Priority = layerIndex * BonusEvaluateRule.LayerStep }))
-                .ToDictionary(pair => pair.Stat, pair => pair.Priority);
-
             this.DependencyBonusTypeLayers = this.GetDependencyBonusTypeLayers();
             this.BonusTypePriority = this.DependencyBonusTypeLayers.SelectMany((layer, layerIndex) => layer.Select(bonus => new { Bonus = bonus, Priority = layerIndex * BonusEvaluateRule.LayerStep + (bonus.IsMultiply.Value ? BonusEvaluateRule.MultiplyOffset : BonusEvaluateRule.SumOffset) }))
                 .ToDictionary(pair => pair.Bonus, pair => pair.Priority);
@@ -101,21 +83,7 @@ public partial class ApplicationContext : IApplicationContext
             this.AttackBonusTypes = this.DataSource.GetFullList<IBonusType>().Where(bonusType => bonusType.Stats.Any() && bonusType.Stats.All(bts => bts.Stat == this.AttackStat)).ToList();
         }
 
-        this.EditStats = stats.Where(s => s.IsEditable).ToReadOnlyCollection();
-
-        this.BaseStats = stats.Except(classStats.Distinct()).ToReadOnlyCollection();
-
-        this.NotPrimaryEditStats = this.BaseStats.Where(s => s.IsEditable).ToReadOnlyCollection();
-
-        {
-            this.Formulas = this.GetParsedFormulas();
-        }
-
-        {
-            this.SourcesStats = stats.Where(s => s.Sources.Any()).ToArray();
-        }
-
-        this._primaryWeaponSlot = this.DataSource.GetFullList<IEquipmentSlot>().Single(s => s.IsPrimarySlot());
+        this._primaryWeaponSlot = this.DataSource.GetFullList<IEquipmentSlot>().Single(s => s.IsWeapon == true && s.IsPrimarySlot());
 
         this.EquipmentForges = this.DataSource.GetFullList<IEquipmentForge>().ToDictionary(v => v.Level).ToArrayI();
         this.EquipmentLevelForges = this.DataSource.GetFullList<IEquipmentLevelForge>().ToDictionary(v => Tuple.Create(v.EquipmentLevel, v.Level), v => v.Hp);
@@ -145,9 +113,6 @@ public partial class ApplicationContext : IApplicationContext
             this.GuildTalentSerializer = new GuildTalentBuildSerializer(this).Select(urlSerializer);
         }
 
-
-        this._defaultCharacter = this.CreateDefaultCharacter();
-
         this.TypeResolver = typeResolver ?? throw new ArgumentNullException(nameof(typeResolver));
         this.ImageSourceService = imageSourceService ?? throw new ArgumentNullException(nameof(imageSourceService));
     }
@@ -160,8 +125,6 @@ public partial class ApplicationContext : IApplicationContext
 
     public IDataSource<IPersistentDomainObjectBase> DataSource { get; }
 
-
-    public IReadOnlyList<IStat> NotPrimaryEditStats { get; }
 
 
     public ISerializer<byte[], ICharacterSource> CharacterBinarySerializer { get; }
@@ -208,11 +171,6 @@ public partial class ApplicationContext : IApplicationContext
 
             StatDescriptions = calc.GetDescriptionValues(stats)
         };
-    }
-
-    public ICharacterSource GetDefaultCharacter()
-    {
-        return this._defaultCharacter;
     }
 
     public IEquipmentClass GetEquipmentClass(IEquipment equipment)
@@ -291,28 +249,6 @@ public partial class ApplicationContext : IApplicationContext
         return result;
     }
 
-    private Dictionary<IFormula, Func<ICalcState, decimal>> GetParsedFormulas()
-    {
-        return this.DataSource.GetFullList<IFormula>().Where(formula => formula.Enabled).ToDictionary(formula => formula, formula =>
-        {
-            var expr = this._nativeParser.Parse(new NativeExpressionParsingData(new MethodTypeInfo(formula.Variables.Select(ParseVariableType), typeof(decimal)), formula.Value));
-
-            var stateParam = Expression.Parameter(typeof(ICalcState));
-
-            var lambda = Expression.Lambda<Func<ICalcState, decimal>>(
-
-                Expression.Invoke(expr,
-
-                    formula.Variables.Select(var =>
-                    {
-                        var varExpr = this.GetCompileSourceFormulaArgExpression(var);
-
-                        return (varExpr as LambdaExpression).Maybe(varLambda => varLambda.GetBodyWithOverrideParameters(stateParam)) ?? varExpr;
-                    })), stateParam);
-
-            return lambda.Compile();
-        });
-    }
 
     private static Type ParseVariableType(IFormulaVariable variable)
     {
@@ -345,77 +281,6 @@ public partial class ApplicationContext : IApplicationContext
         }
     }
 
-    private Expression GetCompileSourceFormulaArgExpression(IFormulaVariable variable)
-    {
-        if (variable == null) throw new ArgumentNullException(nameof(variable));
-
-        switch (variable.Type)
-        {
-            case FormulaVariableType.Decimal:
-                return ExpressionHelper.Create((ICalcState state) => state.CustomVariables[variable.Index]);
-
-            case FormulaVariableType.Int32:
-                return ExpressionHelper.Create((ICalcState state) => (int)state.CustomVariables[variable.Index]);
-
-            case FormulaVariableType.Level:
-                return ExpressionHelper.Create((ICalcState state) => state.Level);
-
-            case FormulaVariableType.MaxLevel:
-                return Expression.Constant(this.LastVersion.MaxLevel);
-
-            case FormulaVariableType.Stat:
-            {
-                var stat = variable.TypeStat.FromMaybe(() => "Null stat");
-
-                return ExpressionHelper.Create((ICalcState state) => state.Stats[stat]);
-            }
-
-            case FormulaVariableType.StatDescription:
-            {
-                var stat = variable.TypeStat.FromMaybe(() => "Null stat");
-
-                var descFormula = stat.DescriptionFormula.FromMaybe(() => "Null Desc Formula");
-
-                var descDel = LazyHelper.Create(() => this.Formulas[descFormula]);
-
-                return ExpressionHelper.Create((ICalcState state) => descDel.Value(state.ChangeVariable(state.Stats[stat])));
-            }
-
-            case FormulaVariableType.CurrentWeaponInfo:
-                return ExpressionHelper.Create((ICalcState state) => state.CurrentWeaponInfo);
-
-            case FormulaVariableType.LevelDef:
-                return ExpressionHelper.Create((ICalcState state) => MathHelper.ArmorByLevel(state.Level, this.Settings.QualityMaxLevel));
-
-            case FormulaVariableType.LevelAttack:
-                return ExpressionHelper.Create((ICalcState state) => MathHelper.AttackByLevel(state.Level));
-
-            case FormulaVariableType.LevelMultiplicity:
-                return Expression.Constant(this.Settings.LevelMultiplicity);
-
-            case FormulaVariableType.HpPerVitality:
-                return ExpressionHelper.Create((ICalcState state) => state.Class.HpPerVitality);
-
-            default:
-                throw new ArgumentOutOfRangeException("variable.Type");
-        }
-    }
-
-    private ICharacterSource CreateDefaultCharacter()
-    {
-        var gender = this.DataSource.GetFullList<IGender>().OrderById().First();
-        var @class = this.DataSource.GetFullList<IClass>().OrderById().First();
-        var state = this.DataSource.GetFullList<IState>().OrderById().First();
-
-        return new CharacterSource
-        {
-            Level = 1,
-            Gender = gender,
-            Class = @class,
-            State = state,
-            EditStats = this.GetEditStats(@class).ToDictionary(stat => stat, _ => 1)
-        };
-    }
 
 
     //public static ApplicationContext Create(IDataSource<IPersistentDomainObjectBase> dataSource)

@@ -5,11 +5,11 @@ namespace Framework.DataBase._Extensions;
 
 public class MemoryTypeCache<TPersistentDomainObjectBase>
 {
-    private readonly ITypeSource _typeSource;
+    private readonly ITypeSource typeSource;
 
-    private readonly Lock _locker = new();
+    private readonly Lock locker = new();
 
-    private IReadOnlyDictionary<Type, Type>? _implTypes;
+    private IReadOnlyDictionary<Type, Type>? implTypes;
 
 
     public MemoryTypeCache(ITypeSource typeSource)
@@ -22,7 +22,7 @@ public class MemoryTypeCache<TPersistentDomainObjectBase>
         if (typeSource == null) throw new ArgumentNullException(nameof(typeSource));
         if (anonymousTypeBuilderStorage == null) throw new ArgumentNullException(nameof(anonymousTypeBuilderStorage));
 
-        this._typeSource = typeSource;
+        this.typeSource = typeSource;
         this.TypeBuilder = new ImplTypeBuilder<TPersistentDomainObjectBase>(anonymousTypeBuilderStorage, typeSource).WithCache();
     }
 
@@ -34,9 +34,9 @@ public class MemoryTypeCache<TPersistentDomainObjectBase>
     {
         get
         {
-            lock (this._locker)
+            lock (this.locker)
             {
-                return this._implTypes ??= this._typeSource.GetTypes().ToDictionary(
+                return this.implTypes ??= this.typeSource.GetTypes().ToDictionary(
                     type => type,
                     type => this.TypeBuilder.GetAnonymousType(new InterfaceTypeMap(type, $"Impl{type.Name.Skip("I")}",
                         type.GetAllInterfaceProperties().ToDictionary(property => property.Name, property => property.PropertyType))));

@@ -1,7 +1,7 @@
 namespace RqCalc.Tests;
 
 [TestClass]
-public class DBImagesTests
+public class DbImagesTests
 {
     [TestMethod]
     public void ReSaveImages()

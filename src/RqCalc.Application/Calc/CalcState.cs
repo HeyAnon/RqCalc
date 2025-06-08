@@ -32,7 +32,7 @@ internal class CalcState : ICalcState
 
     public IGender Gender { get; set; }
 
-    public WeaponInfo CurrentWeaponInfo { get; set; }
+    public WeaponInfo? CurrentWeaponInfo { get; set; }
 
 
     public IReadOnlyDictionary<IStat, decimal> Stats { get; set; }

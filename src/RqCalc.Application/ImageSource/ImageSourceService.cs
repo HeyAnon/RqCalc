@@ -1,38 +1,22 @@
 ﻿using Framework.DataBase;
+
 using RqCalc.Domain._Base;
 
 namespace RqCalc.Application.ImageSource;
 
-public class ImageSourceService : IImageSourceService
+public class ImageSourceService(IDataSource<IPersistentDomainObjectBase> dataSource, ImageSourceFuncCache invokeCache) : IImageSourceService
 {
-    private readonly IDataSource<IPersistentDomainObjectBase> _dataSource;
-
-    private readonly ImageSourceInvokeCache _invokeCache;
-
-
-
-    public ImageSourceService(IDataSource<IPersistentDomainObjectBase> dataSource, ImageSourceInvokeCache invokeCache)
-    {
-        if (dataSource == null) throw new ArgumentNullException(nameof(dataSource));
-        if (invokeCache == null) throw new ArgumentNullException(nameof(invokeCache));
-
-        this._dataSource = dataSource;
-        this._invokeCache = invokeCache;
-    }
-
-
-
     public IImageSource GetImageSource(string typeName)
     {
-        var del = this._invokeCache.FuncCache[typeName];
+        var func = invokeCache.GetFunc(typeName);
 
-        return new ImageSourceFunc(id => del(this._dataSource, id));
+        return new FuncImageSource(id => func(dataSource, id));
     }
 }
 
-internal class ImageSourceFunc(Func<int, IImage> getImage) : IImageSource
+internal class FuncImageSource(Func<int, IImage?> getImage) : IImageSource
 {
-    public IImage GetById(int id)
+    public IImage? GetById(int id)
     {
         return getImage(id);
     }

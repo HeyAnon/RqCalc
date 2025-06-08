@@ -10,25 +10,25 @@ namespace RqCalc.Application.Serializer.Talent;
 
 internal class TalentBuildVersionSerializer
 {
-    private readonly ApplicationContext _context;
+    private readonly ApplicationContext context;
 
-    private readonly IVersion _version;
+    private readonly IVersion version;
 
-    private readonly IIndexedDict<IClass> _classes;
+    private readonly IIndexedDict<IClass> classes;
 
-    private readonly IReadOnlyDictionary<IClass, ReadOnlyCollection<Tuple<ITalentBranch, IReadOnlyList<IReadOnlyList<ITalent>>>>> _talents;
+    private readonly IReadOnlyDictionary<IClass, ReadOnlyCollection<Tuple<ITalentBranch, IReadOnlyList<IReadOnlyList<ITalent>>>>> talents;
         
 
     public TalentBuildVersionSerializer(ApplicationContext context, IVersion version)
     {
-        this._context = context ?? throw new ArgumentNullException(nameof(context));
-        this._version = version ?? throw new ArgumentNullException(nameof(version));
+        this.context = context ?? throw new ArgumentNullException(nameof(context));
+        this.version = version ?? throw new ArgumentNullException(nameof(version));
 
-        var classes = this._context.DataSource.GetFullList<IClass>();
+        var classes = this.context.DataSource.GetFullList<IClass>();
 
-        this._classes = IndexedDict.Create(classes, false);
+        this.classes = IndexedDict.Create(classes, false);
 
-        this._talents = classes.OrderById().ToReadOnlyDictionary(@class => @class, @class =>
+        this.talents = classes.OrderById().ToReadOnlyDictionary(@class => @class, @class =>
 
             @class.GetAllTalentBranches().OrderById().ToReadOnlyCollection(branch =>
 
@@ -43,7 +43,7 @@ internal class TalentBuildVersionSerializer
         if (writer == null) throw new ArgumentNullException(nameof(writer));
         if (character == null) throw new ArgumentNullException(nameof(character));
 
-        writer.WriteByMax(this._version.Id, byte.MaxValue);
+        writer.WriteByMax(this.version.Id, byte.MaxValue);
 
         this.Format(writer, character);
     }
@@ -53,13 +53,13 @@ internal class TalentBuildVersionSerializer
         if (writer == null) throw new ArgumentNullException(nameof(writer));
         if (character == null) throw new ArgumentNullException(nameof(character));
             
-        writer.Write(character.Class, this._classes);
+        writer.Write(character.Class, this.classes);
 
-        writer.WriteByMax(character.Level, character.Class.Specialization.MaxLevel ?? this._version.MaxLevel);
+        writer.WriteByMax(character.Level, character.Class.Specialization.MaxLevel ?? this.version.MaxLevel);
 
         var charBranches = character.Talents.GroupBy(tal => tal.Branch).ToDictionary(g => g.Key, g => g.OrderBy(v => v.HIndex).ToReadOnlyCollection());
 
-        foreach (var branchPair in this._talents[character.Class])
+        foreach (var branchPair in this.talents[character.Class])
         {
             var charTalents = charBranches.GetValueOrDefault(branchPair.Item1);
 
@@ -81,9 +81,9 @@ internal class TalentBuildVersionSerializer
     {
         if (reader == null) throw new ArgumentNullException(nameof(reader));
 
-        var @class = reader.Read(this._classes);
+        var @class = reader.Read(this.classes);
 
-        var level = reader.ReadByMax(@class.Specialization.MaxLevel ?? this._version.MaxLevel);
+        var level = reader.ReadByMax(@class.Specialization.MaxLevel ?? this.version.MaxLevel);
 
         var talents = this.ReadTalents(reader, @class).ToList();
 
@@ -103,7 +103,7 @@ internal class TalentBuildVersionSerializer
         if (reader == null) throw new ArgumentNullException(nameof(reader));
         if (@class == null) throw new ArgumentNullException(nameof(@class));
 
-        return from branchPair in this._talents[@class]
+        return from branchPair in this.talents[@class]
 
             let talentCount = reader.ReadByMax(branchPair.Item2.Count)
 

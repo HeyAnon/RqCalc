@@ -10,26 +10,26 @@ namespace RqCalc.Application.Serializer.Character;
 
 internal class CharacterSerializer : ISerializer<byte[], ICharacterSource>
 {
-    private readonly ApplicationContext _context;
+    private readonly ApplicationContext context;
 
-    private readonly IReadOnlyDictionary<int, Lazy<CharacterVersionSerializer>> _serializers;
+    private readonly IReadOnlyDictionary<int, Lazy<CharacterVersionSerializer>> serializers;
 
     internal readonly CharacterVersionSerializer LastVersionSerializer;
 
 
     public CharacterSerializer(ApplicationContext context)
     {
-        this._context = context ?? throw new ArgumentNullException(nameof(context));
+        this.context = context ?? throw new ArgumentNullException(nameof(context));
 
         var serializersRequest = from version in context.DataSource.GetFullList<IVersion>()
 
             where version.Id <= context.LastVersion.Id
 
-            select version.Id.ToKeyValuePair(LazyHelper.Create(() => new CharacterVersionSerializer(this._context, version)));
+            select version.Id.ToKeyValuePair(LazyHelper.Create(() => new CharacterVersionSerializer(this.context, version)));
 
-        this._serializers = serializersRequest.ToDictionary();
+        this.serializers = serializersRequest.ToDictionary();
 
-        this.LastVersionSerializer = this._serializers[context.LastVersion.Id].Value;
+        this.LastVersionSerializer = this.serializers[context.LastVersion.Id].Value;
     }
 
 
@@ -43,7 +43,7 @@ internal class CharacterSerializer : ISerializer<byte[], ICharacterSource>
 
         var version = preVersion == 0 ? 1 : preVersion;
 
-        var serializer = this._serializers.GetValue(version, () => new Exception($"Invalid Version: {version}"));
+        var serializer = this.serializers.GetValue(version, () => new Exception($"Invalid Version: {version}"));
 
         var character = serializer.Value.Parse(reader);
 
@@ -64,13 +64,13 @@ internal class CharacterSerializer : ISerializer<byte[], ICharacterSource>
 
             if (equipment.Contains(this.LastVersionSerializer.Version))
             {
-                var maxUpgradeLevel = this._context.GetMaxUpgradeLevel(equipment);
+                var maxUpgradeLevel = this.context.GetMaxUpgradeLevel(equipment);
 
                 equipmentData.Upgrade = Math.Min(equipmentData.Upgrade, maxUpgradeLevel);
 
                 equipmentData.Cards.ToList().Foreach((card, i) =>
                 {
-                    if (card != null && !(card.Contains(this.LastVersionSerializer.Version) && card.IsAllowed(equipment.Type, this.LastVersionSerializer.Version, this._context.GetEquipmentClass(equipment))))
+                    if (card != null && !(card.Contains(this.LastVersionSerializer.Version) && card.IsAllowed(equipment.Type, this.LastVersionSerializer.Version, this.context.GetEquipmentClass(equipment))))
                     {
                         equipmentData.Cards[i] = null;
                     }
@@ -78,7 +78,7 @@ internal class CharacterSerializer : ISerializer<byte[], ICharacterSource>
 
                 if (equipmentData.StampVariant != null)
                 {
-                    if (this._context.IsAllowedStamp(equipmentData.StampVariant.Stamp, equipment, character.Class) == false)
+                    if (this.context.IsAllowedStamp(equipmentData.StampVariant.Stamp, equipment, character.Class) == false)
                     {
                         equipmentData.StampVariant = null;
                     }

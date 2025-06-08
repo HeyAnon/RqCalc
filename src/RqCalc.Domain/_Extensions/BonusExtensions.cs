@@ -1,10 +1,11 @@
 using Framework.Core;
 using Framework.HierarchicalExpand;
 using Framework.Persistent;
+
 using RqCalc.Domain._Base;
+using RqCalc.Domain.BonusType;
 using RqCalc.Domain.Card;
 using RqCalc.Domain.Stamp;
-using RqCalc.Domain.BonusType;
 using RqCalc.Domain.VirtualBonus;
 
 namespace RqCalc.Domain._Extensions;

@@ -8,17 +8,17 @@ namespace RqCalc.Application.Serializer.Talent;
 
 internal class TalentBuildSerializer : ISerializer<byte[], ITalentBuildSource>
 {
-    private readonly ApplicationContext _context;
+    private readonly ApplicationContext context;
         
 
-    private readonly IReadOnlyDictionary<int, Lazy<TalentBuildVersionSerializer>> _serializers;
+    private readonly IReadOnlyDictionary<int, Lazy<TalentBuildVersionSerializer>> serializers;
 
     internal readonly TalentBuildVersionSerializer LastVersionSerializer;
 
 
     public TalentBuildSerializer(ApplicationContext context)
     {
-        this._context = context ?? throw new ArgumentNullException(nameof(context));
+        this.context = context ?? throw new ArgumentNullException(nameof(context));
 
 
         var serializersRequest = from version in context.DataSource.GetFullList<IVersion>()
@@ -29,11 +29,11 @@ internal class TalentBuildSerializer : ISerializer<byte[], ITalentBuildSource>
 
             let version = levelGroup.OrderBy(v => v.Id).First()
 
-            select version.Id.ToKeyValuePair(LazyHelper.Create(() => new TalentBuildVersionSerializer(this._context, version)));
+            select version.Id.ToKeyValuePair(LazyHelper.Create(() => new TalentBuildVersionSerializer(this.context, version)));
 
-        this._serializers = serializersRequest.ToDictionary();
+        this.serializers = serializersRequest.ToDictionary();
 
-        this.LastVersionSerializer = this._serializers.OrderByDescending(ser => ser.Key).First(ser => ser.Key <= context.LastVersion.Id).Value.Value;
+        this.LastVersionSerializer = this.serializers.OrderByDescending(ser => ser.Key).First(ser => ser.Key <= context.LastVersion.Id).Value.Value;
     }
 
 
@@ -45,7 +45,7 @@ internal class TalentBuildSerializer : ISerializer<byte[], ITalentBuildSource>
 
         var version = reader.ReadByMax(byte.MaxValue);
             
-        var serializer = this._serializers.GetValue(version, () => new Exception($"Invalid Version: {version}"));
+        var serializer = this.serializers.GetValue(version, () => new Exception($"Invalid Version: {version}"));
 
         return serializer.Value.Parse(reader);
     }

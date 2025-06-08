@@ -7,7 +7,7 @@ namespace RqCalc.Application.Serializer._Internal;
 
 internal class BitWriter
 {
-    private readonly List<bool> _bits = [];
+    private readonly List<bool> bits = [];
 
 
     public BitWriter()
@@ -17,14 +17,14 @@ internal class BitWriter
 
     public void Write(bool value)
     {
-        this._bits.Add(value);
+        this.bits.Add(value);
     }
 
     public void Write(params bool[] values)
     {
         if (values == null) throw new ArgumentNullException(nameof(values));
 
-        this._bits.AddRange(values);
+        this.bits.AddRange(values);
     }
 
     public void Write(int value, int bitSize)
@@ -149,7 +149,7 @@ internal class BitWriter
 
     public bool[] GetBits()
     {
-        return this._bits.ToArray();
+        return this.bits.ToArray();
     }
 
     public byte[] GetBytes()

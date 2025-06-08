@@ -7,25 +7,25 @@ namespace RqCalc.Application.Serializer.GuildTalent;
 
 internal class GuildTalentBuildVersionSerializer
 {
-    private readonly ApplicationContext _context;
+    private readonly ApplicationContext context;
 
-    private readonly IVersion _version;
+    private readonly IVersion version;
 
-    private readonly IReadOnlyCollection<IGuildTalentBranch> _guildBranches;
+    private readonly IReadOnlyCollection<IGuildTalentBranch> guildBranches;
 
-    private readonly int _guildbranchCount;
+    private readonly int guildbranchCount;
 
-    private readonly int _guildBranchSize;
+    private readonly int guildBranchSize;
 
     public GuildTalentBuildVersionSerializer(ApplicationContext context, IVersion version)
     {
-        this._context = context ?? throw new ArgumentNullException(nameof(context));
-        this._version = version ?? throw new ArgumentNullException(nameof(version));
+        this.context = context ?? throw new ArgumentNullException(nameof(context));
+        this.version = version ?? throw new ArgumentNullException(nameof(version));
 
-        this._guildBranches = this._context.DataSource.GetFullList<IGuildTalentBranch>();
+        this.guildBranches = this.context.DataSource.GetFullList<IGuildTalentBranch>();
 
-        this._guildbranchCount = this._guildBranches.Count;
-        this._guildBranchSize = this._guildBranches.Select(b => b.Talents.Count()).Distinct().Single();
+        this.guildbranchCount = this.guildBranches.Count;
+        this.guildBranchSize = this.guildBranches.Select(b => b.Talents.Count()).Distinct().Single();
     }
 
 
@@ -34,7 +34,7 @@ internal class GuildTalentBuildVersionSerializer
         if (writer == null) throw new ArgumentNullException(nameof(writer));
         if (character == null) throw new ArgumentNullException(nameof(character));
 
-        writer.WriteByMax(this._version.Id, byte.MaxValue);
+        writer.WriteByMax(this.version.Id, byte.MaxValue);
 
         this.Format(writer, character);
     }
@@ -51,11 +51,11 @@ internal class GuildTalentBuildVersionSerializer
             .Reverse()
             .ToArray();
 
-        writer.WriteByMax(datas.Length, this._guildbranchCount);
+        writer.WriteByMax(datas.Length, this.guildbranchCount);
 
         foreach (var data in datas)
         {
-            writer.WriteByMax(data.Talent.OrderIndex, this._guildBranchSize - 1);
+            writer.WriteByMax(data.Talent.OrderIndex, this.guildBranchSize - 1);
 
             if (data.IsLast)
             {
@@ -81,11 +81,11 @@ internal class GuildTalentBuildVersionSerializer
     {
         if (reader == null) throw new ArgumentNullException(nameof(reader));
 
-        var branchCount = reader.ReadByMax(this._guildbranchCount);
+        var branchCount = reader.ReadByMax(this.guildbranchCount);
 
-        foreach (var pair in this._guildBranches.Select((branch, index) => new { Branch = branch, Index = index }).Take(branchCount))
+        foreach (var pair in this.guildBranches.Select((branch, index) => new { Branch = branch, Index = index }).Take(branchCount))
         {
-            var talentOrderIndex = reader.ReadByMax(this._guildBranchSize - 1);
+            var talentOrderIndex = reader.ReadByMax(this.guildBranchSize - 1);
 
             var talent = pair.Branch.Talents.Single(tal => tal.OrderIndex == talentOrderIndex);
 

@@ -10,12 +10,12 @@ public interface IImageSourceService
 
 public interface IImageSource
 {
-    IImage GetById(int id);
+    IImage? GetById(int id);
 }
 
 public static class ImageSourceServiceExtensions
 {
-    public static IImage GetStaticImage(this IImageSourceService service, StaticImageType type)
+    public static IImage? GetStaticImage(this IImageSourceService service, StaticImageType type)
     {
         if (service == null) throw new ArgumentNullException(nameof(service));
 

@@ -7,7 +7,7 @@ namespace Framework.DataBase.TypeBuilder;
 
 internal class ImplTypeBuilder<TPersistentDomainObjectBase> : AnonymousTypeByPropertyBuilder<InterfaceTypeMap, TypeMapMember>
 {
-    private readonly ITypeSource _typeSource;
+    private readonly ITypeSource typeSource;
 
 
     public ImplTypeBuilder(IAnonymousTypeBuilderStorage storage, ITypeSource typeSource)
@@ -15,7 +15,7 @@ internal class ImplTypeBuilder<TPersistentDomainObjectBase> : AnonymousTypeByPro
     {
         if (typeSource == null) throw new ArgumentNullException(nameof(typeSource));
 
-        this._typeSource = typeSource;
+        this.typeSource = typeSource;
     }
 
 
@@ -43,7 +43,7 @@ internal class ImplTypeBuilder<TPersistentDomainObjectBase> : AnonymousTypeByPro
         {
             if (actualType.IsAssignableToInterface(typeof(TPersistentDomainObjectBase)))
             {
-                if (!this._typeSource.GetTypes().Contains(actualType))
+                if (!this.typeSource.GetTypes().Contains(actualType))
                 {
                     throw new Exception($"Missed Impl Type for {actualType}");
                 }

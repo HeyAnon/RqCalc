@@ -7,7 +7,7 @@ public interface IFormulaVariable : IPersistentDomainObjectBase, ITypeObject<For
 {
     IFormula Formula { get; }
 
-    IStat TypeStat { get; }
+    IStat? TypeStat { get; }
 }
 
 

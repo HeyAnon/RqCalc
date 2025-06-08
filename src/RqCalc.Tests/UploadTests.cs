@@ -177,17 +177,17 @@ public class UploadTests : TestBase
 
 public enum ColorE
 {
-    GREEN = 1,
-    BLUE,
-    VIOLET,
-    ORANGE
+    Green = 1,
+    Blue,
+    Violet,
+    Orange
 }
 
 public enum AddType
 {
-    POINT,
-    COMBO,
-    PERCENT
+    Point,
+    Combo,
+    Percent
 }
 
 internal static class StatExtensions

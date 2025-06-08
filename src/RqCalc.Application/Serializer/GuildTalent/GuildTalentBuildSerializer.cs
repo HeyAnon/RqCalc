@@ -8,17 +8,17 @@ namespace RqCalc.Application.Serializer.GuildTalent;
 
 internal class GuildTalentBuildSerializer : ISerializer<byte[], IGuildTalentBuildSource>
 {
-    private readonly ApplicationContext _context;
+    private readonly ApplicationContext context;
         
 
-    private readonly IReadOnlyDictionary<int, Lazy<GuildTalentBuildVersionSerializer>> _serializers;
+    private readonly IReadOnlyDictionary<int, Lazy<GuildTalentBuildVersionSerializer>> serializers;
 
     internal readonly GuildTalentBuildVersionSerializer LastVersionSerializer;
 
 
     public GuildTalentBuildSerializer(ApplicationContext context)
     {
-        this._context = context ?? throw new ArgumentNullException(nameof(context));
+        this.context = context ?? throw new ArgumentNullException(nameof(context));
 
 
         var serializersRequest = from version in context.DataSource.GetFullList<IVersion>()
@@ -27,11 +27,11 @@ internal class GuildTalentBuildSerializer : ISerializer<byte[], IGuildTalentBuil
                                      
             orderby version.Id
 
-            select version.Id.ToKeyValuePair(LazyHelper.Create(() => new GuildTalentBuildVersionSerializer(this._context, version)));
+            select version.Id.ToKeyValuePair(LazyHelper.Create(() => new GuildTalentBuildVersionSerializer(this.context, version)));
 
-        this._serializers = serializersRequest.Take(1).ToDictionary();
+        this.serializers = serializersRequest.Take(1).ToDictionary();
 
-        this.LastVersionSerializer = this._serializers.OrderByDescending(ser => ser.Key).First(ser => ser.Key <= context.LastVersion.Id).Value.Value;
+        this.LastVersionSerializer = this.serializers.OrderByDescending(ser => ser.Key).First(ser => ser.Key <= context.LastVersion.Id).Value.Value;
     }
 
 
@@ -43,7 +43,7 @@ internal class GuildTalentBuildSerializer : ISerializer<byte[], IGuildTalentBuil
 
         var version = reader.ReadByMax(byte.MaxValue);
             
-        var serializer = this._serializers.GetValue(version, () => new Exception($"Invalid Version: {version}"));
+        var serializer = this.serializers.GetValue(version, () => new Exception($"Invalid Version: {version}"));
 
         return serializer.Value.Parse(reader);
     }
