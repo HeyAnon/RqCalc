@@ -15,4 +15,6 @@ public interface IStatSource
     IReadOnlyList<IStat> NotPrimaryEditStats { get; }
     
     IReadOnlyList<IStat> SourcesStats { get; }
+
+    IEnumerable<IStat> GetEditStats(IClass @class);
 }

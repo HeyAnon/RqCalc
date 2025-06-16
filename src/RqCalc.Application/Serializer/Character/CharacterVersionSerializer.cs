@@ -1,8 +1,10 @@
 using System.Collections.ObjectModel;
 using Framework.Core;
+using Framework.DataBase;
 using Framework.HierarchicalExpand;
 
 using RqCalc.Application.Serializer._Internal;
+using RqCalc.Application.Settings;
 using RqCalc.Domain;
 using RqCalc.Domain._Base;
 using RqCalc.Domain._Extensions;
@@ -22,8 +24,6 @@ namespace RqCalc.Application.Serializer.Character;
 
 internal class CharacterVersionSerializer
 {
-    private readonly ApplicationContext context;
-        
     private readonly IIndexedDict<IClass> classes;
     private readonly IIndexedDict<IGender> genders;
     private readonly IIndexedDict<IState> states;
@@ -68,26 +68,25 @@ internal class CharacterVersionSerializer
     private readonly int guildBranchSize;
 
 
-    public CharacterVersionSerializer(ApplicationContext context, IVersion version)
+    public CharacterVersionSerializer(ApplicationSettings settings, IDataSource<IPersistentDomainObjectBase> dataSource, IVersion version)
     {
-        this.context = context;
         this.Version = version;
 
-        this.classes = IndexedDict.Create(this.context.DataSource.GetFullList<IClass>(), false);
-        this.genders = IndexedDict.Create(this.context.DataSource.GetFullList<IGender>(), false);
-        this.states = IndexedDict.Create(this.context.DataSource.GetFullList<IState>(), false);
-        this.events = IndexedDict.Create(this.context.DataSource.GetFullList<IEvent>().WhereVersion(this.Version), true);
-        this.elixirs = IndexedDict.Create(this.context.DataSource.GetFullList<IElixir>(), true);
-        this.stampColors = IndexedDict.Create(this.context.DataSource.GetFullList<IStampColor>(), false);
+        this.classes = IndexedDict.Create(dataSource.GetFullList<IClass>(), false);
+        this.genders = IndexedDict.Create(dataSource.GetFullList<IGender>(), false);
+        this.states = IndexedDict.Create(dataSource.GetFullList<IState>(), false);
+        this.events = IndexedDict.Create(dataSource.GetFullList<IEvent>().WhereVersion(this.Version), true);
+        this.elixirs = IndexedDict.Create(dataSource.GetFullList<IElixir>(), true);
+        this.stampColors = IndexedDict.Create(dataSource.GetFullList<IStampColor>(), false);
 
         this.classStats = classes.Select(c => c.GetRoot()).Distinct().ToDictionary(c => c, c => this.context.GetEditStats(c).OrderById().ToReadOnlyCollectionI());
 
-        this.stampVariants = this.context.DataSource.GetFullList<IStampVariant>().ToDictionary(var => Tuple.Create(var.Stamp, var.Color));
+        this.stampVariants = dataSource.GetFullList<IStampVariant>().ToDictionary(var => Tuple.Create(var.Stamp, var.Color));
 
-        this.consumables = IndexedDict.Create(this.context.DataSource.GetFullList<IConsumable>(), false);
+        this.consumables = IndexedDict.Create(dataSource.GetFullList<IConsumable>(), false);
 
         {
-            var classAurasRequest = from aura in this.context.DataSource.GetFullList<IAura>()
+            var classAurasRequest = from aura in dataSource.GetFullList<IAura>()
 
                 where aura.Contains(version)
 
@@ -99,7 +98,7 @@ internal class CharacterVersionSerializer
         }
 
         {
-            var classBuffsRequest = from buff in this.context.DataSource.GetFullList<IBuff>()
+            var classBuffsRequest = from buff in dataSource.GetFullList<IBuff>()
 
                 where buff.Class != null && buff.Contains(version)
 
@@ -112,14 +111,14 @@ internal class CharacterVersionSerializer
 
         if (this.Version.GuildTalents)
         {
-            this.guildBranches = this.context.DataSource.GetFullList<IGuildTalentBranch>();
+            this.guildBranches = dataSource.GetFullList<IGuildTalentBranch>();
 
             this.guildBranchCount = this.guildBranches.Count;
             this.guildBranchSize = this.guildBranches.Select(b => b.Talents.Count()).Distinct().Single();
         }
         else
         {
-            this.guildBonuses = IndexedDict.Create(this.context.DataSource.GetFullList<ILegacyGuildBonus>(), false);
+            this.guildBonuses = IndexedDict.Create(dataSource.GetFullList<ILegacyGuildBonus>(), false);
         }
 
         {
@@ -142,12 +141,12 @@ internal class CharacterVersionSerializer
             this.equipments = equipmentsRequest.ToDictionary(g => g.Key, g => IndexedDict.Create(g, false));
         }
 
-        this.slots = this.context.DataSource.GetFullList<IEquipmentSlot>().OrderById().SelectMany(slot => Enumerable.Range(0, slot.Count).Select(index => Tuple.Create(slot, index))).ToReadOnlyCollection();
+        this.slots = dataSource.GetFullList<IEquipmentSlot>().OrderById().SelectMany(slot => Enumerable.Range(0, slot.Count).Select(index => Tuple.Create(slot, index))).ToReadOnlyCollection();
            
         {
-            var stampEquipmentTypes = this.context.DataSource.GetFullList<IEquipmentType>().Where(t => t.Slot.IsWeapon != null).ToList();
+            var stampEquipmentTypes = dataSource.GetFullList<IEquipmentType>().Where(t => t.Slot.IsWeapon != null).ToList();
 
-            var stampsRequest = from stamp in this.context.DataSource.GetFullList<IStamp>()
+            var stampsRequest = from stamp in dataSource.GetFullList<IStamp>()
 
                 from type in stamp.Equipments.Any() ? stamp.Equipments.WhereVersion(this.Version).Select(e => e.Type) : stampEquipmentTypes
 
@@ -159,7 +158,7 @@ internal class CharacterVersionSerializer
 
         if (this.Version.SerializeCardBySlotType)
         {
-            var cardsRequest = from card in this.context.DataSource.GetFullList<ICard>()
+            var cardsRequest = from card in dataSource.GetFullList<ICard>()
 
                 where card.Contains(version)
 
@@ -171,7 +170,7 @@ internal class CharacterVersionSerializer
         }
         else
         {
-            var cardsRequest = from card in this.context.DataSource.GetFullList<ICard>()
+            var cardsRequest = from card in dataSource.GetFullList<ICard>()
 
                 where card.Contains(version)
 
@@ -193,7 +192,7 @@ internal class CharacterVersionSerializer
 
         if (this.Version.SharedAuras)
         {
-            var aurasRequest = from aura in this.context.DataSource.GetFullList<IAura>()
+            var aurasRequest = from aura in dataSource.GetFullList<IAura>()
 
                 where aura.Contains(this.Version)
 
@@ -217,7 +216,7 @@ internal class CharacterVersionSerializer
 
         if (this.Version.SharedBuffs)
         {
-            var buffsRequest = from buff in this.context.DataSource.GetFullList<IBuff>()
+            var buffsRequest = from buff in dataSource.GetFullList<IBuff>()
 
                 where buff.IsShared() && buff.Contains(this.Version)
 
@@ -228,7 +227,7 @@ internal class CharacterVersionSerializer
 
         if (this.Version.CardBuffs)
         {
-            var buffsRequest = from buff in this.context.DataSource.GetFullList<IBuff>()
+            var buffsRequest = from buff in dataSource.GetFullList<IBuff>()
 
                 where buff.Card != null && buff.Contains(this.Version)
 
@@ -239,7 +238,7 @@ internal class CharacterVersionSerializer
             
         if (this.Version.StampBuffs)
         {
-            var buffsRequest = from buff in this.context.DataSource.GetFullList<IBuff>()
+            var buffsRequest = from buff in dataSource.GetFullList<IBuff>()
 
                 where buff.Stamp != null && buff.Contains(this.Version)
 
@@ -249,7 +248,7 @@ internal class CharacterVersionSerializer
         }
 
         {
-            var request = from equipmentElixir in this.context.DataSource.GetFullList<IEquipmentElixir>()
+            var request = from equipmentElixir in dataSource.GetFullList<IEquipmentElixir>()
 
                 where equipmentElixir.Contains(this.Version)
 
@@ -269,9 +268,9 @@ internal class CharacterVersionSerializer
 
         if (this.Version.Collections)
         {
-            var request = from gender in this.context.DataSource.GetFullList<IGender>().OrderById()
+            var request = from gender in dataSource.GetFullList<IGender>().OrderById()
 
-                let groupRequest = from collectionGroup in this.context.DataSource.GetFullList<ICollectedGroup>().OrderById()
+                let groupRequest = from collectionGroup in dataSource.GetFullList<ICollectedGroup>().OrderById()
                               
                     let items = collectionGroup.Items.Where(item => item.IsAllowed(gender, this.Version))
 

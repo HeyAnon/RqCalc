@@ -2,44 +2,30 @@ using RqCalc.Domain;
 
 namespace RqCalc.Application.Calc;
 
-internal class CalcState : ICalcState
+public record ChangedCharacterCalculationState : ICharacterCalculationState
 {
-    public CalcState(ICalcState state)
-        : this((ICharacterCalc)state)
+    public ChangedCharacterCalculationState(ICharacterCalculationStateBase characterCalculationStateBase)
     {
-
-    }
-
-    public CalcState(ICharacterCalc characterCalc)
-        : this()
-    {
-        if (characterCalc == null) throw new ArgumentNullException(nameof(characterCalc));
-
-        this.Class = characterCalc.Class;
-        this.Level = characterCalc.Level;
-        this.Gender = characterCalc.Gender;
-        this.CurrentWeaponInfo = characterCalc.CurrentWeaponInfo;
-    }
-
-    private CalcState()
-    {
+        this.Class = characterCalculationStateBase.Class;
+        this.Level = characterCalculationStateBase.Level;
+        this.Gender = characterCalculationStateBase.Gender;
+        this.CurrentWeaponInfo = characterCalculationStateBase.CurrentWeaponInfo;
     }
 
 
-    public IClass Class { get; set; }
+    public IClass Class { get; }
 
-    public int Level { get; set; }
+    public int Level { get; }
 
-    public IGender Gender { get; set; }
+    public IGender Gender { get; }
 
-    public WeaponInfo? CurrentWeaponInfo { get; set; }
-
+    public WeaponInfo? CurrentWeaponInfo { get; }
 
     public IReadOnlyDictionary<IStat, decimal> Stats { get; set; }
 
     public Dictionary<int, decimal> CustomVariables { get; set; }
 
-    public ICalcState ChangeVariable(decimal variable)
+    public ICharacterCalculationState ChangeVariable(decimal variable)
     {
         return new CalcState(this)
         {
@@ -50,7 +36,7 @@ internal class CalcState : ICalcState
     }
 
 
-    IReadOnlyDictionary<IStat, decimal> ICalcState.Stats
+    IReadOnlyDictionary<IStat, decimal> ICharacterCalculationState.Stats
     {
         get
         {
@@ -63,7 +49,7 @@ internal class CalcState : ICalcState
         }
     }
 
-    IReadOnlyDictionary<int, decimal> ICalcState.CustomVariables
+    IReadOnlyDictionary<int, decimal> ICharacterCalculationState.CustomVariables
     {
         get
         {

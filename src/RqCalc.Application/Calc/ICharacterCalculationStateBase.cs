@@ -3,7 +3,7 @@ using RqCalc.Model;
 
 namespace RqCalc.Application.Calc;
 
-public interface ICharacterCalc : ICharacterSourceBase
+public interface ICharacterCalculationStateBase : ICharacterSourceBase
 {
     WeaponInfo? CurrentWeaponInfo { get; }
 }

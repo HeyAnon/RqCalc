@@ -1,40 +1,27 @@
-﻿using Framework.DataBase;
+﻿using Framework.Core;
+using Framework.Core.Serialization;
+using Framework.DataBase;
 
-using RqCalc.Domain;
+using RqCalc.Application.Calc;
 using RqCalc.Domain._Base;
-using RqCalc.Domain._Extensions;
 using RqCalc.Model;
 using RqCalc.Model.Impl;
+using System.ComponentModel.DataAnnotations;
+using RqCalc.Model._Extensions;
+using RqCalc.Application.Settings;
 
 namespace RqCalc.Application;
 
-public class CharacterCalculator : ICharacterCalculator
+public class CharacterCalculator(
+    ApplicationSettings settings,
+    IDataSource<IPersistentDomainObjectBase> dataSource,
+    IStatSource statSource,
+    ICharacterValidator characterValidator)
+    : ICharacterCalculator
 {
-    private readonly ApplicationSettings settings;
-    
-    private readonly IDataSource<IPersistentDomainObjectBase> dataSource;
-
-    private readonly IStatSource statSource;
-
-    private readonly ICharacterSource defaultCharacter;
-
-    public CharacterCalculator(
-        ApplicationSettings settings,
-        IDataSource<IPersistentDomainObjectBase> dataSource,
-        IStatSource statSource)
-    {
-        this.settings = settings;
-        this.dataSource = dataSource;
-        this.statSource = statSource;
-
-        this.defaultCharacter = this.CreateDefaultCharacter();
-    }
-
     public int GetFreeStats(ICharacterSource characterInput)
     {
-        if (characterInput == null) throw new ArgumentNullException(nameof(characterInput));
-
-        var allAvailableStats = (characterInput.Level - 1) * this.settings.StatsPerLevel;
+        var allAvailableStats = (characterInput.Level - 1) * settings.StatsPerLevel;
 
         var usedStats = characterInput.EditStats.Values.Sum(v => v - 1);
 
@@ -42,31 +29,27 @@ public class CharacterCalculator : ICharacterCalculator
     }
 
 
-    public ICharacterSource GetDefaultCharacter()
+    public CharacterCalculationResult Calculate(ICharacterSource character)
     {
-        return this.defaultCharacter;
-    }
+        characterValidator.Validate(character);
 
-    private ICharacterSource CreateDefaultCharacter()
-    {
-        var gender = dataSource.GetFullList<IGender>().OrderById().First();
-        var @class = dataSource.GetFullList<IClass>().OrderById().First();
-        var state = dataSource.GetFullList<IState>().OrderById().First();
+        var calc = new CharacterCalc(this, character);
 
-        return new CharacterSource
+        var stats = calc.GetStats().ChangeValue(d => d.Normalize());
+
+        return new CharacterCalculateResult
         {
-            Level = 1,
-            Gender = gender,
-            Class = @class,
-            State = state,
-            EditStats = this.GetEditStats(@class).ToDictionary(stat => stat, _ => 1)
+            Stats = stats,
+
+            Code = this.CharacterSerializer.Serialize(character),
+
+            //TalentCode = this.TalentSerializer.Serialize(character),
+
+            //GuildTalentCode = this.GuildTalentSerializer.Serialize(character),
+
+            Equipments = calc.GetEquipmentResults(),
+
+            StatDescriptions = calc.GetDescriptionValues(stats)
         };
-    }
-
-    public IEnumerable<IStat> GetEditStats(IClass @class)
-    {
-        if (@class == null) throw new ArgumentNullException(nameof(@class));
-
-        return new[] { @class.PrimaryStat }.Concat(this.statSource.NotPrimaryEditStats);
     }
 }

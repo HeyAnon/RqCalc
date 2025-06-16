@@ -2,25 +2,23 @@
 using Framework.Core.Serialization;
 using Framework.DataBase;
 
-using RqCalc.Application._Extensions;
 using RqCalc.Application.Calc;
 using RqCalc.Application.ImageSource;
 using RqCalc.Application.Serializer.Character;
 using RqCalc.Application.Serializer.GuildTalent;
 using RqCalc.Application.Serializer.Talent;
+using RqCalc.Application.Settings;
 using RqCalc.Domain;
 using RqCalc.Domain._Base;
 using RqCalc.Domain._Extensions;
 using RqCalc.Domain.BonusType;
 using RqCalc.Domain.Equipment;
 using RqCalc.Domain.Formula;
-using RqCalc.Domain.GuildTalent;
 using RqCalc.Model;
-using RqCalc.Model.Impl;
 
 namespace RqCalc.Application;
 
-public partial class ApplicationContext : IApplicationContext
+public partial class ApplicationContext 
 {
     //private readonly INativeExpressionParser _nativeParser;
 
@@ -88,11 +86,7 @@ public partial class ApplicationContext : IApplicationContext
         this.EquipmentForges = this.DataSource.GetFullList<IEquipmentForge>().ToDictionary(v => v.Level).ToArrayI();
         this.EquipmentLevelForges = this.DataSource.GetFullList<IEquipmentLevelForge>().ToDictionary(v => Tuple.Create(v.EquipmentLevel, v.Level), v => v.Hp);
 
-        this.ClassLevelHpBonuses = this.DataSource.GetFullList<IClass>().Where(@class => @class.Parent == null).ToDictionary(
 
-            @class => @class,
-
-            @class => new Dictionary<int, int> { { 0, 0 } }.Concat(@class.LevelHpBonuses.ToDictionary(bonus => bonus.Level, bonus => bonus.Value)).ToArrayI().ToReadOnlyListI());
 
 
         {
@@ -147,31 +141,6 @@ public partial class ApplicationContext : IApplicationContext
         return new[] { @class.PrimaryStat }.Concat(this.NotPrimaryEditStats);
     }
 
-    public ICharacterResult Calc(ICharacterSource character)
-    {
-        if (character == null) throw new ArgumentNullException(nameof(character));
-
-        this.Validate(character);
-
-        var calc = new CharacterCalc(this, character);
-
-        var stats = calc.GetStats().ChangeValue(d => d.Normalize());
-
-        return new CharacterResult
-        {
-            Stats = stats,
-
-            Code = this.CharacterSerializer.Serialize(character),
-
-            //TalentCode = this.TalentSerializer.Serialize(character),
-
-            //GuildTalentCode = this.GuildTalentSerializer.Serialize(character),
-
-            Equipments = calc.GetEquipmentResults(),
-
-            StatDescriptions = calc.GetDescriptionValues(stats)
-        };
-    }
 
     public IEquipmentClass GetEquipmentClass(IEquipment equipment)
     {
@@ -180,17 +149,6 @@ public partial class ApplicationContext : IApplicationContext
         var internalLevel = equipment.Info.Maybe(v => v.InternalLevel, 1);
 
         return this.DataSource.GetFullList<IEquipmentClass>().OrderByDescending(e => e.Level).First(c => internalLevel >= c.Level);
-    }
-
-    public int GetFreeGuildTalents(IGuildTalentBuildSource characterInput)
-    {
-        if (characterInput == null) throw new ArgumentNullException(nameof(characterInput));
-
-        var pointLimit = this.DataSource.GetFullList<IGuildTalentBranch>().Sum(b => b.MaxPoints);
-
-        var usedPoints = characterInput.GuildTalents.Sum(tal => tal.Value);
-
-        return pointLimit - usedPoints;
     }
 
 

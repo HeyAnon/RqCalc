@@ -1,13 +1,15 @@
-﻿using System.Linq.Expressions;
-
-using Framework.Core;
+﻿using Framework.Core;
 using Framework.DataBase;
 using Framework.ExpressionParsers;
 
 using RqCalc.Application.Calc;
+using RqCalc.Application.Settings;
 using RqCalc.Domain;
 using RqCalc.Domain._Base;
 using RqCalc.Domain.Formula;
+using RqCalc.Model;
+
+using System.Linq.Expressions;
 
 namespace RqCalc.Application;
 

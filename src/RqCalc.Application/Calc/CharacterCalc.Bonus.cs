@@ -1,4 +1,5 @@
 ﻿using Framework.Core;
+
 using RqCalc.Domain._Base;
 using RqCalc.Domain._Extensions;
 using RqCalc.Domain.BonusType;
@@ -9,7 +10,7 @@ using RqCalc.Model;
 
 namespace RqCalc.Application.Calc;
 
-internal partial class CharacterCalc
+public partial class CharacterCalculationStateBase
 {
     private IEnumerable<IBonusBase> GetBonuses(BonusSource source)
     {

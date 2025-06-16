@@ -1,5 +1,6 @@
 ﻿using Framework.Core;
 using Framework.DataBase;
+
 using RqCalc.Domain;
 using RqCalc.Domain._Base;
 using RqCalc.Domain.Card;
@@ -9,6 +10,8 @@ using RqCalc.Domain.Stamp;
 using RqCalc.Domain.Talent;
 
 namespace RqCalc.Application.ImageSource;
+
+
 
 public class PreLoadedImageSourceService(
     ITypeResolver<string> typeResolver,

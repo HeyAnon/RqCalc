@@ -1,4 +1,5 @@
 ﻿using Framework.Persistent;
+
 using RqCalc.Domain._Base;
 using RqCalc.Domain.Formula;
 

@@ -1,16 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-using Framework.Core;
-
-using RqCalc.Application._Extensions;
-using RqCalc.Domain._Extensions;
-using RqCalc.Domain.GuildTalent;
+﻿using Framework.Core;
 using RqCalc.Model;
+using System.ComponentModel.DataAnnotations;
+using RqCalc.Domain._Extensions;
 using RqCalc.Model._Extensions;
 
 namespace RqCalc.Application;
 
-public partial class ApplicationContext
+public interface ICharacterValidator
+{
+    void Validate(ICharacterSource character);
+}
+
+public class CharacterValidator(ITalentValidator talentValidator, IGuildTalentValidator guildTalentValidator) : ICharacterValidator
 {
     public void Validate(ICharacterSource character)
     {
@@ -26,9 +27,9 @@ public partial class ApplicationContext
             throw new ValidationException("Gender not initialized");
         }
 
-        this.Validate((ITalentBuildSource)character);
+        talentValidator.Validate(character);
 
-        this.Validate((IGuildTalentBuildSource)character);
+        guildTalentValidator.Validate(character);
 
         character.EditStats.Keys.GetMergeResult(this.GetEditStats(character.Class)).Pipe(mergeResult =>
         {
@@ -312,98 +313,6 @@ public partial class ApplicationContext
             if (!collectedItem.IsAllowed(character.Gender, this.LastVersion))
             {
                 throw new ValidationException($"Invalid CollectedItem \"{collectedItem.Name}\"");
-            }
-        }
-    }
-
-    public void Validate(ITalentBuildSource character)
-    {
-        if (character == null) throw new ArgumentNullException(nameof(character));
-
-        if (character.Level < 1 || character.Level > (character.Class.Specialization.MaxLevel ?? this.LastVersion.MaxLevel))
-        {
-            throw new ValidationException($"Invalid Level. Out of range: {character.Level}");
-        }
-
-        character.Talents.GroupBy(tal => tal.Branch).ToList().Pipe(talentBranchGroups =>
-        {
-            foreach (var talentBranchGroup in talentBranchGroups)
-            {
-                var branch = talentBranchGroup.Key;
-
-                if (!character.Class.IsSubsetOf(branch.Class))
-                {
-                    throw new ValidationException($"Invalid TalentBrunch \"{branch.Name}\" Class: {branch.Class}");
-                }
-
-                foreach (var pair in branch.Talents.GroupBy(tal => tal.HIndex).OrderBy(g => g.Key)
-                             .Zip(
-                                 talentBranchGroup.GroupBy(tal => tal.HIndex)
-                                     .OrderBy(g => g.Key)
-                                     .Select(instance => instance.SingleOrDefault(dup => new Exception(
-                                         $"To many talents ({dup.Join(", ", t => t.Name)}) in one vertical set {instance.Key}"))),
-
-                                 (definition, talent) => new { Definition = definition, Talent = talent }))
-                {
-                    var definition = pair.Definition;
-
-                    var talent = pair.Talent;
-
-                    if (!definition.Contains(talent))
-                    {
-                        throw new ValidationException($"Invalid Talent \"{talent.Name}\" Position");
-                    }
-                }
-            }
-        });
-
-
-        this.GetFreeTalents(character).Pipe(freeTalents =>
-        {
-            if (freeTalents < 0)
-            {
-                throw new ValidationException($"Invalid talents. Overflow usage talents: {-freeTalents}");
-            }
-        });
-    }
-
-    public void Validate(IGuildTalentBuildSource character)
-    {
-        if (character == null) throw new ArgumentNullException(nameof(character));
-
-        var initializedTalents = character.GuildTalents.Where(pair => pair.Value != 0).ToList();
-
-        initializedTalents.Select(t => t.Key).GetDuplicates().ToList().Pipe(guildBonusDuplicates =>
-        {
-            if (guildBonusDuplicates.Any())
-            {
-                throw new ValidationException($"Invalid Guild Talents. Duplicate elements: {guildBonusDuplicates.Join(", ", gb => gb.Name)}");
-            }
-        });
-
-        initializedTalents.GroupBy(pair => pair.Key.Branch, pair => pair.Key)
-            .Where(g => g.Count() > 1).Foreach(overflowGroup =>
-                throw new ValidationException($"More one guild talent ({overflowGroup.Join(", ")}) in branch \"{overflowGroup.Key}\""));
-
-        var missedBranches = this.DataSource.GetFullList<IGuildTalentBranch>().OrderById().Take(initializedTalents.Count).Except(initializedTalents.Select(t => t.Key.Branch))
-            .ToList();
-
-        if (missedBranches.Any())
-        {
-            throw new ValidationException($"Missed Talent in Branches: {missedBranches.Join(", ")}");
-        }
-
-        foreach (var pair in initializedTalents.OrderBy(tal => tal.Key.Branch.Id)
-                     .Select((pair, index) => new { Talent = pair.Key, Points = pair.Value, IsLast = index == initializedTalents.Count - 1 }))
-        {
-            if (pair.Points <= 0 || pair.Points > pair.Talent.Branch.MaxPoints)
-            {
-                throw new ValidationException($"Invalid point count ({pair.Points}) in guild talent: \"{pair.Talent}\"");
-            }
-
-            if (!pair.IsLast && pair.Points != pair.Talent.Branch.MaxPoints)
-            {
-                throw new ValidationException($"Points ({pair.Points}) in guild talent \"{pair.Talent}\" must be maximized ({pair.Talent.Branch.MaxPoints})");
             }
         }
     }

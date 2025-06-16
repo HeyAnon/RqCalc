@@ -2,11 +2,11 @@ using RqCalc.Domain;
 
 namespace RqCalc.Application.Calc;
 
-public interface ICalcState : ICharacterCalc
+public interface ICharacterCalculationState : ICharacterCalculationStateBase
 {
     IReadOnlyDictionary<IStat, decimal> Stats { get; }
         
     IReadOnlyDictionary<int, decimal> CustomVariables { get; }
 
-    ICalcState ChangeVariable(decimal variable);
+    ICharacterCalculationState ChangeVariable(decimal variable);
 }   

@@ -24,7 +24,7 @@ internal class TalentBuildVersionSerializer
         this.context = context ?? throw new ArgumentNullException(nameof(context));
         this.version = version ?? throw new ArgumentNullException(nameof(version));
 
-        var classes = this.context.DataSource.GetFullList<IClass>();
+        var classes = dataSource.GetFullList<IClass>();
 
         this.classes = IndexedDict.Create(classes, false);
 

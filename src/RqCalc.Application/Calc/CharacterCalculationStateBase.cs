@@ -2,6 +2,7 @@
 using Framework.HierarchicalExpand;
 
 using RqCalc.Application._Extensions;
+using RqCalc.Application.Settings;
 using RqCalc.Domain;
 using RqCalc.Domain._Base;
 using RqCalc.Domain._Extensions;
@@ -15,25 +16,30 @@ using RqCalc.Model._Extensions;
 namespace RqCalc.Application.Calc;
 
 
-internal partial class CharacterCalc : ICharacterCalc
+public partial class CharacterCalculationStateBase : ICharacterCalculationStateBase
 {
     private readonly ApplicationContext context;
-        
+
+    private readonly ApplicationSettings applicationSettings;
+
     private readonly HashSet<IStat> currentClassStats;
         
 
     private readonly ICharacterSource character;
 
 
-    public CharacterCalc(ApplicationContext context, ICharacterSource character)
+    public CharacterCalculationStateBase(ApplicationContext context, IStatSource statSource, ApplicationSettings applicationSettings, ICharacterSource character)
     {
-        this.context = context ?? throw new ArgumentNullException(nameof(context));
-        this.character = character ?? throw new ArgumentNullException(nameof(character));
+        this.context = context;
+        this.applicationSettings = applicationSettings;
+        this.character = character;
 
-        this.currentClassStats = this.character.Class.GetStats().Concat(this.context.BaseStats).Pipe(System.Linq.Enumerable.ToHashSet);
+        this.currentClassStats = this.character.Class.GetStats().Concat(statSource.BaseStats).ToHashSet();
 
         {
-            var primaryWeaponRequest = from pair in this.character.Equipments
+            var primaryWeaponRequest =
+                
+                from pair in this.character.Equipments
 
                 orderby pair.Key.Slot.IsExtraSlot()
                                            
@@ -88,7 +94,7 @@ internal partial class CharacterCalc : ICharacterCalc
         {
             if (this.CurrentWeaponInfo == null)
             {
-                yield return new BonusEvaluator.ConstBonusEvaluator(BonusEvaluateRule.SumOffset, false, this.context.AttackStat, 2);
+                yield return new BonusEvaluator.ConstBonusEvaluator(BonusEvaluateRule.SumOffset, false, applicationSettings.AttackStat, 2);
             }
 
             {
@@ -414,13 +420,6 @@ internal partial class CharacterCalc : ICharacterCalc
         
     public Dictionary<CharacterEquipmentIdentity, IBonusContainer<IBonusBase>> GetEquipmentStampInfo()
     {
-        int x = 123;
-
-        x = 356 switch
-        {
-            123 => 234,
-        };
-
         var request = from pair in this.character.Equipments
 
             let equipmentInfo = pair.Value

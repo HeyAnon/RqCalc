@@ -44,6 +44,10 @@ public class StatSource : IStatSource
 
     public IReadOnlyList<IStat> SourcesStats { get; }
 
+    public IEnumerable<IStat> GetEditStats(IClass @class)
+    {
+        return new[] { @class.PrimaryStat }.Concat(this.NotPrimaryEditStats);
+    }
 
     private IReadOnlyList<IReadOnlyList<IStat>> GetDependencyStatLayers([NotNull] IReadOnlyCollection<IStat> stats)
     {

@@ -22,7 +22,7 @@ internal class GuildTalentBuildVersionSerializer
         this.context = context ?? throw new ArgumentNullException(nameof(context));
         this.version = version ?? throw new ArgumentNullException(nameof(version));
 
-        this.guildBranches = this.context.DataSource.GetFullList<IGuildTalentBranch>();
+        this.guildBranches = dataSource.GetFullList<IGuildTalentBranch>();
 
         this.guildbranchCount = this.guildBranches.Count;
         this.guildBranchSize = this.guildBranches.Select(b => b.Talents.Count()).Distinct().Single();

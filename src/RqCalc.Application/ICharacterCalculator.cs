@@ -4,7 +4,11 @@ namespace RqCalc.Application;
 
 public interface ICharacterCalculator
 {
-    int GetFreeStats(ICharacterSource characterInput);
+    //ISerializer<byte[], ICharacterSource> CharacterBinarySerializer { get; }
 
-    ICharacterSource GetDefaultCharacter();
+    //ISerializer<string, ICharacterSource> CharacterSerializer { get; }
+
+    int GetFreeStats(ICharacterSource characterInput);
+    
+    CharacterCalculationResult Calculate(ICharacterSource character);
 }
