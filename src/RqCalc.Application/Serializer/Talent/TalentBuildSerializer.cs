@@ -13,18 +13,19 @@ public class TalentBuildSerializer : ISerializer<byte[], ITalentBuildSource>
 {
     private readonly IReadOnlyDictionary<int, Lazy<TalentBuildVersionSerializer>> serializers;
 
-    internal readonly TalentBuildVersionSerializer LastVersionSerializer;
+    private readonly Lazy<TalentBuildVersionSerializer> lazyLastVersionSerializer;
 
 
     public TalentBuildSerializer(IDataSource<IPersistentDomainObjectBase> dataSource, IVersion lastVersion)
     {
         var serializersRequest =
-            
+
             from version in dataSource.GetFullList<IVersion>()
 
             where version.Id <= lastVersion.Id
-                                     
-            group version by version.MaxLevel into levelGroup
+
+            group version by version.MaxLevel
+            into levelGroup
 
             let version = levelGroup.OrderBy(v => v.Id).First()
 
@@ -32,18 +33,16 @@ public class TalentBuildSerializer : ISerializer<byte[], ITalentBuildSource>
 
         this.serializers = serializersRequest.ToDictionary();
 
-        this.LastVersionSerializer = this.serializers.OrderByDescending(ser => ser.Key).First(ser => ser.Key <= lastVersion.Id).Value.Value;
+        this.lazyLastVersionSerializer = LazyHelper.Create(() => this.serializers.OrderByDescending(ser => ser.Key).First(ser => ser.Key <= lastVersion.Id).Value.Value);
     }
 
 
     public ITalentBuildSource Parse(byte[] input)
     {
-        if (input == null) throw new ArgumentNullException(nameof(input));
-
         var reader = new BitReader(input);
 
         var version = reader.ReadByMax(byte.MaxValue);
-            
+
         var serializer = this.serializers.GetValue(version, () => new Exception($"Invalid Version: {version}"));
 
         return serializer.Value.Parse(reader);
@@ -51,11 +50,9 @@ public class TalentBuildSerializer : ISerializer<byte[], ITalentBuildSource>
 
     public byte[] Format(ITalentBuildSource character)
     {
-        if (character == null) throw new ArgumentNullException(nameof(character));
-
         var writer = new BitWriter();
 
-        this.LastVersionSerializer.FullFormat(writer, character);
+        this.lazyLastVersionSerializer.Value.FullFormat(writer, character);
 
         return writer.GetBytes();
     }

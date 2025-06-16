@@ -1,4 +1,5 @@
 using Framework.Core;
+
 using RqCalc.Domain._Base;
 
 namespace RqCalc.Infrastructure;

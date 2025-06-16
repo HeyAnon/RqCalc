@@ -16,7 +16,7 @@ public partial class CharacterCalculationStartupState
     {
         if (source.HasFlag(BonusSource.Class))
         {
-            foreach (var bonus in this.character.Class.Bonuses)
+            foreach (var bonus in character.Class.Bonuses)
             {
                 yield return bonus;
             }
@@ -24,11 +24,11 @@ public partial class CharacterCalculationStartupState
 
         if (source.HasFlag(BonusSource.Equipment))
         {
-            foreach (var equipmentInfo in this.character.Equipments.Values)
+            foreach (var equipmentInfo in character.Equipments.Values)
             {
                 var equipment = equipmentInfo.Equipment;
 
-                if (equipment.IsAllowed(this.character.State))
+                if (equipment.IsAllowed(character.State))
                 {
                     foreach (var bonus in this.GetEquipmentBonuses(equipment))
                     {
@@ -56,9 +56,9 @@ public partial class CharacterCalculationStartupState
 
         if (source.HasFlag(BonusSource.Stamp))
         {
-            foreach (var equipmentInfo in this.character.Equipments.Values)
+            foreach (var equipmentInfo in character.Equipments.Values)
             {
-                if (equipmentInfo.StampVariant != null && equipmentInfo.Equipment.IsAllowed(this.character.State))
+                if (equipmentInfo.StampVariant != null && equipmentInfo.Equipment.IsAllowed(character.State))
                 {
                     foreach (var bonus in this.GetStampBonuses(equipmentInfo))
                     {
@@ -68,17 +68,17 @@ public partial class CharacterCalculationStartupState
             }
         }
 
-        if (source.HasFlag(BonusSource.Elixir) && this.character.EnableElixir && this.character.Elixir != null)
+        if (source.HasFlag(BonusSource.Elixir) && character.EnableElixir && character.Elixir != null)
         {
-            foreach (var bonus in this.character.Elixir.Bonuses)
+            foreach (var bonus in character.Elixir.Bonuses)
             {
                 yield return bonus;
             }
         }
 
-        if (source.HasFlag(BonusSource.Consumable) && this.character.EnableConsumables)
+        if (source.HasFlag(BonusSource.Consumable) && character.EnableConsumables)
         {
-            foreach (var consumable in this.character.Consumables)
+            foreach (var consumable in character.Consumables)
             {
                 foreach (var bonus in consumable.Bonuses)
                 {
@@ -87,9 +87,9 @@ public partial class CharacterCalculationStartupState
             }
         }
 
-        if (source.HasFlag(BonusSource.Guild) && this.character.EnableGuildTalents)
+        if (source.HasFlag(BonusSource.Guild) && character.EnableGuildTalents)
         {
-            foreach (var guildTalentPair in this.character.GuildTalents)
+            foreach (var guildTalentPair in character.GuildTalents)
             {
                 var guildTalent = guildTalentPair.Key;
 
@@ -108,23 +108,23 @@ public partial class CharacterCalculationStartupState
             }
         }
 
-        if (source.HasFlag(BonusSource.Aura) && this.character.EnableAura)
+        if (source.HasFlag(BonusSource.Aura) && character.EnableAura)
         {
-            var mainAuraTalentBonuses = from talent in this.character.Talents
+            var mainAuraTalentBonuses = from talent in character.Talents
 
                 from bonus in talent.Bonuses
 
-                where bonus.AuraCondition == this.character.Aura
+                where bonus.AuraCondition == character.Aura
 
                 select bonus;
 
-            var mainBonuses = this.character.Aura == null ? [] : this.character.EnableTalents ? this.character.Aura.GetBonuses(this.lastVersion, false, mainAuraTalentBonuses) : this.character.Aura.GetBonuses(this.lastVersion, false, false);
+            var mainBonuses = character.Aura == null ? [] : character.EnableTalents ? character.Aura.GetBonuses(this.lastVersion, false, mainAuraTalentBonuses) : character.Aura.GetBonuses(this.lastVersion, false, false);
 
 
 
-            var allAuraBonuses = from auraPair in new[] { new { Aura = this.character.Aura, Bonuses = mainBonuses.ToArray() } }
+            var allAuraBonuses = from auraPair in new[] { new { Aura = character.Aura, Bonuses = mainBonuses.ToArray() } }
 
-                    .Concat(this.character.SharedAuras.Select(pair => new { Aura = pair.Key, Bonuses = pair.Key.GetBonuses(this.lastVersion, true, pair.Value).ToArray()}))
+                    .Concat(character.SharedAuras.Select(pair => new { Aura = pair.Key, Bonuses = pair.Key.GetBonuses(this.lastVersion, true, pair.Value).ToArray()}))
 
                 from bonus in auraPair.Bonuses
                                      
@@ -143,21 +143,21 @@ public partial class CharacterCalculationStartupState
             }
         }
 
-        if (source.HasFlag(BonusSource.Buff) && this.character.EnableBuffs)
+        if (source.HasFlag(BonusSource.Buff) && character.EnableBuffs)
         {
-            foreach (var buffPair in this.character.Buffs)
+            foreach (var buffPair in character.Buffs)
             {
                 var buff = buffPair.Key;
 
                 if (buff.Class != null)
                 {
-                    if (buff.TalentCondition == null || (this.character.EnableTalents && this.character.Talents.Contains(buffPair.Key.TalentCondition)))
+                    if (buff.TalentCondition == null || (character.EnableTalents && character.Talents.Contains(buffPair.Key.TalentCondition)))
                     {
                         var buffBonusesRequest = from bonus in buff.Bonuses
 
                             select new { Bonus = (IBonusBase)bonus, Priority = 0 };
 
-                        var talentBuffBonusesRequest = from talent in this.character.Talents
+                        var talentBuffBonusesRequest = from talent in character.Talents
 
                             from bonus in talent.Bonuses
 
@@ -166,7 +166,7 @@ public partial class CharacterCalculationStartupState
                             select new { Bonus = (IBonusBase)bonus, Priority = 1 };
 
 
-                        var totalBonusRequest = from pair in this.character.EnableTalents ? buffBonusesRequest.Concat(talentBuffBonusesRequest) : buffBonusesRequest
+                        var totalBonusRequest = from pair in character.EnableTalents ? buffBonusesRequest.Concat(talentBuffBonusesRequest) : buffBonusesRequest
 
                             group pair by pair.Bonus.Type into bonusTypeGroup
 
@@ -191,9 +191,9 @@ public partial class CharacterCalculationStartupState
             }
         }
 
-        if (source.HasFlag(BonusSource.Talent) && this.character.EnableTalents)
+        if (source.HasFlag(BonusSource.Talent) && character.EnableTalents)
         {
-            foreach (var talent in this.character.Talents)
+            foreach (var talent in character.Talents)
             {
                 foreach (var bonus in talent.Bonuses)
                 {
@@ -207,11 +207,11 @@ public partial class CharacterCalculationStartupState
 
         if (source.HasFlag(BonusSource.Card))
         {
-            var request = from equipmentInfo in this.character.Equipments.Values
+            var request = from equipmentInfo in character.Equipments.Values
 
                 let equipment = equipmentInfo.Equipment
 
-                where equipment.IsAllowed(this.character.State)
+                where equipment.IsAllowed(character.State)
 
                 from card in equipmentInfo.Cards
 
@@ -240,9 +240,9 @@ public partial class CharacterCalculationStartupState
             }
         }
 
-        if (source.HasFlag(BonusSource.Collection) && this.character.EnableCollecting)
+        if (source.HasFlag(BonusSource.Collection) && character.EnableCollecting)
         {
-            foreach (var collectedItem in this.character.CollectedItems)
+            foreach (var collectedItem in character.CollectedItems)
             {
                 foreach (var bonus in collectedItem.Bonuses)
                 {
@@ -400,7 +400,7 @@ public partial class CharacterCalculationStartupState
 
     private int GetCardCount(Func<ICard, bool> filter)
     {
-        return this.character.Equipments.SelectMany(pair => pair.Value.Cards).Where(c => c != null).Count(filter);
+        return character.Equipments.SelectMany(pair => pair.Value.Cards).Where(c => c != null).Count(filter);
     }
 
     private IEnumerable<IBonusBase> GetStampBonuses(ICharacterEquipmentData equipmentInfo)

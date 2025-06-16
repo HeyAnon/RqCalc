@@ -72,7 +72,7 @@ internal class CharacterVersionSerializer
 
     public CharacterVersionSerializer(
         ApplicationSettings settings,
-        IStatSource statSource,
+        IStatService statService,
         IDataSource<IPersistentDomainObjectBase> dataSource,
         IVersion version)
     {
@@ -86,7 +86,7 @@ internal class CharacterVersionSerializer
         this.elixirDict = dataSource.GetFullList<IElixir>().ToIndexedDict().ToNullable();
         this.stampColorDict = dataSource.GetFullList<IStampColor>().ToIndexedDict();
 
-        this.classStatDict = this.classDict.Select(c => c.GetRoot()).Distinct().ToDictionary(c => c, c => statSource.GetEditStats(c).OrderById().ToReadOnlyCollectionI());
+        this.classStatDict = this.classDict.Select(c => c.GetRoot()).Distinct().ToDictionary(c => c, c => statService.GetEditStats(c).OrderById().ToReadOnlyCollectionI());
 
         this.stampVariantDict = dataSource.GetFullList<IStampVariant>().ToDictionary(var => Tuple.Create(var.Stamp, var.Color));
 

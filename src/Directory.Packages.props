@@ -9,6 +9,7 @@
     <PackageVersion Include="Luxoft.Framework.Core.AnonymousTypeBuilder" Version="$(FrameworkVersion)" />
     <PackageVersion Include="Luxoft.Framework.ExpressionParsers" Version="$(FrameworkVersion)" />
     <PackageVersion Include="Luxoft.Framework.Persistent" Version="$(FrameworkVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6" />
   </ItemGroup>
   <!-- Tests -->
   <ItemGroup>

@@ -25,10 +25,10 @@ public class CharacterSerializer : ISerializer<byte[], ICharacterSource>
     private readonly Lazy<CharacterVersionSerializer> lazyLastSerializer;
 
     public CharacterSerializer(
-        ApplicationSettings settings,
-        IStatSource statSource,
         IDataSource<IPersistentDomainObjectBase> dataSource,
         IVersion lastVersion,
+        ApplicationSettings settings,
+        IStatService statService,
         IEquipmentService equipmentService,
         IStampService stampService)
     {
@@ -42,14 +42,12 @@ public class CharacterSerializer : ISerializer<byte[], ICharacterSource>
 
             where version.Id <= lastVersion.Id
 
-            select (version.Id, LazyHelper.Create(() => new CharacterVersionSerializer(settings, statSource, dataSource, version)));
+            select (version.Id, LazyHelper.Create(() => new CharacterVersionSerializer(settings, statService, dataSource, version)));
 
         this.serializers = serializersRequest.ToDictionary();
 
         this.lazyLastSerializer = LazyHelper.Create(() => this.serializers[lastVersion.Id].Value);
     }
-
-    private CharacterVersionSerializer LastVersionSerializer => this.lazyLastSerializer.Value;
 
     public ICharacterSource Parse(byte[] input)
     {
@@ -76,7 +74,7 @@ public class CharacterSerializer : ISerializer<byte[], ICharacterSource>
     {
         var writer = new BitWriter();
 
-        this.LastVersionSerializer.FullFormat(writer, character);
+        this.lazyLastSerializer.Value.FullFormat(writer, character);
 
         return writer.GetBytes();
     }

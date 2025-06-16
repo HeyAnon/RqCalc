@@ -4,10 +4,15 @@ namespace RqCalc.Application.Calculation;
 
 public record CharacterCalculationChangedState(IClass Class, int Level, IGender Gender, WeaponInfo? CurrentWeaponInfo) : ICharacterCalculationChangedState
 {
+    public CharacterCalculationChangedState(ICharacterCalculationState sourceState)
+        : this(sourceState.Class, sourceState.Level, sourceState.Gender, sourceState.CurrentWeaponInfo)
+    {
+    }
+
     public IReadOnlyDictionary<IStat, decimal>? Stats { get; init; }
 
     public decimal? CustomVariable { get; init; }
-    
+
     ICharacterCalculationChangedState ICharacterCalculationChangedState.ChangeVariable(decimal variable)
     {
         return this with { CustomVariable = variable };

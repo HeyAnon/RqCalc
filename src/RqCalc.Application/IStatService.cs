@@ -2,7 +2,7 @@
 
 namespace RqCalc.Application;
 
-public interface IStatSource
+public interface IStatService
 {
     IReadOnlyList<IStat> BaseStats { get; }
 

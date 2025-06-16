@@ -5,7 +5,7 @@ namespace RqCalc.Domain.BonusType;
 
 public interface IBonusTypeVariable : IPersistentDomainObjectBase, IIndexObject
 {
-    IStat MultiplicityStat { get; }
+    IStat? MultiplicityStat { get; }
 
     IBonusType BonusType { get; }
 

@@ -9,9 +9,9 @@ using RqCalc.Domain._Extensions;
 
 namespace RqCalc.Application;
 
-public class StatSource : IStatSource
+public class StatService : IStatService
 {
-    public StatSource(IDataSource<IPersistentDomainObjectBase> dataSource)
+    public StatService(IDataSource<IPersistentDomainObjectBase> dataSource)
     {
         var stats = dataSource.GetFullList<IStat>();
 

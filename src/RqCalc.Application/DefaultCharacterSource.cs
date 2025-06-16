@@ -8,7 +8,7 @@ using RqCalc.Model.Impl;
 
 namespace RqCalc.Application;
 
-public class DefaultCharacterSource(IDataSource<IPersistentDomainObjectBase> dataSource, IStatSource statSource) : IDefaultCharacterSource
+public class DefaultCharacterSource(IDataSource<IPersistentDomainObjectBase> dataSource, IStatService statService) : IDefaultCharacterSource
 {
     private ICharacterSource? defaultCharacter;
 
@@ -29,7 +29,7 @@ public class DefaultCharacterSource(IDataSource<IPersistentDomainObjectBase> dat
             Gender = gender,
             Class = @class,
             State = state,
-            EditStats = statSource.GetEditStats(@class).ToDictionary(stat => stat, _ => 1)
+            EditStats = statService.GetEditStats(@class).ToDictionary(stat => stat, _ => 1)
         };
     }
 }

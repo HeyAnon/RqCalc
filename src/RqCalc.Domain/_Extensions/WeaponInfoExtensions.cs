@@ -2,7 +2,7 @@
 
 public static class WeaponInfoExtensions
 {
-    public static WeaponInfo Average(this IEnumerable<WeaponInfo> weaponInfos)
+    public static WeaponInfo? Average(this IEnumerable<WeaponInfo> weaponInfos)
     {
         if (weaponInfos == null) throw new ArgumentNullException(nameof(weaponInfos));
 

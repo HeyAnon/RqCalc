@@ -2,7 +2,7 @@ using RqCalc.Domain;
 
 namespace RqCalc.Application._Extensions;
 
-public static class DecimalExtensions
+internal static class DecimalExtensions
 {
     public static decimal Normalize(this decimal value)
     {
