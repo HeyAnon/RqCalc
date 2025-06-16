@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using Framework.Core;
 using Framework.DataBase;
 using Framework.HierarchicalExpand;
@@ -20,73 +19,83 @@ using RqCalc.Model;
 using RqCalc.Model._Extensions;
 using RqCalc.Model.Impl;
 
+using System.Collections.ObjectModel;
+using RqCalc.Application.IndexedDict;
+
 namespace RqCalc.Application.Serializer.Character;
 
 internal class CharacterVersionSerializer
 {
-    private readonly IIndexedDict<IClass> classes;
-    private readonly IIndexedDict<IGender> genders;
-    private readonly IIndexedDict<IState> states;
-    private readonly IIndexedDict<IEvent> events;
-    private readonly IIndexedDict<IElixir> elixirs;
-    private readonly IIndexedDict<ILegacyGuildBonus> guildBonuses;
-    private readonly IIndexedDict<IConsumable> consumables;
-    private readonly IIndexedDict<IStampColor> stampColors;
+    private readonly IIndexedDict<IClass> classDict;
+    private readonly IIndexedDict<IGender> genderDict;
+    private readonly IIndexedDict<IState> stateDict;
+    private readonly IIndexedDict<IEvent?> eventDict;
+    private readonly IIndexedDict<IElixir?> elixirDict;
+    private readonly IIndexedDict<ILegacyGuildBonus> guildLegacyBonusDict;
+    private readonly IIndexedDict<IConsumable> consumableDict;
+    private readonly IIndexedDict<IStampColor> stampColorDict;
 
-    private readonly IReadOnlyDictionary<IClass, IReadOnlyCollection<IStat>> classStats;
-    private readonly IReadOnlyDictionary<IClass, IIndexedDict<IAura>> classAuras;
-    private readonly IReadOnlyDictionary<IClass, IIndexedDict<IBuff>> classBuffs;
-    private readonly IReadOnlyDictionary<Tuple<IStamp, IStampColor>, IStampVariant> stampVariants;
-    private readonly IReadOnlyDictionary<Tuple<IClass, IEquipmentSlot>, IIndexedDict<IEquipment>> equipments;
-    private readonly IReadOnlyCollection<Tuple<IEquipmentSlot, int>> slots;
-    private readonly IReadOnlyDictionary<IEquipmentType, IIndexedDict<IStamp>> stamps;
-    private readonly IReadOnlyDictionary<IEquipmentSlot, IIndexedDict<ICard>> cardsBySlot;
-    private readonly IReadOnlyDictionary<IEquipmentType, IIndexedDict<ICard>> cardsBySlotType;
-    private readonly IReadOnlyDictionary<IClass, ReadOnlyCollection<Tuple<ITalentBranch, IReadOnlyList<IReadOnlyList<ITalent>>>>> talents;
-    private readonly IReadOnlyDictionary<IEquipmentSlot, IIndexedDict<IEquipmentElixir>> equipmentElixirs;
+    private readonly IReadOnlyDictionary<IClass, IReadOnlyCollection<IStat>> classStatDict;
+    private readonly IReadOnlyDictionary<IClass, IIndexedDict<IAura?>> classAuraDict;
+    private readonly IReadOnlyDictionary<IClass, IIndexedDict<IBuff>> classBuffDict;
+    private readonly IReadOnlyDictionary<Tuple<IStamp, IStampColor>, IStampVariant> stampVariantDict;
+    private readonly IReadOnlyDictionary<Tuple<IClass, IEquipmentSlot>, IIndexedDict<IEquipment>> equipmentDict;
+    private readonly IReadOnlyCollection<Tuple<IEquipmentSlot, int>> slotDict;
+    private readonly IReadOnlyDictionary<IEquipmentType, IIndexedDict<IStamp>> stampDict;
+    private readonly IReadOnlyDictionary<IEquipmentSlot, IIndexedDict<ICard?>> cardsBySlotDict;
+    private readonly IReadOnlyDictionary<IEquipmentType, IIndexedDict<ICard?>> cardsBySlotTypeDict;
+    private readonly IReadOnlyDictionary<IClass, ReadOnlyCollection<Tuple<ITalentBranch, IReadOnlyList<IReadOnlyList<ITalent>>>>> talentDict;
+    private readonly IReadOnlyDictionary<IEquipmentSlot, IIndexedDict<IEquipmentElixir?>> equipmentElixirDict;
 
-    public readonly IVersion Version;
-
-
-    internal readonly IReadOnlyDictionary<IAura, Tuple<IBonusContainer<IBonusBase>, IBonusContainer<IBonusBase>>> AuraSharedBonuses;
-
-    private readonly IIndexedDict<IAura> sharedAuras;
-
-    private readonly IIndexedDict<IBuff> sharedBuffs;
-
-    private readonly IIndexedDict<IBuff> cardBuffs;
-
-    private readonly IIndexedDict<IBuff> stampBuffs;
-
-    private readonly IReadOnlyDictionary<IGender, IReadOnlyCollection<Tuple<ICollectedGroup, IIndexedDict<ICollectedItem>>>> collectedGroups;
+    private readonly ApplicationSettings settings;
 
 
-    private readonly IReadOnlyCollection<IGuildTalentBranch> guildBranches;
+    private readonly IReadOnlyDictionary<IAura, Tuple<IBonusContainer<IBonusBase>, IBonusContainer<IBonusBase>>> sharedAuraBonusDict;
+
+    private readonly IIndexedDict<IAura> sharedAuraDict;
+
+    private readonly IIndexedDict<IBuff> sharedBuffDict;
+
+    private readonly IIndexedDict<IBuff> cardBuffDict;
+
+    private readonly IIndexedDict<IBuff> stampBuffDict;
+
+    private readonly IReadOnlyDictionary<IGender, IReadOnlyCollection<Tuple<ICollectedGroup, IIndexedDict<ICollectedItem>>>> collectedGroupDict;
+
+
+    private readonly IReadOnlyCollection<IGuildTalentBranch>? guildBranchDict;
 
     private readonly int guildBranchCount;
 
     private readonly int guildBranchSize;
 
 
-    public CharacterVersionSerializer(ApplicationSettings settings, IDataSource<IPersistentDomainObjectBase> dataSource, IVersion version)
+    public CharacterVersionSerializer(
+        ApplicationSettings settings,
+        IStatSource statSource,
+        IDataSource<IPersistentDomainObjectBase> dataSource,
+        IVersion version)
     {
+        this.settings = settings;
         this.Version = version;
 
-        this.classes = IndexedDict.Create(dataSource.GetFullList<IClass>(), false);
-        this.genders = IndexedDict.Create(dataSource.GetFullList<IGender>(), false);
-        this.states = IndexedDict.Create(dataSource.GetFullList<IState>(), false);
-        this.events = IndexedDict.Create(dataSource.GetFullList<IEvent>().WhereVersion(this.Version), true);
-        this.elixirs = IndexedDict.Create(dataSource.GetFullList<IElixir>(), true);
-        this.stampColors = IndexedDict.Create(dataSource.GetFullList<IStampColor>(), false);
+        this.classDict = dataSource.GetFullList<IClass>().ToIndexedDict();
+        this.genderDict = dataSource.GetFullList<IGender>().ToIndexedDict();
+        this.stateDict = dataSource.GetFullList<IState>().ToIndexedDict();
+        this.eventDict = dataSource.GetFullList<IEvent>().WhereVersion(this.Version).ToIndexedDict().ToNullable();
+        this.elixirDict = dataSource.GetFullList<IElixir>().ToIndexedDict().ToNullable();
+        this.stampColorDict = dataSource.GetFullList<IStampColor>().ToIndexedDict();
 
-        this.classStats = classes.Select(c => c.GetRoot()).Distinct().ToDictionary(c => c, c => this.context.GetEditStats(c).OrderById().ToReadOnlyCollectionI());
+        this.classStatDict = this.classDict.Select(c => c.GetRoot()).Distinct().ToDictionary(c => c, c => statSource.GetEditStats(c).OrderById().ToReadOnlyCollectionI());
 
-        this.stampVariants = dataSource.GetFullList<IStampVariant>().ToDictionary(var => Tuple.Create(var.Stamp, var.Color));
+        this.stampVariantDict = dataSource.GetFullList<IStampVariant>().ToDictionary(var => Tuple.Create(var.Stamp, var.Color));
 
-        this.consumables = IndexedDict.Create(dataSource.GetFullList<IConsumable>(), false);
+        this.consumableDict = dataSource.GetFullList<IConsumable>().ToIndexedDict();
 
         {
-            var classAurasRequest = from aura in dataSource.GetFullList<IAura>()
+            var classAurasRequest =
+
+                from aura in dataSource.GetFullList<IAura>()
 
                 where aura.Contains(version)
 
@@ -94,11 +103,13 @@ internal class CharacterVersionSerializer
 
                 group aura by @class;
 
-            this.classAuras = classAurasRequest.ToDictionary(g => g.Key, g => IndexedDict.Create(g, true));
+            this.classAuraDict = classAurasRequest.ToDictionary(g => g.Key, g => g.ToIndexedDict().ToNullable());
         }
 
         {
-            var classBuffsRequest = from buff in dataSource.GetFullList<IBuff>()
+            var classBuffsRequest =
+
+                from buff in dataSource.GetFullList<IBuff>()
 
                 where buff.Class != null && buff.Contains(version)
 
@@ -106,59 +117,66 @@ internal class CharacterVersionSerializer
 
                 group buff by @class;
 
-            this.classBuffs = classBuffsRequest.ToDictionary(g => g.Key, g => IndexedDict.Create(g, false));
+            this.classBuffDict = classBuffsRequest.ToDictionary(g => g.Key, g => g.ToIndexedDict());
         }
 
         if (this.Version.GuildTalents)
         {
-            this.guildBranches = dataSource.GetFullList<IGuildTalentBranch>();
+            this.guildBranchDict = dataSource.GetFullList<IGuildTalentBranch>();
 
-            this.guildBranchCount = this.guildBranches.Count;
-            this.guildBranchSize = this.guildBranches.Select(b => b.Talents.Count()).Distinct().Single();
+            this.guildBranchCount = this.guildBranchDict.Count;
+            this.guildBranchSize = this.guildBranchDict.Select(b => b.Talents.Count()).Distinct().Single();
         }
         else
         {
-            this.guildBonuses = IndexedDict.Create(dataSource.GetFullList<ILegacyGuildBonus>(), false);
+            this.guildLegacyBonusDict = dataSource.GetFullList<ILegacyGuildBonus>().ToIndexedDict();
         }
 
         {
             var equipmentsRequest =
-                
-                from equipment in context.DataSource.GetFullList<IEquipment>()
+
+                from equipment in dataSource.GetFullList<IEquipment>()
 
                 where equipment.Contains(version)
 
-                from @class in classes
+                from @class in this.classDict
 
                 where equipment.IsAllowed(@class)
 
                 let currentSlot = equipment.Type.Slot
 
-                from slot in @class.AllowExtraWeapon && currentSlot.IsPrimarySlot() && equipment.Type.WeaponInfo.IsSingleHand ? new[] { currentSlot, currentSlot.ExtraSlot } : new[] { currentSlot }
+                from slot in @class.AllowExtraWeapon && currentSlot.IsPrimarySlot() && equipment.Type.WeaponInfo.IsSingleHand
+                    ? new[] { currentSlot, currentSlot.ExtraSlot }
+                    : new[] { currentSlot }
 
                 group equipment by Tuple.Create(@class, slot);
 
-            this.equipments = equipmentsRequest.ToDictionary(g => g.Key, g => IndexedDict.Create(g, false));
+            this.equipmentDict = equipmentsRequest.ToDictionary(g => g.Key, g => g.ToIndexedDict());
         }
 
-        this.slots = dataSource.GetFullList<IEquipmentSlot>().OrderById().SelectMany(slot => Enumerable.Range(0, slot.Count).Select(index => Tuple.Create(slot, index))).ToReadOnlyCollection();
-           
+        this.slotDict = dataSource.GetFullList<IEquipmentSlot>().OrderById().SelectMany(slot => Enumerable.Range(0, slot.Count).Select(index => Tuple.Create(slot, index)))
+            .ToReadOnlyCollection();
+
         {
             var stampEquipmentTypes = dataSource.GetFullList<IEquipmentType>().Where(t => t.Slot.IsWeapon != null).ToList();
 
-            var stampsRequest = from stamp in dataSource.GetFullList<IStamp>()
+            var stampsRequest =
+
+                from stamp in dataSource.GetFullList<IStamp>()
 
                 from type in stamp.Equipments.Any() ? stamp.Equipments.WhereVersion(this.Version).Select(e => e.Type) : stampEquipmentTypes
 
                 group stamp by type;
 
 
-            this.stamps = stampsRequest.ToReadOnlyDictionary(g => g.Key, g => IndexedDict.Create(g, false));
+            this.stampDict = stampsRequest.ToReadOnlyDictionary(g => g.Key, g => g.ToIndexedDict());
         }
 
         if (this.Version.SerializeCardBySlotType)
         {
-            var cardsRequest = from card in dataSource.GetFullList<ICard>()
+            var cardsRequest =
+
+                from card in dataSource.GetFullList<ICard>()
 
                 where card.Contains(version)
 
@@ -166,11 +184,13 @@ internal class CharacterVersionSerializer
 
                 group card by type;
 
-            this.cardsBySlotType = cardsRequest.ToReadOnlyDictionary(g => g.Key, g => IndexedDict.Create(g, true));
+            this.cardsBySlotTypeDict = cardsRequest.ToReadOnlyDictionary(g => g.Key, g => g.ToIndexedDict().ToNullable());
         }
         else
         {
-            var cardsRequest = from card in dataSource.GetFullList<ICard>()
+            var cardsRequest =
+
+                from card in dataSource.GetFullList<ICard>()
 
                 where card.Contains(version)
 
@@ -178,10 +198,10 @@ internal class CharacterVersionSerializer
 
                 group card by slot;
 
-            this.cardsBySlot = cardsRequest.ToReadOnlyDictionary(g => g.Key, g => IndexedDict.Create(g, true));
+            this.cardsBySlotDict = cardsRequest.ToReadOnlyDictionary(g => g.Key, g => g.ToIndexedDict().ToNullable());
         }
 
-        this.talents = classes.OrderById().ToReadOnlyDictionary(@class => @class, @class =>
+        this.talentDict = this.classDict.OrderById().ToReadOnlyDictionary(@class => @class, @class =>
 
             @class.GetAllTalentBranches().OrderById().ToReadOnlyCollection(branch =>
 
@@ -192,13 +212,15 @@ internal class CharacterVersionSerializer
 
         if (this.Version.SharedAuras)
         {
-            var aurasRequest = from aura in dataSource.GetFullList<IAura>()
+            var aurasRequest =
+
+                from aura in dataSource.GetFullList<IAura>()
 
                 where aura.Contains(this.Version)
 
-                let bc1 = new VirtualBonusBaseContainer (aura.GetBonuses(this.Version, true, false))
+                let bc1 = new VirtualBonusBaseContainer(aura.GetBonuses(this.Version, true, false))
 
-                let bc2 = new VirtualBonusBaseContainer (aura.GetBonuses(this.Version, true, true))
+                let bc2 = new VirtualBonusBaseContainer(aura.GetBonuses(this.Version, true, true))
 
                 where bc1.Bonuses.Any() || bc2.Bonuses.Any()
 
@@ -209,110 +231,114 @@ internal class CharacterVersionSerializer
                     Value = new Tuple<IBonusContainer<IBonusBase>, IBonusContainer<IBonusBase>>(bc1, bc2)
                 };
 
-            this.AuraSharedBonuses = aurasRequest.ToDictionary(pair => pair.Key, pair => pair.Value);
+            this.sharedAuraBonusDict = aurasRequest.ToDictionary(pair => pair.Key, pair => pair.Value);
 
-            this.sharedAuras = IndexedDict.Create(this.AuraSharedBonuses.Keys, false);
+            this.sharedAuraDict = this.sharedAuraBonusDict.Keys.ToIndexedDict();
         }
 
         if (this.Version.SharedBuffs)
         {
-            var buffsRequest = from buff in dataSource.GetFullList<IBuff>()
+            var buffsRequest =
+
+                from buff in dataSource.GetFullList<IBuff>()
 
                 where buff.IsShared() && buff.Contains(this.Version)
 
                 select buff;
 
-            this.sharedBuffs = IndexedDict.Create(buffsRequest, false);
+            this.sharedBuffDict = buffsRequest.ToIndexedDict();
         }
 
         if (this.Version.CardBuffs)
         {
-            var buffsRequest = from buff in dataSource.GetFullList<IBuff>()
+            var buffsRequest =
+
+                from buff in dataSource.GetFullList<IBuff>()
 
                 where buff.Card != null && buff.Contains(this.Version)
 
                 select buff;
 
-            this.cardBuffs = IndexedDict.Create(buffsRequest, false);
-        } 
-            
+            this.cardBuffDict = buffsRequest.ToIndexedDict();
+        }
+
         if (this.Version.StampBuffs)
         {
-            var buffsRequest = from buff in dataSource.GetFullList<IBuff>()
+            var buffsRequest =
+
+                from buff in dataSource.GetFullList<IBuff>()
 
                 where buff.Stamp != null && buff.Contains(this.Version)
 
                 select buff;
 
-            this.stampBuffs = IndexedDict.Create(buffsRequest, false);
+            this.stampBuffDict = buffsRequest.ToIndexedDict();
         }
 
         {
-            var request = from equipmentElixir in dataSource.GetFullList<IEquipmentElixir>()
+            var request =
+
+                from equipmentElixir in dataSource.GetFullList<IEquipmentElixir>()
 
                 where equipmentElixir.Contains(this.Version)
 
                 from slot in equipmentElixir.Slots
 
-                group equipmentElixir by slot into g
+                group equipmentElixir by slot;
 
-                select new
-                {
-                    Key = g.Key,
-
-                    Value = IndexedDict.Create(g, true)
-                };
-
-            this.equipmentElixirs = request.ToDictionary(pair => pair.Key, pair => pair.Value);
+            this.equipmentElixirDict = request.ToDictionary(g => g.Key, g => g.ToIndexedDict().ToNullable());
         }
 
         if (this.Version.Collections)
         {
-            var request = from gender in dataSource.GetFullList<IGender>().OrderById()
+            var request =
 
-                let groupRequest = from collectionGroup in dataSource.GetFullList<ICollectedGroup>().OrderById()
-                              
+                from gender in dataSource.GetFullList<IGender>().OrderById()
+
+                let groupRequest =
+
+                    from collectionGroup in dataSource.GetFullList<ICollectedGroup>().OrderById()
+
                     let items = collectionGroup.Items.Where(item => item.IsAllowed(gender, this.Version))
 
-                    select Tuple.Create(collectionGroup, IndexedDict.Create(items, false))
-                                                 
+                    select Tuple.Create(collectionGroup, items.ToIndexedDict().ToNullable())
+
                 select (gender, groupRequest.ToReadOnlyCollectionI());
 
-                
-            this.collectedGroups = request.ToDictionary();
+
+            this.collectedGroupDict = request.ToDictionary();
         }
     }
 
+    public IVersion Version { get; }
+
     public CharacterSource Parse(BitReader reader)
     {
-        if (reader == null) throw new ArgumentNullException(nameof(reader));
+        var @class = reader.Read(this.classDict);
 
+        var gender = reader.Read(this.genderDict);
 
-        var @class = reader.Read(this.classes);
-            
-        var gender = reader.Read(this.genders);
+        var state = reader.Read(this.stateDict);
 
-        var state = reader.Read(this.states);
+        var @event = reader.Read(this.eventDict);
 
-        var @event = reader.Read(this.events);
-
-        var elixir = reader.Read(this.elixirs);
+        var elixir = reader.Read(this.elixirDict);
 
         var level = reader.ReadByMax(@class.Specialization.MaxLevel ?? this.Version.MaxLevel);
 
-        var aura = this.classAuras.GetMaybeValue(@class).Select(reader.Read).GetValueOrDefault();
+        var aura = this.classAuraDict.GetMaybeValue(@class).Select(reader.Read).GetValueOrDefault();
 
-        var classBuffs = this.classBuffs.GetMaybeValue(@class).Select(reader.ReadDict).GetValueOrDefault(() => new Dictionary<IBuff, int>());
+        var classBuffs = this.classBuffDict.GetMaybeValue(@class).Select(reader.ReadDict).GetValueOrDefault(() => new Dictionary<IBuff, int>());
 
-            
+
         var guildTalents = this.Version.GuildTalents ? this.ReadGuildTalents(reader).ToDictionary() : new Dictionary<IGuildTalent, int>();
 
         if (!this.Version.GuildTalents)
         {
-            var guildBonuses = reader.ReadDict(this.guildBonuses); // ignored
+            _ = reader.ReadDict(this.guildLegacyBonusDict); // ignored
         }
 
-        var consumables = reader.ReadList(this.consumables);
+        var consumables = reader.ReadList(this.consumableDict);
 
         var enableAura = reader.Read();
 
@@ -326,26 +352,28 @@ internal class CharacterVersionSerializer
 
         var enableTalents = reader.Read();
 
-        var editStats = this.classStats[@class.GetRoot()].ToDictionary(s => s, s => reader.ReadByMax(this.context.Settings.MaxStatCount));
+        var editStats = this.classStatDict[@class.GetRoot()].ToDictionary(s => s, _ => reader.ReadByMax(this.settings.MaxStatCount));
 
         var equipments = this.ReadEquipments(reader, @class);
 
         var talents = this.ReadTalents(reader, @class).ToList();
 
-        var sharedAuras = this.Version.SharedAuras ? Enumerable.Range(0, reader.ReadByMax(this.context.Settings.MaxPartySize - 1)).ToDictionary(_ => reader.Read(this.sharedAuras), _ => reader.Read()) : new Dictionary<IAura, bool>();
+        var sharedAuras = this.Version.SharedAuras
+            ? Enumerable.Range(0, reader.ReadByMax(this.settings.MaxPartySize - 1)).ToDictionary(_ => reader.Read(this.sharedAuraDict), _ => reader.Read())
+            : new Dictionary<IAura, bool>();
 
-        var sharedBuffs = this.Version.SharedBuffs ? reader.ReadDict(this.sharedBuffs) : new Dictionary<IBuff, int>();
+        var sharedBuffs = this.Version.SharedBuffs ? reader.ReadDict(this.sharedBuffDict) : new Dictionary<IBuff, int>();
 
-        var cardBuffs = this.Version.CardBuffs ? reader.ReadDict(this.cardBuffs) : new Dictionary<IBuff, int>();
+        var cardBuffs = this.Version.CardBuffs ? reader.ReadDict(this.cardBuffDict) : new Dictionary<IBuff, int>();
 
-        var stampBuffs = this.Version.StampBuffs ? reader.ReadDict(this.stampBuffs) : new Dictionary<IBuff, int>();
+        var stampBuffs = this.Version.StampBuffs ? reader.ReadDict(this.stampBuffDict) : new Dictionary<IBuff, int>();
 
         var lostControl = this.Version.LostControl && reader.Read();
 
         var enableCollections = this.Version.Collections && reader.Read();
-            
-        var collectedItems = this.Version.Collections ? this.collectedGroups[gender].SelectMany(pair => reader.ReadListOptimize(pair.Item2)).ToList() : [];
-            
+
+        var collectedItems = this.Version.Collections ? this.collectedGroupDict[gender].SelectMany(pair => reader.ReadListOptimize(pair.Item2)).ToList() : [];
+
         return new CharacterSource
         {
             Class = @class,
@@ -379,27 +407,34 @@ internal class CharacterVersionSerializer
         if (reader == null) throw new ArgumentNullException(nameof(reader));
         if (@class == null) throw new ArgumentNullException(nameof(@class));
 
-        var equipmentsRequest = from slotPair in this.slots
+        var equipmentsRequest =
+
+            from slotPair in this.slotDict
 
             let currentSlot = slotPair.Item1
 
             where reader.Read()
 
-            let equipment = reader.Read(this.equipments[Tuple.Create(@class, currentSlot)])
+            let equipment = reader.Read(this.equipmentDict[Tuple.Create(@class, currentSlot)])
 
             let baseSlot = equipment.Type.Slot
 
-            let maxCardCount = baseSlot.IsWeapon == null ? 0 : baseSlot.IsWeapon.Value ? this.context.Settings.WeaponCardCount : this.context.Settings.EquipmentCardCount
+            let maxCardCount = baseSlot.IsWeapon == null ? 0 : baseSlot.IsWeapon.Value ? this.settings.WeaponCardCount : this.settings.EquipmentCardCount
 
             let active = !equipment.IsActivate() || reader.Read()
 
-            let upgrade = baseSlot.IsWeapon == null ? 0 : reader.ReadByMax(this.context.Settings.MaxUpgradeLevel)
+            let upgrade = baseSlot.IsWeapon == null ? 0 : reader.ReadByMax(this.settings.MaxUpgradeLevel)
 
-            let stampVariant = baseSlot.IsWeapon == null || !reader.Read() ? null : this.stampVariants[Tuple.Create(reader.Read(this.stamps[equipment.Type]), reader.Read(this.stampColors))]
+            let stampVariant = baseSlot.IsWeapon == null || !reader.Read()
+                ? null
+                : this.stampVariantDict[Tuple.Create(reader.Read(this.stampDict[equipment.Type]), reader.Read(this.stampColorDict))]
 
-            let cards = baseSlot.IsWeapon == null ? [] : Enumerable.Range(0, maxCardCount).ToList(_ => this.Version.SerializeCardBySlotType ? reader.Read(this.cardsBySlotType[equipment.Type]) : reader.Read(this.cardsBySlot[baseSlot]))
+            let cards = baseSlot.IsWeapon == null
+                ? []
+                : Enumerable.Range(0, maxCardCount).ToList(_ =>
+                    this.Version.SerializeCardBySlotType ? reader.Read(this.cardsBySlotTypeDict[equipment.Type]) : reader.Read(this.cardsBySlotDict[baseSlot]))
 
-            let elixir = this.equipmentElixirs.GetValueOrDefault(baseSlot).Maybe(reader.Read)
+            let elixir = this.equipmentElixirDict.GetValueOrDefault(baseSlot).Maybe(reader.Read)
 
             select new
             {
@@ -426,29 +461,26 @@ internal class CharacterVersionSerializer
 
     private IEnumerable<ITalent> ReadTalents(BitReader reader, IClass @class)
     {
-        if (reader == null) throw new ArgumentNullException(nameof(reader));
-        if (@class == null) throw new ArgumentNullException(nameof(@class));
+        return
 
-        return from branchPair in this.talents[@class]
+            from branchPair in this.talentDict[@class]
 
             let talentCount = reader.ReadByMax(branchPair.Item2.Count)
-                   
+
             from talentVertList in branchPair.Item2.Take(talentCount)
-                   
+
             let talentIndex = reader.ReadByMax(talentVertList.Count - 1)
-                   
+
             let talent = talentVertList[talentIndex]
-                   
+
             select talent;
     }
 
     private IEnumerable<KeyValuePair<IGuildTalent, int>> ReadGuildTalents(BitReader reader)
     {
-        if (reader == null) throw new ArgumentNullException(nameof(reader));
-
         var branchCount = reader.ReadByMax(this.guildBranchCount);
 
-        foreach (var pair in this.guildBranches.Select((branch, index) => new { Branch = branch, Index = index }).Take(branchCount))
+        foreach (var pair in this.guildBranchDict!.Select((branch, index) => new { Branch = branch, Index = index }).Take(branchCount))
         {
             var talentOrderIndex = reader.ReadByMax(this.guildBranchSize);
 
@@ -464,37 +496,34 @@ internal class CharacterVersionSerializer
 
     public void Format(BitWriter writer, ICharacterSource character)
     {
-        if (writer == null) throw new ArgumentNullException(nameof(writer));
-        if (character == null) throw new ArgumentNullException(nameof(character));
-            
-        writer.Write(character.Class, this.classes);
-        writer.Write(character.Gender, this.genders);
-        writer.Write(character.State, this.states);
-        writer.Write(character.Event, this.events);
-        writer.Write(character.Elixir, this.elixirs);
+        writer.Write(character.Class, this.classDict);
+        writer.Write(character.Gender, this.genderDict);
+        writer.Write(character.State, this.stateDict);
+        writer.Write(character.Event, this.eventDict);
+        writer.Write(character.Elixir, this.elixirDict);
 
         writer.WriteByMax(character.Level, character.Class.Specialization.MaxLevel ?? this.Version.MaxLevel);
 
-        this.classAuras.GetMaybeValue(character.Class).Match(auraDict => writer.Write(character.Aura, auraDict));
+        this.classAuraDict.GetMaybeValue(character.Class).Match(auraDict => writer.Write(character.Aura, auraDict));
 
         {
             var buffs = character.Buffs.Where(b => b.Key.Class != null).ToDictionary();
 
-            this.classBuffs.GetMaybeValue(character.Class).Match(buffDict => writer.Write(buffs, buffDict));    
+            this.classBuffDict.GetMaybeValue(character.Class).Match(buffDict => writer.Write(buffs, buffDict));
         }
 
         if (this.Version.GuildTalents)
         {
-            var datas = character.GuildTalents.Where(tal => tal.Value != 0)
+            var dataList = character.GuildTalents.Where(tal => tal.Value != 0)
                 .OrderBy(tal => tal.Key.Branch.Id)
                 .Reverse()
                 .Select((pair, index) => new { Talent = pair.Key, Points = pair.Value, IsLast = index == 0 })
                 .Reverse()
-                .ToArray();
+                .ToList();
 
-            writer.WriteByMax(datas.Length, this.guildBranchCount);
+            writer.WriteByMax(dataList.Count, this.guildBranchCount);
 
-            foreach (var data in datas)
+            foreach (var data in dataList)
             {
                 writer.WriteByMax(data.Talent.OrderIndex, this.guildBranchSize);
 
@@ -507,17 +536,17 @@ internal class CharacterVersionSerializer
         else
         {
             //throw new Exception("serialization not supported");
-            writer.WriteByMax(0, this.guildBonuses.Count);
+            writer.WriteByMax(0, this.guildLegacyBonusDict.Count);
         }
 
-            
-        writer.Write(character.Consumables, this.consumables);
+
+        writer.Write(character.Consumables, this.consumableDict);
 
         writer.Write(character.EnableAura, character.EnableBuffs, character.EnableConsumables, character.EnableElixir, character.EnableGuildTalents, character.EnableTalents);
 
-        this.classStats[character.Class.GetRoot()].Foreach(stat => writer.WriteByMax(character.EditStats[stat], this.context.Settings.MaxStatCount));
+        this.classStatDict[character.Class.GetRoot()].Foreach(stat => writer.WriteByMax(character.EditStats[stat], this.settings.MaxStatCount));
 
-        foreach (var pair in this.slots)
+        foreach (var pair in this.slotDict)
         {
             var charEquip = character.Equipments.GetValueOrDefault(pair.Item1, pair.Item2);
 
@@ -525,7 +554,7 @@ internal class CharacterVersionSerializer
 
             if (charEquip != null)
             {
-                writer.Write(charEquip.Equipment, this.equipments[Tuple.Create(character.Class, pair.Item1)]);
+                writer.Write(charEquip.Equipment, this.equipmentDict[Tuple.Create(character.Class, pair.Item1)]);
 
                 if (charEquip.Equipment.IsActivate())
                 {
@@ -536,34 +565,34 @@ internal class CharacterVersionSerializer
 
                 if (baseSlot.IsWeapon != null)
                 {
-                    writer.WriteByMax(charEquip.Upgrade, this.context.Settings.MaxUpgradeLevel);
+                    writer.WriteByMax(charEquip.Upgrade, this.settings.MaxUpgradeLevel);
 
                     writer.Write(charEquip.StampVariant != null);
 
                     if (charEquip.StampVariant != null)
                     {
-                        writer.Write(charEquip.StampVariant.Stamp, this.stamps[charEquip.Equipment.Type]);
-                        writer.Write(charEquip.StampVariant.Color, this.stampColors);
+                        writer.Write(charEquip.StampVariant.Stamp, this.stampDict[charEquip.Equipment.Type]);
+                        writer.Write(charEquip.StampVariant.Color, this.stampColorDict);
                     }
 
-                    var maxCardCount = baseSlot.IsWeapon.Value ? this.context.Settings.WeaponCardCount : this.context.Settings.EquipmentCardCount;
+                    var maxCardCount = baseSlot.IsWeapon.Value ? this.settings.WeaponCardCount : this.settings.EquipmentCardCount;
 
-                    for (int i = 0; i < maxCardCount; i++)
+                    for (var i = 0; i < maxCardCount; i++)
                     {
                         var card = charEquip.Cards.Count > i ? charEquip.Cards[i] : null;
 
                         if (this.Version.SerializeCardBySlotType)
                         {
-                            writer.Write(card, this.cardsBySlotType[charEquip.Equipment.Type]);
+                            writer.Write(card, this.cardsBySlotTypeDict[charEquip.Equipment.Type]);
                         }
                         else
                         {
-                            writer.Write(card, this.cardsBySlot[baseSlot]);
+                            writer.Write(card, this.cardsBySlotDict[baseSlot]);
                         }
                     }
                 }
 
-                this.equipmentElixirs.GetValueOrDefault(baseSlot).Maybe(dict => writer.Write(charEquip.Elixir, dict));
+                this.equipmentElixirDict.GetValueOrDefault(baseSlot).Maybe(dict => writer.Write(charEquip.Elixir, dict));
             }
         }
 
@@ -571,7 +600,7 @@ internal class CharacterVersionSerializer
 
             var charBranches = character.Talents.GroupBy(tal => tal.Branch).ToDictionary(g => g.Key, g => g.OrderBy(v => v.HIndex).ToReadOnlyCollection());
 
-            foreach (var branchPair in this.talents[character.Class])
+            foreach (var branchPair in this.talentDict[character.Class])
             {
                 var charTalents = charBranches.GetValueOrDefault(branchPair.Item1);
 
@@ -591,11 +620,11 @@ internal class CharacterVersionSerializer
 
         if (this.Version.SharedAuras)
         {
-            writer.WriteByMax(character.SharedAuras.Count, this.context.Settings.MaxPartySize - 1);
+            writer.WriteByMax(character.SharedAuras.Count, this.settings.MaxPartySize - 1);
 
             foreach (var pair in character.SharedAuras.OrderById())
             {
-                writer.Write(pair.Key, this.sharedAuras);
+                writer.Write(pair.Key, this.sharedAuraDict);
                 writer.Write(pair.Value);
             }
         }
@@ -604,21 +633,21 @@ internal class CharacterVersionSerializer
         {
             var buffs = character.Buffs.Where(b => b.Key.IsShared()).ToDictionary();
 
-            writer.Write(buffs, this.sharedBuffs);
+            writer.Write(buffs, this.sharedBuffDict);
         }
 
         if (this.Version.CardBuffs)
         {
             var buffs = character.Buffs.Where(b => b.Key.Card != null).ToDictionary();
 
-            writer.Write(buffs, this.cardBuffs);
+            writer.Write(buffs, this.cardBuffDict);
         }
 
         if (this.Version.StampBuffs)
         {
             var buffs = character.Buffs.Where(b => b.Key.Stamp != null).ToDictionary();
 
-            writer.Write(buffs, this.stampBuffs);
+            writer.Write(buffs, this.stampBuffDict);
         }
 
         if (this.Version.LostControl)
@@ -632,7 +661,7 @@ internal class CharacterVersionSerializer
 
             var grouped = character.CollectedItems.GroupBy(item => item.Group).ToDictionary(pair => pair.Key, pair => pair.ToList());
 
-            foreach (var pair in this.collectedGroups[character.Gender])
+            foreach (var pair in this.collectedGroupDict[character.Gender])
             {
                 var items = grouped.GetValueOrDefault(pair.Item1) ?? [];
 
@@ -643,9 +672,6 @@ internal class CharacterVersionSerializer
 
     public void FullFormat(BitWriter writer, ICharacterSource character)
     {
-        if (writer == null) throw new ArgumentNullException(nameof(writer));
-        if (character == null) throw new ArgumentNullException(nameof(character));
-
         writer.WriteByMax(this.Version.Id, byte.MaxValue);
 
         this.Format(writer, character);

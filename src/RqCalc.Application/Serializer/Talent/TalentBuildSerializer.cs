@@ -1,39 +1,38 @@
 using Framework.Core;
 using Framework.Core.Serialization;
+using Framework.DataBase;
+
 using RqCalc.Application.Serializer._Internal;
 using RqCalc.Domain;
+using RqCalc.Domain._Base;
 using RqCalc.Model;
 
 namespace RqCalc.Application.Serializer.Talent;
 
-internal class TalentBuildSerializer : ISerializer<byte[], ITalentBuildSource>
+public class TalentBuildSerializer : ISerializer<byte[], ITalentBuildSource>
 {
-    private readonly ApplicationContext context;
-        
-
     private readonly IReadOnlyDictionary<int, Lazy<TalentBuildVersionSerializer>> serializers;
 
     internal readonly TalentBuildVersionSerializer LastVersionSerializer;
 
 
-    public TalentBuildSerializer(ApplicationContext context)
+    public TalentBuildSerializer(IDataSource<IPersistentDomainObjectBase> dataSource, IVersion lastVersion)
     {
-        this.context = context ?? throw new ArgumentNullException(nameof(context));
+        var serializersRequest =
+            
+            from version in dataSource.GetFullList<IVersion>()
 
-
-        var serializersRequest = from version in context.DataSource.GetFullList<IVersion>()
-
-            where version.Id <= context.LastVersion.Id
+            where version.Id <= lastVersion.Id
                                      
             group version by version.MaxLevel into levelGroup
 
             let version = levelGroup.OrderBy(v => v.Id).First()
 
-            select version.Id.ToKeyValuePair(LazyHelper.Create(() => new TalentBuildVersionSerializer(this.context, version)));
+            select (version.Id, LazyHelper.Create(() => new TalentBuildVersionSerializer(dataSource, version)));
 
         this.serializers = serializersRequest.ToDictionary();
 
-        this.LastVersionSerializer = this.serializers.OrderByDescending(ser => ser.Key).First(ser => ser.Key <= context.LastVersion.Id).Value.Value;
+        this.LastVersionSerializer = this.serializers.OrderByDescending(ser => ser.Key).First(ser => ser.Key <= lastVersion.Id).Value.Value;
     }
 
 

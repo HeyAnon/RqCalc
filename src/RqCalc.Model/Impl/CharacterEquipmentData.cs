@@ -25,13 +25,13 @@ public class CharacterEquipmentData : ICharacterEquipmentData, IEquatable<Charac
         set;
     }
 
-    public List<ICard> Cards
+    public List<ICard?> Cards
     {
         get;
         set;
     }
 
-    public IStampVariant StampVariant
+    public IStampVariant? StampVariant
     {
         get;
         set;

@@ -13,10 +13,9 @@ using RqCalc.Domain.VirtualBonus;
 using RqCalc.Model;
 using RqCalc.Model._Extensions;
 
-namespace RqCalc.Application.Calc;
+namespace RqCalc.Application.Calculation;
 
-
-public partial class CharacterCalculationStateBase : ICharacterCalculationStateBase
+public partial class CharacterCalculationStartupState : ICharacterCalculationState
 {
     private readonly ApplicationContext context;
 
@@ -28,7 +27,7 @@ public partial class CharacterCalculationStateBase : ICharacterCalculationStateB
     private readonly ICharacterSource character;
 
 
-    public CharacterCalculationStateBase(ApplicationContext context, IStatSource statSource, ApplicationSettings applicationSettings, ICharacterSource character)
+    public CharacterCalculationStartupState(ApplicationContext context, IStatSource statSource, ApplicationSettings applicationSettings, ICharacterSource character)
     {
         this.context = context;
         this.applicationSettings = applicationSettings;
@@ -94,7 +93,7 @@ public partial class CharacterCalculationStateBase : ICharacterCalculationStateB
         {
             if (this.CurrentWeaponInfo == null)
             {
-                yield return new BonusEvaluator.ConstBonusEvaluator(BonusEvaluateRule.SumOffset, false, applicationSettings.AttackStat, 2);
+                yield return new BonusEvaluator.ConstBonusEvaluator(BonusEvaluateRule.SumOffset, false, this.applicationSettings.AttackStat, 2);
             }
 
             {
@@ -123,7 +122,7 @@ public partial class CharacterCalculationStateBase : ICharacterCalculationStateB
             yield return bonusEvaluator;
         }
 
-        foreach (var sourceStat in this.context.SourcesStats)
+        foreach (var sourceStat in sourcesStats)
         {
             foreach (var sourceEvaluator in this.GetSourceEvaluators(sourceStat))
             {
@@ -150,7 +149,7 @@ public partial class CharacterCalculationStateBase : ICharacterCalculationStateB
 
         var formulaFunc = this.context.Formulas[sourceFormula];
 
-        return new BonusEvaluator.DynamicBonusEvaluator(this.context.StatPriority[stat] + BonusEvaluateRule.SumOffset, stats => new BonusEvaluator.ConstBonusEvaluator(0, false, stat, formulaFunc(new CalcState (this) { Stats = stats })));
+        return new BonusEvaluator.DynamicBonusEvaluator(statPriority[stat] + BonusEvaluateRule.SumOffset, stats => new BonusEvaluator.ConstBonusEvaluator(0, false, stat, formulaFunc(new CalcState (this) { Stats = stats })));
     }
 
     private BonusEvaluator GetDependencyEvaluator(IReadOnlyList<IStat> layer, int index)
@@ -171,7 +170,7 @@ public partial class CharacterCalculationStateBase : ICharacterCalculationStateB
             
         if (multiplicityVars.Any())
         {
-            var priority = multiplicityVars.Select(var => this.context.StatPriority[var.MultiplicityStat]).Distinct().Single();
+            var priority = multiplicityVars.Select(var => statPriority[var.MultiplicityStat]).Distinct().Single();
 
             return new BonusEvaluator.DynamicBonusEvaluator(priority + BonusEvaluateRule.DynamicOffset, stats =>
             {
@@ -509,7 +508,7 @@ public partial class CharacterCalculationStateBase : ICharacterCalculationStateB
                                                        && (condition.State == null || condition.State == this.character.State)
                                                        && (condition.Class == null || this.character.Class.IsSubsetOf(condition.Class))
                                                        && (condition.EquipmentType == null || this.IsEvaluatedEquipmentType(condition.EquipmentType, condition.PairEquipment.Value))
-                                                       && (condition.IsMaxLevel == null || condition.IsMaxLevel.Value == (this.character.Level == this.context.LastVersion.MaxLevel))
+                                                       && (condition.IsMaxLevel == null || condition.IsMaxLevel.Value == (this.character.Level == this.lastVersion.MaxLevel))
                                                        && (condition.LostControl == null || condition.LostControl.Value == this.character.LostControl));
     }
 

@@ -1,5 +1,6 @@
 using Framework.Core;
 using Framework.Core.Serialization;
+
 using RqCalc.Application.Serializer._Internal;
 using RqCalc.Domain;
 using RqCalc.Model;
@@ -21,9 +22,9 @@ internal class GuildTalentBuildSerializer : ISerializer<byte[], IGuildTalentBuil
         this.context = context ?? throw new ArgumentNullException(nameof(context));
 
 
-        var serializersRequest = from version in context.DataSource.GetFullList<IVersion>()
+        var serializersRequest = from version in dataSource.GetFullList<IVersion>()
 
-            where version.Id <= context.LastVersion.Id && version.GuildTalents
+            where version.Id <= lastVersion.Id && version.GuildTalents
                                      
             orderby version.Id
 
@@ -31,7 +32,7 @@ internal class GuildTalentBuildSerializer : ISerializer<byte[], IGuildTalentBuil
 
         this.serializers = serializersRequest.Take(1).ToDictionary();
 
-        this.LastVersionSerializer = this.serializers.OrderByDescending(ser => ser.Key).First(ser => ser.Key <= context.LastVersion.Id).Value.Value;
+        this.LastVersionSerializer = this.serializers.OrderByDescending(ser => ser.Key).First(ser => ser.Key <= lastVersion.Id).Value.Value;
     }
 
 

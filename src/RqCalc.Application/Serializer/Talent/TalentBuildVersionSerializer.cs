@@ -1,7 +1,11 @@
 using System.Collections.ObjectModel;
+
 using Framework.Core;
+using Framework.DataBase;
+using RqCalc.Application.IndexedDict;
 using RqCalc.Application.Serializer._Internal;
 using RqCalc.Domain;
+using RqCalc.Domain._Base;
 using RqCalc.Domain._Extensions;
 using RqCalc.Domain.Talent;
 using RqCalc.Model;
@@ -10,8 +14,6 @@ namespace RqCalc.Application.Serializer.Talent;
 
 internal class TalentBuildVersionSerializer
 {
-    private readonly ApplicationContext context;
-
     private readonly IVersion version;
 
     private readonly IIndexedDict<IClass> classes;
@@ -19,16 +21,15 @@ internal class TalentBuildVersionSerializer
     private readonly IReadOnlyDictionary<IClass, ReadOnlyCollection<Tuple<ITalentBranch, IReadOnlyList<IReadOnlyList<ITalent>>>>> talents;
         
 
-    public TalentBuildVersionSerializer(ApplicationContext context, IVersion version)
+    public TalentBuildVersionSerializer(IDataSource<IPersistentDomainObjectBase> dataSource, IVersion version)
     {
-        this.context = context ?? throw new ArgumentNullException(nameof(context));
         this.version = version ?? throw new ArgumentNullException(nameof(version));
 
-        var classes = dataSource.GetFullList<IClass>();
+        var classList = dataSource.GetFullList<IClass>();
 
-        this.classes = IndexedDict.Create(classes, false);
+        this.classes = IndexedDict.Create(classList, false);
 
-        this.talents = classes.OrderById().ToReadOnlyDictionary(@class => @class, @class =>
+        this.talents = this.classes.OrderById().ToReadOnlyDictionary(@class => @class, @class =>
 
             @class.GetAllTalentBranches().OrderById().ToReadOnlyCollection(branch =>
 
@@ -85,7 +86,7 @@ internal class TalentBuildVersionSerializer
 
         var level = reader.ReadByMax(@class.Specialization.MaxLevel ?? this.version.MaxLevel);
 
-        var talents = this.ReadTalents(reader, @class).ToList();
+        var talentList = this.ReadTalents(reader, @class).ToList();
 
         return new TalentBuildSource
         {
@@ -93,7 +94,7 @@ internal class TalentBuildVersionSerializer
 
             Level = level,
 
-            Talents = talents
+            Talents = talentList
         };
     }
 

@@ -1,9 +1,9 @@
-﻿using RqCalc.Application.Calc;
+﻿using RqCalc.Application.Calculation;
 using RqCalc.Domain.Formula;
 
 namespace RqCalc.Application;
 
 public interface IFormulaService
 {
-    Func<ICalcState, decimal> GetFunc(IFormula formula);
+    Func<ICharacterCalculationChangedState, decimal> GetFunc(IFormula formula);
 }

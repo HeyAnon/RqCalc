@@ -1,4 +1,4 @@
-namespace RqCalc.Application.Calc;
+namespace RqCalc.Application.Calculation;
 
 internal static class BonusEvaluateRule
 {

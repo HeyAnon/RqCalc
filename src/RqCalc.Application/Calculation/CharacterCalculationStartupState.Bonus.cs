@@ -8,9 +8,9 @@ using RqCalc.Domain.Equipment;
 using RqCalc.Domain.VirtualBonus;
 using RqCalc.Model;
 
-namespace RqCalc.Application.Calc;
+namespace RqCalc.Application.Calculation;
 
-public partial class CharacterCalculationStateBase
+public partial class CharacterCalculationStartupState
 {
     private IEnumerable<IBonusBase> GetBonuses(BonusSource source)
     {
@@ -118,13 +118,13 @@ public partial class CharacterCalculationStateBase
 
                 select bonus;
 
-            var mainBonuses = this.character.Aura == null ? [] : this.character.EnableTalents ? this.character.Aura.GetBonuses(this.context.LastVersion, false, mainAuraTalentBonuses) : this.character.Aura.GetBonuses(this.context.LastVersion, false, false);
+            var mainBonuses = this.character.Aura == null ? [] : this.character.EnableTalents ? this.character.Aura.GetBonuses(this.lastVersion, false, mainAuraTalentBonuses) : this.character.Aura.GetBonuses(this.lastVersion, false, false);
 
 
 
             var allAuraBonuses = from auraPair in new[] { new { Aura = this.character.Aura, Bonuses = mainBonuses.ToArray() } }
 
-                    .Concat(this.character.SharedAuras.Select(pair => new { Aura = pair.Key, Bonuses = pair.Key.GetBonuses(this.context.LastVersion, true, pair.Value).ToArray()}))
+                    .Concat(this.character.SharedAuras.Select(pair => new { Aura = pair.Key, Bonuses = pair.Key.GetBonuses(this.lastVersion, true, pair.Value).ToArray()}))
 
                 from bonus in auraPair.Bonuses
                                      
@@ -415,7 +415,7 @@ public partial class CharacterCalculationStateBase
 
             foreach (var bonus in equipmentInfo.StampVariant.Bonuses.OrderBy(bonus => bonus.OrderIndex))
             {
-                var value = MathHelper.GetStampValue(bonus.QualityValue, internalLevel, bonus.Type.StampQuality.MinCoef, bonus.Type.StampQuality.MaxCoef, 10, this.context.Settings.QualityMaxLevel);
+                var value = MathHelper.GetStampValue(bonus.QualityValue, internalLevel, bonus.Type.StampQuality.MinCoef, bonus.Type.StampQuality.MaxCoef, 10, settings.QualityMaxLevel);
 
                 yield return new VirtualBonusBase
                 {

@@ -1,6 +1,10 @@
 using System.Collections;
 using System.ComponentModel;
+
 using Framework.Core;
+
+using RqCalc.Application._Extensions;
+using RqCalc.Application.IndexedDict;
 using RqCalc.Domain._Base;
 
 namespace RqCalc.Application.Serializer._Internal;
@@ -42,7 +46,6 @@ internal class BitWriter
     public void WriteByMax(int value, int maxValue)
     {
         if (value < 0 || value > maxValue) throw new ArgumentOutOfRangeException(nameof(value));
-        if (maxValue < 0) throw new ArgumentOutOfRangeException(nameof(maxValue));
 
         if (maxValue == 0)
         {

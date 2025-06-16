@@ -1,6 +1,6 @@
 using RqCalc.Domain;
 
-namespace RqCalc.Application.Calc;
+namespace RqCalc.Application.Calculation;
 
 public record BonusEvaluator(int Priority)
 {
