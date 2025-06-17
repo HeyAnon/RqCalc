@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using RqCalc.Infrastructure;
 
-
 namespace RqCalc.Tests.__Support;
 
 public class EnvironmentInitializer : IFrameworkInitializer
