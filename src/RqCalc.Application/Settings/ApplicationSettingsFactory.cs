@@ -3,6 +3,7 @@ using Framework.DataBase;
 using RqCalc.Application._Extensions;
 using RqCalc.Domain;
 using RqCalc.Domain._Base;
+using RqCalc.Model;
 
 namespace RqCalc.Application.Settings;
 

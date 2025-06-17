@@ -1,4 +1,5 @@
 using Framework.Core;
+using RqCalc.Model;
 
 namespace RqCalc.Application.Settings;
 

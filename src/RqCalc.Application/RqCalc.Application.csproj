@@ -5,7 +5,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Framework.DataBase\Framework.DataBase.csproj" />
-		<ProjectReference Include="..\RqCalc.Model\RqCalc.Model.csproj" />
+		<ProjectReference Include="..\Framework.DataBase.Abstraction\Framework.DataBase.Abstraction.csproj" />
+
+		<ProjectReference Include="..\RqCalc.Application.Abstraction\RqCalc.Application.Abstraction.csproj" />
 	</ItemGroup>
+
 </Project>

@@ -3,7 +3,6 @@ using Framework.Core.Serialization;
 using Framework.DataBase;
 
 using RqCalc.Application.Serializer._Internal;
-using RqCalc.Application.Settings;
 using RqCalc.Domain;
 using RqCalc.Domain._Base;
 using RqCalc.Domain._Extensions;

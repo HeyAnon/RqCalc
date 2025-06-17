@@ -1,6 +1,6 @@
 using RqCalc.Domain;
 
-namespace RqCalc.Application.Settings;
+namespace RqCalc.Model;
 
 public record ApplicationSettings(
     int WeaponCardCount,

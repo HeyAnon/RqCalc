@@ -1,9 +1,8 @@
 ﻿using Framework.Core;
 using Framework.DataBase;
-
-using RqCalc.Application.Settings;
 using RqCalc.Domain._Base;
 using RqCalc.Domain.Equipment;
+using RqCalc.Model;
 
 namespace RqCalc.Application;
 

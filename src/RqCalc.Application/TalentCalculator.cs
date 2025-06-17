@@ -1,5 +1,4 @@
-﻿using RqCalc.Application.Settings;
-using RqCalc.Domain;
+﻿using RqCalc.Domain;
 using RqCalc.Domain._Extensions;
 using RqCalc.Domain.Talent;
 using RqCalc.Model;

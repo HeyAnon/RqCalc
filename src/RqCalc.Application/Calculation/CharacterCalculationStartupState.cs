@@ -2,7 +2,6 @@
 using Framework.HierarchicalExpand;
 
 using RqCalc.Application._Extensions;
-using RqCalc.Application.Settings;
 using RqCalc.Domain;
 using RqCalc.Domain._Base;
 using RqCalc.Domain._Extensions;

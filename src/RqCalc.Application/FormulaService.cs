@@ -1,8 +1,6 @@
 ﻿using Framework.Core;
 using Framework.DataBase;
 using Framework.ExpressionParsers;
-
-using RqCalc.Application.Settings;
 using RqCalc.Domain;
 using RqCalc.Domain._Base;
 using RqCalc.Domain.Formula;
@@ -10,6 +8,7 @@ using RqCalc.Domain.Formula;
 using System.Linq.Expressions;
 
 using RqCalc.Application.Calculation;
+using RqCalc.Model;
 
 namespace RqCalc.Application;
 

@@ -300,10 +300,10 @@ public partial class CharacterCalculationStartupState
 
         var defaultBonus = this.GetDefaultCardBonusVariables(characterEquipment, cardBonus);
 
-        return this.ProcessCardBonusVariablesFuncList(characterEquipment, cardBonus).Aggregate(defaultBonus, (state, f) => f(state));
+        return this.ProcessCardBonusVariablesFuncList(cardBonus).Aggregate(defaultBonus, (state, f) => f(state));
     }
 
-    private IEnumerable<Func<Dictionary<int, decimal>,  Dictionary<int, decimal>>> ProcessCardBonusVariablesFuncList(ICharacterEquipmentData characterEquipment, ICardBonus cardBonus)
+    private IEnumerable<Func<Dictionary<int, decimal>,  Dictionary<int, decimal>>> ProcessCardBonusVariablesFuncList(ICardBonus cardBonus)
     {
         return
         [

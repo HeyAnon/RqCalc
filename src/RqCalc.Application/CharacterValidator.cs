@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using Framework.Core;
-
-using RqCalc.Application.Settings;
 using RqCalc.Domain;
 using RqCalc.Domain._Extensions;
 using RqCalc.Model;

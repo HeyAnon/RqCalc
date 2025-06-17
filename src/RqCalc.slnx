@@ -5,7 +5,9 @@
     <File Path="Directory.Packages.props" />
     <File Path="__SolutionItems/CommonAssemblyInfo.cs" />
   </Folder>
+  <Project Path="Framework.DataBase.Abstraction/Framework.DataBase.Abstraction.csproj" />
   <Project Path="Framework.DataBase/Framework.DataBase.csproj" />
+  <Project Path="RqCalc.Application.Abstraction/RqCalc.Application.Abstraction.csproj" />
   <Project Path="RqCalc.Application/RqCalc.Application.csproj" />
   <Project Path="RqCalc.Domain/RqCalc.Domain.csproj" />
   <Project Path="RqCalc.Infrastructure/RqCalc.Infrastructure.csproj" />

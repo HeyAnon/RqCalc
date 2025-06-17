@@ -1,5 +1,4 @@
-﻿using RqCalc.Application.Settings;
-using RqCalc.Model;
+﻿using RqCalc.Model;
 
 namespace RqCalc.Application;
 

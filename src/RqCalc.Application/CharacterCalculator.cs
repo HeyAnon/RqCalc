@@ -1,11 +1,8 @@
 ﻿using Framework.Core;
 using Framework.Core.Serialization;
-using Framework.DataBase;
 using RqCalc.Application._Extensions;
 using RqCalc.Application.Calculation;
-using RqCalc.Application.Settings;
 using RqCalc.Domain;
-using RqCalc.Domain._Base;
 using RqCalc.Model;
 
 namespace RqCalc.Application;
