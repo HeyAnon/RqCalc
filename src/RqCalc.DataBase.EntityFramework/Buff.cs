@@ -1,25 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain;
+using RqCalc.Domain._Base;
+using RqCalc.Domain.Card;
+using RqCalc.Domain.Stamp;
+using RqCalc.Domain.Talent;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework
 {
     [Table("Buff")]
     public partial class Buff : ImageDirectoryBase
     {
-        public virtual ICollection<BuffBonus> Bonuses { get; set; }
+        public virtual HashSet<BuffBonus> Bonuses { get; set; } = null!;
 
 
-        public virtual Class Class { get; set; }
+        public virtual Class Class { get; set; } = null!;
 
-        public virtual Card Card { get; set; }
+        public virtual Card.Card Card { get; set; }
 
-        public virtual Stamp Stamp { get; set; }
+        public virtual Stamp.Stamp Stamp { get; set; }
 
 
-        public virtual Talent TalentCondition { get; set; }
+        public virtual Talent.Talent TalentCondition { get; set; }
         
         public virtual Version StartVersion { get; set; }
 
@@ -59,9 +61,9 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
     public partial class Buff : IBuff
     {
-        IEnumerable<IBuffBonus> IBonusContainer<IBuffBonus>.Bonuses => this.Bonuses;
+        IReadOnlyCollection<IBuffBonus> IBonusContainer<IBuffBonus>.Bonuses => this.Bonuses;
 
-        IClass IClassObject.Class => this.Class;
+        IClass IBuff.Class => this.Class;
 
         ITalent IBuff.TalentCondition => this.TalentCondition;
 

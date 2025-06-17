@@ -1,20 +1,19 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 
 using Framework.Core;
 
-using Anon.RQ_Calc.Domain;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain;
+using RqCalc.Domain.BonusType;
 
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.BonusType
 {
     [Table("BonusType")]
     public partial class BonusType : PersistentDomainObjectBase
     {
-        public virtual ICollection<BonusTypeVariable> Variables { get; set; }
+        public virtual HashSet<BonusTypeVariable> Variables { get; set; } = null!;
 
-        public virtual ICollection<BonusTypeStat> Stats { get; set; }
+        public virtual HashSet<BonusTypeStat> Stats { get; set; } = null!;
 
 
         public bool IsSingle { get; set; }
@@ -35,11 +34,11 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
     public partial class BonusType : IBonusType
     {
-        private readonly Lazy<bool?> _lazyIsMultiply;
+        private readonly Lazy<bool?> lazyIsMultiply;
 
         public BonusType()
         {
-            this._lazyIsMultiply = new Lazy<bool?>(() =>
+            this.lazyIsMultiply = new Lazy<bool?>(() =>
                 this.Stats.IsEmpty()               ? null
               : this.Stats.All(s => s.IsMultiply)  ? new bool?(true)
               : this.Stats.All(s => !s.IsMultiply) ? new bool?(false)
@@ -53,7 +52,7 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
         public StampQualityInfo StampQuality => this.GetStampQuality();
         
-        public bool? IsMultiply => this._lazyIsMultiply.Value;
+        public bool? IsMultiply => this.lazyIsMultiply.Value;
 
 
         private StampQualityInfo GetStampQuality()

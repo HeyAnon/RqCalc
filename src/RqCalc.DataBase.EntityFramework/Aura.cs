@@ -1,16 +1,19 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-using Anon.RQ_Calc.Domain;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.DataBase.EntityFramework.Talent;
+using RqCalc.Domain;
+using RqCalc.Domain._Base;
+using RqCalc.Domain.Talent;
 
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework
 {
     [Table("Aura")]
     public partial class Aura : ImageDirectoryBase
     {
-        public virtual ICollection<AuraBonus> Bonuses { get; set; }
+        public virtual HashSet<AuraBonus> Bonuses { get; set; }
 
-        public virtual ICollection<TalentBonus> DependencyTalentBonuses { get; set; }
+        public virtual HashSet<TalentBonus> DependencyTalentBonuses { get; set; }
 
 
         public virtual Class Class { get; set; }
@@ -37,9 +40,9 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
     public partial class Aura : IAura
     {
-        IClass IClassObject.Class => this.Class;
+        IClass IAura.Class => this.Class;
 
-        IEnumerable<IAuraBonus> IBonusContainer<IAuraBonus>.Bonuses => this.Bonuses;
+        IReadOnlyCollection<IAuraBonus> IBonusContainer<IAuraBonus>.Bonuses => this.Bonuses;
 
 
         IVersion IVersionObject.StartVersion => this.StartVersion;

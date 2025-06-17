@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Framework.Core;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain;
+using RqCalc.Domain.Equipment;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.Equipment
 {
     [Table("EquipmentSlot")]
     public partial class EquipmentSlot : ImageDirectoryBase
     {
-        public virtual ICollection<EquipmentType> Types { get; set; }
+        public virtual HashSet<EquipmentType> Types { get; set; }
 
 
-        public virtual ICollection<EquipmentSlot> PrimarySlots { get; set; }
+        public virtual HashSet<EquipmentSlot> PrimarySlots { get; set; }
 
 
         public virtual State State { get; set; }
@@ -39,16 +36,16 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
     public partial class EquipmentSlot : IEquipmentSlot
     {
-        private readonly Lazy<EquipmentSlot> _lazyWeaponInfo;
+        private readonly Lazy<EquipmentSlot> lazyWeaponInfo;
 
 
         public EquipmentSlot()
         {
-            this._lazyWeaponInfo = LazyHelper.Create(() => this.PrimarySlots.SingleOrDefault());
+            this.lazyWeaponInfo = LazyHelper.Create(() => this.PrimarySlots.SingleOrDefault());
         }
 
 
-        public EquipmentSlot PrimarySlot => this._lazyWeaponInfo.Value;
+        public EquipmentSlot PrimarySlot => this.lazyWeaponInfo.Value;
 
 
         IEnumerable<IEquipmentType> IEquipmentSlot.Types => this.Types;

@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain.CollectedStatistic;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.CollectedStatistic
 {
     [Table("CollectedItemBonus")]
     public partial class CollectedItemBonus : Bonus

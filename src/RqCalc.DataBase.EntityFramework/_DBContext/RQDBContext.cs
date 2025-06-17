@@ -1,21 +1,26 @@
-﻿using System;
-using System.Data.Common;
-using System.Data.Entity;
-
+﻿using System.Data.Common;
 using Framework.Core;
+using RqCalc.DataBase.EntityFramework._Legacy;
+using RqCalc.DataBase.EntityFramework.Card;
+using RqCalc.DataBase.EntityFramework.CollectedStatistic;
+using RqCalc.DataBase.EntityFramework.Equipment;
+using RqCalc.DataBase.EntityFramework.Formula;
+using RqCalc.DataBase.EntityFramework.GuildTalent;
+using RqCalc.DataBase.EntityFramework.Stamp;
+using RqCalc.DataBase.EntityFramework.Talent;
 
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework._DBContext
 {
-    [DbConfigurationType(typeof(RQDBConfiguration))]
-    public partial class RQDBContext : DbContext
+    [DbConfigurationType(typeof(RqdbConfiguration))]
+    public partial class RqdbContext : DbContext
     {
-        private readonly ITypeResolver<Type> _implementTypeResolver;
+        private readonly ITypeResolver<Type> implementTypeResolver;
 
 
-        public RQDBContext(DbConnection existingConnection, bool contextOwnsConnection, ITypeResolver<Type> implementTypeResolver)
+        public RqdbContext(DbConnection existingConnection, bool contextOwnsConnection, ITypeResolver<Type> implementTypeResolver)
             : base(existingConnection, contextOwnsConnection)
         {
-            this._implementTypeResolver = implementTypeResolver ?? throw new ArgumentNullException(nameof(implementTypeResolver));
+            this.implementTypeResolver = implementTypeResolver ?? throw new ArgumentNullException(nameof(implementTypeResolver));
         }
 
 
@@ -43,7 +48,7 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
         public DbSet<ConsumableBonus> ConsumableBonuses { get; set; }
 
-        public DbSet<Card> Cards { get; set; }
+        public DbSet<Card.Card> Cards { get; set; }
 
         public DbSet<CardType> CardTypes { get; set; }
 
@@ -53,7 +58,7 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
         public DbSet<Gender> Genders { get; set; }
 
-        public DbSet<BonusType> BonusTypes { get; set; }
+        public DbSet<BonusType.BonusType> BonusTypes { get; set; }
 
         public DbSet<CardBonus> CardBonuses { get; set; }
 
@@ -63,7 +68,7 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
         public DbSet<CardEquipmentSlot> CardEquipments { get; set; }
 
-        public DbSet<Talent> Talents { get; set; }
+        public DbSet<Talent.Talent> Talents { get; set; }
 
         public DbSet<TalentBranch> TalentBranches { get; set; }
 
@@ -71,7 +76,7 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
         public DbSet<Buff> Buffs { get; set; }
 
 
-        public DbSet<Stamp> Stamps { get; set; }
+        public DbSet<Stamp.Stamp> Stamps { get; set; }
 
         public DbSet<StampColor> StampColors { get; set; }
 
@@ -83,7 +88,7 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
         public DbSet<EquipmentClass> EquipmentClasses { get; set; }
 
-        public DbSet<Equipment> Equipments { get; set; }
+        public DbSet<Equipment.Equipment> Equipments { get; set; }
 
         public DbSet<EquipmentBonus> EquipmentBonuses { get; set; }
 
@@ -101,7 +106,7 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
         public DbSet<Setting> Settings { get; set; }
 
-        public DbSet<Legacy_GuildBonus> GuildBonuses { get; set; }
+        public DbSet<LegacyGuildBonus> GuildBonuses { get; set; }
 
         public DbSet<ClassLevelHpBonus> ClassLevelHpBonuses { get; set; }
 
@@ -133,7 +138,7 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
         
         public DbSet<Pet> Pets { get; set; }
 
-        public DbSet<GuildTalent> GuildTalents { get; set; }
+        public DbSet<GuildTalent.GuildTalent> GuildTalents { get; set; }
 
         public DbSet<GuildTalentBonus> GuildTalentBonuses { get; set; }
 

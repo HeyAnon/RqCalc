@@ -1,11 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
-using Anon.RQ_Calc.Domain;
-
 using Framework.Persistent;
+using RqCalc.Domain;
+using RqCalc.Domain.Equipment;
 
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.Equipment
 {
     [Table("EquipmentTypeCondition")]
     public partial class EquipmentTypeCondition

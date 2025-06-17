@@ -1,23 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Framework.Core;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain;
+using RqCalc.Domain._Base;
+using RqCalc.Domain.Card;
+using RqCalc.Domain.Equipment;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.Equipment
 {
     [Table("Equipment")]
     public partial class Equipment : ImageDirectoryBase
     {
-        public virtual ICollection<EquipmentCondition> Conditions { get; set; }
+        public virtual HashSet<EquipmentCondition> Conditions { get; set; }
 
-        public virtual ICollection<EquipmentBonus> Bonuses { get; set; }
+        public virtual HashSet<EquipmentBonus> Bonuses { get; set; }
 
         public virtual EquipmentType Type { get; set; }
 
-        public virtual Card PrimaryCard { get; set; }
+        public virtual Card.Card PrimaryCard { get; set; }
 
 
         public virtual Version StartVersion { get; set; }
@@ -65,16 +65,16 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
     public partial class Equipment : IEquipment
     {
-        private readonly Lazy<EquipmentBaseInfo> _lazyInfo;
+        private readonly Lazy<EquipmentBaseInfo> lazyInfo;
 
 
         public Equipment()
         {
-            this._lazyInfo = LazyHelper.Create(this.GetInfo);
+            this.lazyInfo = LazyHelper.Create(this.GetInfo);
         }
 
 
-        public EquipmentBaseInfo Info => this._lazyInfo.Value;
+        public EquipmentBaseInfo Info => this.lazyInfo.Value;
 
 
         IEnumerable<IEquipmentCondition> IEquipment.Conditions => this.Conditions;

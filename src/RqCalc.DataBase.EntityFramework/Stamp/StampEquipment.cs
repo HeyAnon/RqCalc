@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using RqCalc.DataBase.EntityFramework.Equipment;
+using RqCalc.Domain.Equipment;
+using RqCalc.Domain.Stamp;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.Stamp
 {
     [Table("StampEquipment")]
     public partial class StampEquipment : VersionObject

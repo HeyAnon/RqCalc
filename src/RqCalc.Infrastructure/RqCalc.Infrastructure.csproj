@@ -1,9 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\RqCalc.Application\RqCalc.Application.csproj" />
-  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+
+		<PackageReference Include="Luxoft.Framework.DependencyInjection" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\RqCalc.Application\RqCalc.Application.csproj" />
+	</ItemGroup>
 </Project>

@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain._Base;
+using RqCalc.Domain.Stamp;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.Stamp
 {
     [Table("StampVariant")]
     public partial class StampVariant : PersistentDomainObjectBase
     {
-        public virtual ICollection<StampVariantBonus> Bonuses { get; set; }
+        public virtual HashSet<StampVariantBonus> Bonuses { get; set; }
 
 
         public virtual Stamp Stamp { get; set; }

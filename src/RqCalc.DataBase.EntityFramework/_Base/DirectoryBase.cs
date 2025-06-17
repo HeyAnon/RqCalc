@@ -1,6 +1,6 @@
-﻿using Anon.RQ_Calc.Domain;
+﻿using RqCalc.Domain._Base;
 
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework._Base
 {
     public abstract partial class DirectoryBase : PersistentDomainObjectBase
     {

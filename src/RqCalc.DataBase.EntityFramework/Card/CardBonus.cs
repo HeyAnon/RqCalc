@@ -1,21 +1,20 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-
 using Framework.Core;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain;
+using RqCalc.Domain.BonusType;
+using RqCalc.Domain.Card;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.Card
 {
     [Table("CardBonus")]
     public partial class CardBonus : PersistentDomainObjectBase
     {
-        public virtual ICollection<CardBonusVariable> Variables { get; set; }
+        public virtual HashSet<CardBonusVariable> Variables { get; set; }
 
         public virtual Card Card { get; set; }
 
-        public virtual BonusType Type { get; set; }
+        public virtual BonusType.BonusType Type { get; set; }
 
         public virtual Card RequiredCard { get; set; }
 
@@ -64,16 +63,16 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
     public partial class CardBonus : ICardBonus
     {   
-        private readonly Lazy<CardUpgradeEquipmentInfo> _lazyInfo;
+        private readonly Lazy<CardUpgradeEquipmentInfo> lazyInfo;
 
 
         public CardBonus()
         {
-            this._lazyInfo = LazyHelper.Create(this.GetInfo);
+            this.lazyInfo = LazyHelper.Create(this.GetInfo);
         }
 
 
-        public CardUpgradeEquipmentInfo UpgradeEquipmentInfo => this._lazyInfo.Value;
+        public CardUpgradeEquipmentInfo UpgradeEquipmentInfo => this.lazyInfo.Value;
 
 
         IEnumerable<ICardBonusVariable> ICardBonus.Variables => this.Variables;

@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain;
+using RqCalc.Domain._Base;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework
 {
     [Table("Elixir")]
     public partial class Elixir : ImageDirectoryBase
     {
-        public virtual ICollection<ElixirBonus> Bonuses { get; set; }
+        public virtual HashSet<ElixirBonus> Bonuses { get; set; }
 
 
         public bool IsLegacy { get; set; }

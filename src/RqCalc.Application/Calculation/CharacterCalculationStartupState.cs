@@ -165,13 +165,13 @@ public partial class CharacterCalculationStartupState(
 
                     orderby variable.Index
 
-                    let multiplicityCount = (int)stats.GetValueOrDefault(stat) / (int)bonus.Variables[1]
+                    let multiplicityCount = (int)stats.GetValueOrDefault(stat) / (int)bonus.Variables.ElementAt(1)
 
                     let actualMultiplicityCount = variable.MultiplicityValue == null
                         ? multiplicityCount
                         : 1 + Math.Min(1, multiplicityCount)
 
-                    select new VirtualBonusVariable(variable.Index, (int)bonus.Variables[0] * actualMultiplicityCount);
+                    select new VirtualBonusVariable(variable.Index, (int)bonus.Variables.ElementAt(0) * actualMultiplicityCount);
 
 
                 var var1 = bonus.Variables.Select((value, index) => (index, value)).ToDictionary();
@@ -234,7 +234,7 @@ public partial class CharacterCalculationStartupState(
                   //&& bonus.Type.Variables.All(v => v.MultiplicityStat == null || this._currentClassStats.Contains(v.MultiplicityStat)) 
                   && this.IsEvaluated(typeStat)
 
-            let variableValue = bonus.Variables[typeStat.VarIndex]
+            let variableValue = bonus.Variables.ElementAt(typeStat.VarIndex)
 
             where variableValue != 0
 

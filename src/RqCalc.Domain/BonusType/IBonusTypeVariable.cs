@@ -11,7 +11,7 @@ public interface IBonusTypeVariable : IPersistentDomainObjectBase, IIndexObject
 
     bool HasSign { get; }
         
-    IFormula MulFormula { get; }
+    IFormula? MulFormula { get; }
 
     int? MultiplicityValue { get; }
 }

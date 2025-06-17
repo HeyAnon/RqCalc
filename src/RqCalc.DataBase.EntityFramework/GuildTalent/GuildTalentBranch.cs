@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain.GuildTalent;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.GuildTalent
 {
     [Table("GuildTalentBranch")]
     public partial class GuildTalentBranch : DirectoryBase
     {
-        public virtual ICollection<GuildTalent> Talents { get; set; }
+        public virtual HashSet<GuildTalent> Talents { get; set; }
 
         public int MaxPoints { get; set; }
     }

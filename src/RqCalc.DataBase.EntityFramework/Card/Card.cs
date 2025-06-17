@@ -1,24 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-
-using Anon.RQ_Calc.Domain;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Framework.Core;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.DataBase.EntityFramework.Equipment;
+using RqCalc.Domain;
+using RqCalc.Domain._Base;
+using RqCalc.Domain.Card;
+using RqCalc.Domain.Equipment;
 
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.Card
 {
     [Table("Card")]
     public partial class Card : DirectoryBase
     {
-        public virtual ICollection<Buff> Buffs { get; set; }
+        public virtual HashSet<Buff> Buffs { get; set; }
 
-        public virtual ICollection<CardBonus> Bonuses { get; set; }
+        public virtual HashSet<CardBonus> Bonuses { get; set; }
 
-        public virtual ICollection<CardEquipmentSlot> EquipmentSlots { get; set; }
+        public virtual HashSet<CardEquipmentSlot> EquipmentSlots { get; set; }
 
-        public virtual ICollection<CardEquipmentType> EquipmentTypes { get; set; }
+        public virtual HashSet<CardEquipmentType> EquipmentTypes { get; set; }
 
-        public virtual ICollection<CardBuffDescription> BuffDescriptions { get; set; }
+        public virtual HashSet<CardBuffDescription> BuffDescriptions { get; set; }
 
 
         public virtual CardType Type { get; set; }
@@ -65,11 +67,11 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
     public partial class Card : ICard
     {
-        private readonly Lazy<CardGroupInfo> _lazyCardGroup;
+        private readonly Lazy<CardGroupInfo> lazyCardGroup;
 
         public Card()
         {
-            this._lazyCardGroup = LazyHelper.Create(() =>
+            this.lazyCardGroup = LazyHelper.Create(() =>
             {
                 var request = from groupKey in this.GroupKey.ToMaybe()
 
@@ -84,7 +86,7 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
         }
 
 
-        public CardGroupInfo Group => this._lazyCardGroup.Value;
+        public CardGroupInfo Group => this.lazyCardGroup.Value;
 
 
         IEnumerable<IBuff> ICard.Buffs => this.Buffs;

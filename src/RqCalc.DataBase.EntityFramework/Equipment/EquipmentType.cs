@@ -1,20 +1,20 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-
-using Anon.RQ_Calc.Domain;
 using Framework.Core;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain;
+using RqCalc.Domain._Base;
+using RqCalc.Domain.Equipment;
 
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.Equipment
 {
     [Table("EquipmentType")]
     public partial class EquipmentType : DirectoryBase
     {
-        public virtual ICollection<EquipmentTypeBonus> Bonuses { get; set; }
+        public virtual HashSet<EquipmentTypeBonus> Bonuses { get; set; }
         
-        public virtual ICollection<EquipmentTypeCondition> Conditions { get; set; }
+        public virtual HashSet<EquipmentTypeCondition> Conditions { get; set; }
 
-        public virtual ICollection<Equipment> Equipments { get; set; }
+        public virtual HashSet<Equipment> Equipments { get; set; }
 
 
         public virtual EquipmentSlot Slot { get; set; }
@@ -31,16 +31,16 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
     public partial class EquipmentType : IEquipmentType
     {
-        private readonly Lazy<WeaponTypeInfo> _lazyWeaponInfo;
+        private readonly Lazy<WeaponTypeInfo> lazyWeaponInfo;
 
 
         public EquipmentType()
         {
-            this._lazyWeaponInfo = LazyHelper.Create(this.GetWeaponInfo);
+            this.lazyWeaponInfo = LazyHelper.Create(this.GetWeaponInfo);
         }
 
 
-        public WeaponTypeInfo WeaponInfo => this._lazyWeaponInfo.Value;
+        public WeaponTypeInfo WeaponInfo => this.lazyWeaponInfo.Value;
 
 
         IEnumerable<IEquipmentTypeBonus> IBonusContainer<IEquipmentTypeBonus>.Bonuses => this.Bonuses;

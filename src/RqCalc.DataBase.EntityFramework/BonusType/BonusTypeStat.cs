@@ -1,19 +1,19 @@
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using Anon.RQ_Calc.Domain;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain;
+using RqCalc.Domain.BonusType;
 
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.BonusType
 {
     [Table("BonusTypeStat")]
     public partial class BonusTypeStat : PersistentDomainObjectBase
     {
-        public virtual ICollection<BonusTypeStatCondition> Conditions { get; set; }
+        public virtual HashSet<BonusTypeStatCondition> Conditions { get; set; } = null!;
 
-        public virtual BonusType BonusType { get; set; }
+        public virtual BonusType BonusType { get; set; } = null!;
 
-        public virtual Stat Stat { get; set; }
+        public virtual Stat Stat { get; set; } = null!;
 
 
         public bool IsMultiply { get; set; }

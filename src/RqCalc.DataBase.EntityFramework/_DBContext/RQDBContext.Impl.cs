@@ -1,29 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using Framework.Core;
+using RqCalc.Domain._Base;
 
-using Anon.RQ_Calc.Domain;
-
-using Framework.Core;
-using Framework.DataBase;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework._DBContext
 {
-    public partial class RQDBContext : IDataSource<IPersistentDomainObjectBase>
+    public partial class RqdbContext : IDataSource<IPersistentDomainObjectBase>
     {
         IReadOnlyCollection<TProjection> IDataSource<IPersistentDomainObjectBase>.GetFullList<TProjection>()
         {
-            var implType = this._implementTypeResolver.Resolve(typeof(TProjection));
+            var implType = this.implementTypeResolver.Resolve(typeof(TProjection));
             
             return new Func<IReadOnlyCollection<object>>(this.GetFullListInternal<object>)
                   .CreateGenericMethod(implType)
-                  .Invoke<IReadOnlyList<TProjection>>(this);
+                  .Invoke<IReadOnlyCollection<TProjection>>(this);
         }
 
         IQueryable<TProjection> IDataSource<IPersistentDomainObjectBase>.GetQueryable<TProjection>()
         {
-            var implType = this._implementTypeResolver.Resolve(typeof(TProjection));
+            var implType = this.implementTypeResolver.Resolve(typeof(TProjection));
 
             return new Func<IQueryable<object>>(this.GetQueryableInternal<object>)
                   .CreateGenericMethod(implType)

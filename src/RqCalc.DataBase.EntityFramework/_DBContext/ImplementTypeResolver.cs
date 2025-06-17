@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-
+﻿using System.Reflection;
 using Framework.Core;
 
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework._DBContext
 {
     public class ImplementTypeResolver : ITypeResolver<Type>
     {
-        private readonly Assembly _assembly;
+        private readonly Assembly assembly;
 
 
         public ImplementTypeResolver(Assembly assembly)
         {
             if (assembly == null) throw new ArgumentNullException(nameof(assembly));
 
-            this._assembly = assembly;
+            this.assembly = assembly;
         }
 
 
@@ -29,7 +25,7 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
         public IEnumerable<Type> GetSourceTypes()
         {
-            return this._assembly.GetTypes();
+            return this.assembly.GetTypes();
         }
 
 

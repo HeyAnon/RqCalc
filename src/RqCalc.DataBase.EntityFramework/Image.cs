@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain._Base;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework
 {
     [Table("Image")]
     public class Image : PersistentDomainObjectBase, IImage

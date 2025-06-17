@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework
 {
     [Table("StatSource")]
     public class StatSource
     {
         public virtual Stat Stat { get; set; }
 
-        public virtual Formula Formula { get; set; }
+        public virtual Formula.Formula Formula { get; set; }
 
 
         [Key]

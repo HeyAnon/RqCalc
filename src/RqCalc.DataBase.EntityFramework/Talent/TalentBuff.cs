@@ -1,9 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using RqCalc.Domain.Talent;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.Talent
 {
     [Table("TalentBuffDescription")]
     public partial class TalentBuffDescription : BuffElement

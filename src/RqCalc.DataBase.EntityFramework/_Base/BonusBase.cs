@@ -1,16 +1,13 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-
 using Framework.Core;
+using RqCalc.Domain._Base;
+using RqCalc.Domain.BonusType;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework._Base
 {
     public abstract partial class BonusBase
     {
-        public virtual BonusType Type { get; set; }
+        public virtual BonusType.BonusType Type { get; set; }
 
 
         public decimal Value { get; set; }
@@ -29,16 +26,16 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
     public abstract partial class BonusBase : IBonusBase
     {
-        private readonly Lazy<List<decimal>> _lazyVariables;
+        private readonly Lazy<List<decimal>> lazyVariables;
 
 
         protected BonusBase()
         {
-            this._lazyVariables = LazyHelper.Create(() => new List<decimal> { this.Value });
+            this.lazyVariables = LazyHelper.Create(() => new List<decimal> { this.Value });
         }
 
 
-        public IReadOnlyList<decimal> Variables => this._lazyVariables.Value;
+        public IReadOnlyCollection<decimal> Variables => this.lazyVariables.Value;
 
 
         IBonusType Framework.Persistent.ITypeObject<IBonusType>.Type => this.Type;

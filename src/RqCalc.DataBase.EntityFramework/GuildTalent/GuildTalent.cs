@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain._Base;
+using RqCalc.Domain.GuildTalent;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.GuildTalent
 {
     [Table("GuildTalent")]
     public partial class GuildTalent : ImageDirectoryBase
     {
-        public virtual ICollection<GuildTalentBonus> Bonuses { get; set; }
+        public virtual HashSet<GuildTalentBonus> Bonuses { get; set; }
 
-        public virtual ICollection<GuildTalentVariable> Variables { get; set; }
+        public virtual HashSet<GuildTalentVariable> Variables { get; set; }
         
 
         public virtual GuildTalentBranch Branch { get; set; }

@@ -12,24 +12,28 @@ public static class AuraExtensions
 
     public static IEnumerable<IBonusBase> GetBonuses(this IAura aura, IVersion version, bool shared, IEnumerable<ITalentBonus> talentBonuses)
     {
-        var auraBonusesRequest = from bonus in aura.GetOrderedBonuses()
+        var auraBonusesRequest =
+            
+            from bonus in aura.GetOrderedBonuses()
 
             where bonus.Contains(version)
 
             let expandedBonus = shared ? bonus.ExpandShared() : bonus
 
-            where expandedBonus.Type.Stats.Any(s => expandedBonus.Variables[s.VarIndex] != 0)
+            where expandedBonus.Type.Stats.Any(s => expandedBonus.Variables.ElementAt(s.VarIndex) != 0)
 
             select new { Bonus = expandedBonus, Priority = 0 };
 
 
-        var talentAuraBonusesRequest = from bonus in talentBonuses
+        var talentAuraBonusesRequest =
+            
+            from bonus in talentBonuses
 
             where bonus.AuraCondition == aura
                                            
             let expandedBonus = shared ? bonus.ExpandShared() : bonus
 
-            where expandedBonus.Type.Stats.Any(s => expandedBonus.Variables[s.VarIndex] != 0)
+            where expandedBonus.Type.Stats.Any(s => expandedBonus.Variables.ElementAt(s.VarIndex) != 0)
 
             select new { Bonus = expandedBonus, Priority = 1 };
 

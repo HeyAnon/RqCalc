@@ -1,13 +1,8 @@
-using System.Data.Entity;
-using System.Data.Entity.Core.Common;
-using System.Data.SQLite;
-using System.Data.SQLite.EF6;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework._DBContext
 {
-    public class RQDBConfiguration : DbConfiguration
+    public class RqdbConfiguration : DbConfiguration
     {
-        public RQDBConfiguration()
+        public RqdbConfiguration()
         {
             this.SetProviderFactory("System.Data.SQLite", SQLiteFactory.Instance);
             this.SetProviderFactory("System.Data.SQLite.EF6", SQLiteProviderFactory.Instance);

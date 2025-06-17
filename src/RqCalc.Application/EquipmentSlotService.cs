@@ -1,4 +1,5 @@
 ﻿using Framework.DataBase;
+
 using RqCalc.Domain._Base;
 using RqCalc.Domain._Extensions;
 using RqCalc.Domain.Equipment;

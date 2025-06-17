@@ -1,4 +1,5 @@
 using Framework.Core;
+
 using RqCalc.Domain._Base;
 using RqCalc.Domain.BonusType;
 
@@ -16,5 +17,5 @@ public class VirtualBonusBase : IBonusBase
         return $"BonusType: {this.Type.Template} | Values: {this.Variables.Join(", ")}";
     }
 
-    IReadOnlyList<decimal> IBonusBase.Variables => this.Variables;
+    IReadOnlyCollection<decimal> IBonusBase.Variables => this.Variables;
 }

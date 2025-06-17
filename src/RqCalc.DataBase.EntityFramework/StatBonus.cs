@@ -1,18 +1,19 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using RqCalc.Domain;
+using RqCalc.Domain.BonusType;
+using RqCalc.Domain.Formula;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework
 {
     [Table("StatBonus")]
     public partial class StatBonus
     {
         public virtual Stat Stat { get; set; }
         
-        public virtual BonusType Type { get; set; }
+        public virtual BonusType.BonusType Type { get; set; }
 
-        public virtual Formula Formula { get; set; }
+        public virtual Formula.Formula Formula { get; set; }
 
 
         [Column("Formula_Id")]

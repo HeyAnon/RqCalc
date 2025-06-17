@@ -1,8 +1,10 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.DataBase.EntityFramework.Equipment;
+using RqCalc.Domain.Card;
+using RqCalc.Domain.Equipment;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.Card
 {
     [Table("CardBonusVariableCondition")]
     public partial class CardBonusVariableCondition : PersistentDomainObjectBase

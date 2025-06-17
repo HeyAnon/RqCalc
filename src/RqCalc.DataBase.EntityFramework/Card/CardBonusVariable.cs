@@ -1,14 +1,13 @@
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain.Card;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.Card
 {
     [Table("CardBonusVariable")]
     public partial class CardBonusVariable : PersistentDomainObjectBase
     {
-        public virtual ICollection<CardBonusVariableCondition> Conditions { get; set; }
+        public virtual HashSet<CardBonusVariableCondition> Conditions { get; set; }
 
 
         public virtual CardBonus CardBonus { get; set; }

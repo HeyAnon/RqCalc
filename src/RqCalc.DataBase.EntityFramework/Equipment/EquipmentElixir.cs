@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Framework.Core;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain;
+using RqCalc.Domain._Base;
+using RqCalc.Domain.Equipment;
 
-using Anon.RQ_Calc.Domain;
-
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.Equipment
 {
     [Table("EquipmentElixir")]
     public partial class EquipmentElixir : ImageDirectoryBase
     {
-        public virtual ICollection<EquipmentElixirBonus> Bonuses { get; set; }
+        public virtual HashSet<EquipmentElixirBonus> Bonuses { get; set; }
 
-        public virtual ICollection<EquipmentElixirSlot> NativeSlots { get; set; }
+        public virtual HashSet<EquipmentElixirSlot> NativeSlots { get; set; }
         
 
         public virtual Version StartVersion { get; set; }
@@ -33,15 +31,15 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
     public partial class EquipmentElixir : IEquipmentElixir
     {
-        private readonly Lazy<EquipmentSlot[]> _lazySlots;
+        private readonly Lazy<EquipmentSlot[]> lazySlots;
 
         public EquipmentElixir()
         {
-            this._lazySlots = LazyHelper.Create(() => this.NativeSlots.ToArray(ns => ns.EquipmentSlot));
+            this.lazySlots = LazyHelper.Create(() => this.NativeSlots.ToArray(ns => ns.EquipmentSlot));
         }
 
 
-        public IEnumerable<IEquipmentSlot> Slots => this._lazySlots.Value;
+        public IEnumerable<IEquipmentSlot> Slots => this.lazySlots.Value;
 
 
         IEnumerable<IEquipmentElixirBonus> IBonusContainer<IEquipmentElixirBonus>.Bonuses => this.Bonuses;

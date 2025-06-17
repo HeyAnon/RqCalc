@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Framework.Core;
 using Framework.Persistent;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain;
+using RqCalc.Domain._Base;
+using RqCalc.Domain.Formula;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework
 {
     [Table("Stat")]
     public partial class Stat : ImageDirectoryBase
     {
-        public virtual ICollection<StatSource> NativeSources { get; set; }
+        public virtual HashSet<StatSource> NativeSources { get; set; }
 
-        public virtual ICollection<StatBonus> Bonuses { get; set; }
+        public virtual HashSet<StatBonus> Bonuses { get; set; }
 
-        public virtual ICollection<Stat> Children { get; set; }
+        public virtual HashSet<Stat> Children { get; set; }
 
 
         public virtual Race Race { get; set; }
@@ -26,7 +24,7 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
         public virtual Stat Parent { get; set; }
 
-        public virtual Formula DescriptionFormula { get; set; }
+        public virtual Formula.Formula DescriptionFormula { get; set; }
 
 
         public virtual StatType Type { get; set; }
@@ -64,24 +62,24 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
     public partial class Stat : IStat
     {
-        private readonly Lazy<Dictionary<RestoreStatType, IStat>> _lazyRestoreStats;
+        private readonly Lazy<Dictionary<RestoreStatType, IStat>> lazyRestoreStats;
 
-        private readonly Lazy<Formula[]> _lazySources;
+        private readonly Lazy<Formula.Formula[]> lazySources;
 
 
         public Stat()
         {
-            this._lazyRestoreStats = LazyHelper.Create(() => this.Children.Where(c => c.Type < 0).ToDictionary(stat => (RestoreStatType)stat.Type, stat => (IStat)stat));
+            this.lazyRestoreStats = LazyHelper.Create(() => this.Children.Where(c => c.Type < 0).ToDictionary(stat => (RestoreStatType)stat.Type, stat => (IStat)stat));
 
-            this._lazySources = LazyHelper.Create(() => this.NativeSources.Where(s => s.Formula.Enabled).ToArray(s => s.Formula));
+            this.lazySources = LazyHelper.Create(() => this.NativeSources.Where(s => s.Formula.Enabled).ToArray(s => s.Formula));
         }
 
 
 
 
-        public Dictionary<RestoreStatType, IStat> RestoreStats => this._lazyRestoreStats.Value;
+        public Dictionary<RestoreStatType, IStat> RestoreStats => this.lazyRestoreStats.Value;
 
-        public IEnumerable<IFormula> Sources => this._lazySources.Value;
+        public IEnumerable<IFormula> Sources => this.lazySources.Value;
 
 
         IEnumerable<IStatBonus> IBonusContainer<IStatBonus>.Bonuses => this.Bonuses;

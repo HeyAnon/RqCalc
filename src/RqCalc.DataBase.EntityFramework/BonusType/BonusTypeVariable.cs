@@ -1,18 +1,20 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using Anon.RQ_Calc.Domain;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain;
+using RqCalc.Domain.BonusType;
+using RqCalc.Domain.Formula;
 
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.BonusType
 {
     [Table("BonusTypeVariable")]
     public partial class BonusTypeVariable : PersistentDomainObjectBase
     {
-        public virtual Stat MultiplicityStat { get; set; }
+        public virtual Stat? MultiplicityStat { get; set; }
         
-        public virtual BonusType BonusType { get; set; }
+        public virtual BonusType BonusType { get; set; } = null!;
 
-        public virtual Formula MulFormula { get; set; }
+        public virtual Formula.Formula? MulFormula { get; set; }
 
 
         public int? MultiplicityValue { get; set; }
@@ -36,10 +38,10 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
     public partial class BonusTypeVariable : IBonusTypeVariable
     {
-        IStat IBonusTypeVariable.MultiplicityStat => this.MultiplicityStat;
+        IStat? IBonusTypeVariable.MultiplicityStat => this.MultiplicityStat;
 
         IBonusType IBonusTypeVariable.BonusType => this.BonusType;
 
-        IFormula IBonusTypeVariable.MulFormula => this.MulFormula;
+        IFormula? IBonusTypeVariable.MulFormula => this.MulFormula;
     }
 }

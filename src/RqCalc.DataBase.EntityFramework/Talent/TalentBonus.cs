@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-using Anon.RQ_Calc.Domain;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Framework.Core;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain;
+using RqCalc.Domain.BonusType;
+using RqCalc.Domain.Talent;
 
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.Talent
 {
     [Table("TalentBonus")]
     public partial class TalentBonus : PersistentDomainObjectBase
@@ -17,7 +16,7 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
         public virtual Buff BuffCondition { get; set; }
 
-        public virtual BonusType Type { get; set; }
+        public virtual BonusType.BonusType Type { get; set; }
 
 
         [Column("AuraCondition_Id")]
@@ -50,12 +49,12 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
     public partial class TalentBonus : ITalentBonus
     {
-        private readonly Lazy<List<decimal>> _lazyVariables;
+        private readonly Lazy<List<decimal>> lazyVariables;
 
 
         protected TalentBonus()
         {
-            this._lazyVariables = LazyHelper.Create(() => new List<decimal> { this.Value });
+            this.lazyVariables = LazyHelper.Create(() => new List<decimal> { this.Value });
         }
 
         ITalent ITalentBonus.Talent => this.Talent;
@@ -64,7 +63,7 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
         IBuff ITalentBonus.BuffCondition => this.BuffCondition;
 
-        public IReadOnlyList<decimal> Variables => this._lazyVariables.Value;
+        public IReadOnlyCollection<decimal> Variables => this.lazyVariables.Value;
 
         IBonusType Framework.Persistent.ITypeObject<IBonusType>.Type => this.Type;
     }

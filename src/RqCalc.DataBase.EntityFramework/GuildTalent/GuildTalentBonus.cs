@@ -1,22 +1,19 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-
 using Framework.Core;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain.BonusType;
+using RqCalc.Domain.GuildTalent;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.GuildTalent
 {
     [Table("GuildTalentBonus")]
     public partial class GuildTalentBonus : PersistentDomainObjectBase
     {
-        public virtual ICollection<GuildTalentBonusVariable> Variables { get; set; }
+        public virtual HashSet<GuildTalentBonusVariable> Variables { get; set; }
 
         public virtual GuildTalent Talent { get; set; }
 
-        public virtual BonusType Type { get; set; }
+        public virtual BonusType.BonusType Type { get; set; }
 
 
         [Column("Talent_Id")]

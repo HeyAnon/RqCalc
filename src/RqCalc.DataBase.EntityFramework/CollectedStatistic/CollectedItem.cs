@@ -1,16 +1,17 @@
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain;
+using RqCalc.Domain._Base;
+using RqCalc.Domain.CollectedStatistic;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.CollectedStatistic
 {
     [Table("CollectedItem")]
     public partial class CollectedItem : PersistentDomainObjectBase
     {
-        public virtual ICollection<CollectedItemBonus> Bonuses { get; set; }
+        public virtual HashSet<CollectedItemBonus> Bonuses { get; set; }
 
-        public virtual Equipment Equipment { get; set; }
+        public virtual Equipment.Equipment Equipment { get; set; }
 
         public virtual Pet Pet { get; set; }
 

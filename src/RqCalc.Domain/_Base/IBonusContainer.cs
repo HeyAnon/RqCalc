@@ -2,5 +2,5 @@
 
 public interface IBonusContainer<out TBonus>
 {
-    IReadOnlyList<TBonus> Bonuses { get; }
+    IReadOnlyCollection<TBonus> Bonuses { get; }
 }

@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Anon.RQ_Calc.Domain;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain.CollectedStatistic;
 
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.CollectedStatistic
 {
     [Table("Trophy")]
     public partial class Trophy : DirectoryBase

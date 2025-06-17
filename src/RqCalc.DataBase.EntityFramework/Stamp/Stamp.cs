@@ -1,19 +1,18 @@
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain;
+using RqCalc.Domain.Stamp;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.Stamp
 {
     [Table("Stamp")]
     public partial class Stamp : DirectoryBase
     {
-        public virtual ICollection<Buff> Buffs { get; set; }
+        public virtual HashSet<Buff> Buffs { get; set; }
 
-        public virtual ICollection<StampVariant> Variants { get; set; }
+        public virtual HashSet<StampVariant> Variants { get; set; }
 
-        public virtual ICollection<StampEquipment> Equipments { get; set; }
+        public virtual HashSet<StampEquipment> Equipments { get; set; }
 
 
         public bool IsLegacy { get; set; }

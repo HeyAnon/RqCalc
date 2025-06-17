@@ -1,14 +1,14 @@
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.DataBase.EntityFramework.Equipment;
+using RqCalc.Domain.CollectedStatistic;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.CollectedStatistic
 {
     [Table("CollectedGroup")]
     public partial class CollectedGroup : DirectoryBase
     {
-        public virtual ICollection<CollectedItem> Items { get; set; }
+        public virtual HashSet<CollectedItem> Items { get; set; }
 
         public virtual EquipmentType EquipmentType { get; set; }
 

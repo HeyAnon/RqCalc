@@ -1,23 +1,27 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-using Anon.RQ_Calc.Domain;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.DataBase.EntityFramework.Equipment;
+using RqCalc.Domain;
+using RqCalc.Domain.BonusType;
+using RqCalc.Domain.Equipment;
 
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.BonusType
 {
     [Table("BonusTypeStatCondition")]
     public partial class BonusTypeStatCondition : PersistentDomainObjectBase
     {
-        public virtual BonusTypeStat BonusTypeStat { get; set; }
+        public virtual BonusTypeStat BonusTypeStat { get; set; } = null!;
 
-        public virtual Event Event { get; set; }
+        public virtual Event? Event { get; set; }
 
-        public virtual Class Class { get; set; }
+        public virtual Class? Class { get; set; }
 
-        public virtual State State { get; set; }
+        public virtual State? State { get; set; }
 
-        public virtual EquipmentType EquipmentType { get; set; }
+        public virtual EquipmentType? EquipmentType { get; set; }
 
-        
+
         public bool? IsMaxLevel { get; set; }
 
         public bool? PairEquipment { get; set; }
@@ -49,7 +53,7 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
         IEquipmentType IBonusTypeStatCondition.EquipmentType => this.EquipmentType;
 
-        IClass IClassObject.Class => this.Class;
+        IClass IBonusTypeStatCondition.Class => this.Class;
 
         IState IBonusTypeStatCondition.State => this.State;
     }

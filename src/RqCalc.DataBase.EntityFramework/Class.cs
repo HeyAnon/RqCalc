@@ -1,30 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Framework.Core;
 using Framework.Persistent;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.DataBase.EntityFramework.Talent;
+using RqCalc.Domain;
+using RqCalc.Domain.Talent;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework
 {
     [Table("Class")]
     public partial class Class : ImageDirectoryBase
     {
-        public virtual ICollection<Class> SubClasses { get; set; }
+        public virtual HashSet<Class> SubClasses { get; set; }
 
-        public virtual ICollection<ClassBonus> NativeBonuses { get; set; }
+        public virtual HashSet<ClassBonus> NativeBonuses { get; set; }
 
-        public virtual ICollection<ClassLevelHpBonus> LevelHpBonuses { get; set; }
+        public virtual HashSet<ClassLevelHpBonus> LevelHpBonuses { get; set; }
 
-        public virtual ICollection<TalentBranch> TalentBranches { get; set; }
+        public virtual HashSet<TalentBranch> TalentBranches { get; set; }
 
 
-        public virtual ICollection<Aura> Auras { get; set; }
+        public virtual HashSet<Aura> Auras { get; set; }
 
-        public virtual ICollection<Buff> Buffs { get; set; }
+        public virtual HashSet<Buff> Buffs { get; set; }
 
 
         public virtual Class Base { get; set; }
@@ -63,51 +61,51 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
     public partial class Class : IClass
     {
-        private readonly Lazy<bool> _lazyAllowExtraWeapon;
+        private readonly Lazy<bool> lazyAllowExtraWeapon;
         
-        private readonly Lazy<bool> _lazyIsMelee;
+        private readonly Lazy<bool> lazyIsMelee;
 
-        private readonly Lazy<decimal> _lazyHpPerVitality;
+        private readonly Lazy<decimal> lazyHpPerVitality;
 
-        private readonly Lazy<Stat> _lazyPrimaryStat;
+        private readonly Lazy<Stat> lazyPrimaryStat;
 
-        private readonly Lazy<Stat> _lazyEnergyStat;
+        private readonly Lazy<Stat> lazyEnergyStat;
 
-        private readonly Lazy<IReadOnlyList<ClassBonus>> _lazyBonuses;
+        private readonly Lazy<IReadOnlyCollection<ClassBonus>> lazyBonuses;
 
 
         public Class()
         {
-            this._lazyAllowExtraWeapon = LazyHelper.Create(() => this.GetFirst(c => c.NativeAllowExtraWeapon));
+            this.lazyAllowExtraWeapon = LazyHelper.Create(() => this.GetFirst(c => c.NativeAllowExtraWeapon));
 
-            this._lazyIsMelee = LazyHelper.Create(() => this.GetFirst(c => c.NativeIsMelee));
+            this.lazyIsMelee = LazyHelper.Create(() => this.GetFirst(c => c.NativeIsMelee));
 
-            this._lazyHpPerVitality = LazyHelper.Create(() => this.GetFirst(c => c.NativeHpPerVitality));
+            this.lazyHpPerVitality = LazyHelper.Create(() => this.GetFirst(c => c.NativeHpPerVitality));
 
-            this._lazyPrimaryStat = LazyHelper.Create(() => this.GetFirst(c => c.NativePrimaryStat));
+            this.lazyPrimaryStat = LazyHelper.Create(() => this.GetFirst(c => c.NativePrimaryStat));
 
-            this._lazyEnergyStat = LazyHelper.Create(() => this.GetFirst(c => c.NativeEnergyStat));
+            this.lazyEnergyStat = LazyHelper.Create(() => this.GetFirst(c => c.NativeEnergyStat));
             
-            this._lazyBonuses = LazyHelper.Create(() => this.GetMany(c => c.NativeBonuses));
+            this.lazyBonuses = LazyHelper.Create(() => this.GetMany(c => c.NativeBonuses));
         }
 
 
-        public bool AllowExtraWeapon => this._lazyAllowExtraWeapon.Value;
+        public bool AllowExtraWeapon => this.lazyAllowExtraWeapon.Value;
 
-        public bool IsMelee => this._lazyIsMelee.Value;
+        public bool IsMelee => this.lazyIsMelee.Value;
 
-        public decimal HpPerVitality => this._lazyHpPerVitality.Value;
+        public decimal HpPerVitality => this.lazyHpPerVitality.Value;
 
-        public IStat PrimaryStat => this._lazyPrimaryStat.Value;
+        public IStat PrimaryStat => this.lazyPrimaryStat.Value;
 
-        public IStat EnergyStat => this._lazyEnergyStat.Value;
+        public IStat EnergyStat => this.lazyEnergyStat.Value;
 
         IEnumerable<IAura> IClass.Auras => this.Auras;
 
         IEnumerable<IBuff> IClass.Buffs => this.Buffs;
 
 
-        public IEnumerable<IClassBonus> Bonuses => this._lazyBonuses.Value;
+        public IEnumerable<IClassBonus> Bonuses => this.lazyBonuses.Value;
 
 
         IEnumerable<ITalentBranch> IClass.TalentBranches => this.TalentBranches;
@@ -150,7 +148,7 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
             return request.First();
         }
 
-        private IReadOnlyList<T> GetMany<T>(Func<Class, IEnumerable<T>> selector, bool reverse = true)
+        private IReadOnlyCollection<T> GetMany<T>(Func<Class, IEnumerable<T>> selector, bool reverse = true)
         {
             var request = from c in this.GetAllElements(v => v.Base).Pipe(reverse, c => c.Reverse())
 

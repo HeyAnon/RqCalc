@@ -1,18 +1,18 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain._Base;
+using RqCalc.Domain.Talent;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.Talent
 {
     [Table("Talent")]
     public partial class Talent : ImageDirectoryBase
     {
-        public virtual ICollection<TalentBonus> Bonuses { get; set; }
+        public virtual HashSet<TalentBonus> Bonuses { get; set; }
 
-        public virtual ICollection<TalentVariable> Variables { get; set; }
+        public virtual HashSet<TalentVariable> Variables { get; set; }
 
-        public virtual ICollection<TalentBuffDescription> BuffDescriptions { get; set; }
+        public virtual HashSet<TalentBuffDescription> BuffDescriptions { get; set; }
 
 
         public virtual TalentBranch Branch { get; set; }

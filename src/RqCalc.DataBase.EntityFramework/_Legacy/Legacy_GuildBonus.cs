@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-
-using Anon.RQ_Calc.Domain;
-
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Framework.Core;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain.BonusType;
 
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework._Legacy
 {
     [Table("Legacy_GuildBonus")]
-    public partial class Legacy_GuildBonus : ImageDirectoryBase
+    public partial class LegacyGuildBonus : ImageDirectoryBase
     {
-        public virtual BonusType Type { get; set; }
+        public virtual BonusType.BonusType Type { get; set; }
 
 
         public int Value { get; set; }
@@ -24,18 +21,18 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
         public int? TypeId { get; set; }
     }
 
-    public partial class Legacy_GuildBonus : ILegacy_GuildBonus
+    public partial class LegacyGuildBonus : ILegacy_GuildBonus
     {
-        private readonly Lazy<List<decimal>> _lazyVariables;
+        private readonly Lazy<List<decimal>> lazyVariables;
 
 
-        protected Legacy_GuildBonus()
+        protected LegacyGuildBonus()
         {
-            this._lazyVariables = LazyHelper.Create(() => new List<decimal> { this.Value });
+            this.lazyVariables = LazyHelper.Create(() => new List<decimal> { this.Value });
         }
 
 
-        public IReadOnlyList<decimal> Variables => this._lazyVariables.Value;
+        public IReadOnlyCollection<decimal> Variables => this.lazyVariables.Value;
 
 
         IBonusType Framework.Persistent.ITypeObject<IBonusType>.Type => this.Type;

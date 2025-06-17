@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using RqCalc.DataBase.EntityFramework._Base;
 
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.Equipment
 {
     [Table("EquipmentBonusVariable")]
     public partial class EquipmentBonusVariable : PersistentDomainObjectBase

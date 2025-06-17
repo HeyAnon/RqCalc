@@ -1,22 +1,19 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-
 using Framework.Core;
+using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain.BonusType;
+using RqCalc.Domain.Equipment;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework.Equipment
 {
     [Table("EquipmentBonus")]
     public partial class EquipmentBonus : PersistentDomainObjectBase
     {
-        public virtual ICollection<EquipmentBonusVariable> NativeVariables { get; set; }
+        public virtual HashSet<EquipmentBonusVariable> NativeVariables { get; set; }
 
         public virtual Equipment Equipment { get; set; }
 
-        public virtual BonusType Type { get; set; }
+        public virtual BonusType.BonusType Type { get; set; }
 
 
         public int OrderIndex { get; set; }
@@ -39,16 +36,16 @@ namespace Anon.RQ_Calc.DataBase.EntityFramework
 
     public partial class EquipmentBonus : IEquipmentBonus
     {
-        private readonly Lazy<decimal[]> _lazyVariables;
+        private readonly Lazy<decimal[]> lazyVariables;
 
 
         protected EquipmentBonus()
         {
-            this._lazyVariables = LazyHelper.Create(() => this.NativeVariables.ToDictionary(v => v.Index, v => v.Value).ToArrayI());
+            this.lazyVariables = LazyHelper.Create(() => this.NativeVariables.ToDictionary(v => v.Index, v => v.Value).ToArrayI());
         }
 
 
-        public IReadOnlyList<decimal> Variables => this._lazyVariables.Value;
+        public IReadOnlyCollection<decimal> Variables => this.lazyVariables.Value;
 
 
         IEquipment IEquipmentBonus.Equipment => this.Equipment;
