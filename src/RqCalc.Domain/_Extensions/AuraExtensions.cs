@@ -12,9 +12,6 @@ public static class AuraExtensions
 
     public static IEnumerable<IBonusBase> GetBonuses(this IAura aura, IVersion version, bool shared, IEnumerable<ITalentBonus> talentBonuses)
     {
-        if (aura == null) throw new ArgumentNullException(nameof(aura));
-        if (talentBonuses == null) throw new ArgumentNullException(nameof(talentBonuses));
-
         var auraBonusesRequest = from bonus in aura.GetOrderedBonuses()
 
             where bonus.Contains(version)

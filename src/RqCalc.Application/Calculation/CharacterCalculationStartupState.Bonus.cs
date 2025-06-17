@@ -30,7 +30,7 @@ public partial class CharacterCalculationStartupState
 
                 if (equipment.IsAllowed(character.State))
                 {
-                    foreach (var bonus in this.GetEquipmentBonuses(equipment))
+                    foreach (var bonus in GetEquipmentBonuses(equipment))
                     {
                         if (bonus.Activate == null || (bonus.Activate.Value == equipmentInfo.Active))
                         {
@@ -118,13 +118,13 @@ public partial class CharacterCalculationStartupState
 
                 select bonus;
 
-            var mainBonuses = character.Aura == null ? [] : character.EnableTalents ? character.Aura.GetBonuses(this.lastVersion, false, mainAuraTalentBonuses) : character.Aura.GetBonuses(this.lastVersion, false, false);
+            var mainBonuses = character.Aura == null ? [] : character.EnableTalents ? character.Aura.GetBonuses(lastVersion, false, mainAuraTalentBonuses) : character.Aura.GetBonuses(lastVersion, false, false);
 
 
 
             var allAuraBonuses = from auraPair in new[] { new { Aura = character.Aura, Bonuses = mainBonuses.ToArray() } }
 
-                    .Concat(character.SharedAuras.Select(pair => new { Aura = pair.Key, Bonuses = pair.Key.GetBonuses(this.lastVersion, true, pair.Value).ToArray()}))
+                    .Concat(character.SharedAuras.Select(pair => new { Aura = pair.Key, Bonuses = pair.Key.GetBonuses(lastVersion, true, pair.Value).ToArray()}))
 
                 from bonus in auraPair.Bonuses
                                      
@@ -230,7 +230,7 @@ public partial class CharacterCalculationStartupState
                               
                 group expandedCardBonus by new { Card = card, BonusType = expandedCardBonus.Type } into bonusGroup
 
-                from bonus in this.context.AttackBonusTypes.Contains(bonusGroup.Key.BonusType) ? GroupByType(bonusGroup, bonusGroup.Key.BonusType) : bonusGroup
+                from bonus in bonusTypeService.AttackBonusTypes.Contains(bonusGroup.Key.BonusType) ? GroupByType(bonusGroup, bonusGroup.Key.BonusType) : bonusGroup
 
                 select bonus;
 
@@ -300,14 +300,11 @@ public partial class CharacterCalculationStartupState
 
         var defaultBonus = this.GetDefaultCardBonusVariables(characterEquipment, cardBonus);
 
-        return this.ProcessCardBonusVariablesFuncs(characterEquipment, cardBonus).Aggregate(defaultBonus, (state, f) => f(state));
+        return this.ProcessCardBonusVariablesFuncList(characterEquipment, cardBonus).Aggregate(defaultBonus, (state, f) => f(state));
     }
 
-    private IEnumerable<Func<Dictionary<int, decimal>,  Dictionary<int, decimal>>> ProcessCardBonusVariablesFuncs(ICharacterEquipmentData characterEquipment, ICardBonus cardBonus)
+    private IEnumerable<Func<Dictionary<int, decimal>,  Dictionary<int, decimal>>> ProcessCardBonusVariablesFuncList(ICharacterEquipmentData characterEquipment, ICardBonus cardBonus)
     {
-        if (characterEquipment == null) throw new ArgumentNullException(nameof(characterEquipment));
-        if (cardBonus == null) throw new ArgumentNullException(nameof(cardBonus));
-
         return
         [
             state =>
@@ -382,7 +379,7 @@ public partial class CharacterCalculationStartupState
             var res = cardBonus.Variables.ToDictionary(v => v.Index, variable =>
             {
                 var allowed = !variable.Conditions.Any() || variable.Conditions.Any(condition => (condition.EquipmentType == null || condition.EquipmentType == equipment.Type)
-                                                                                                 && (condition.IsSingleHandWeapon == null || condition.IsSingleHandWeapon == equipment.Type.WeaponInfo.IsSingleHand));
+                                                                                                 && (condition.IsSingleHandWeapon == null || condition.IsSingleHandWeapon == equipment.Type.WeaponInfo!.IsSingleHand));
 
                 return allowed ? variable.Value : 0M;
             });
@@ -400,7 +397,7 @@ public partial class CharacterCalculationStartupState
 
     private int GetCardCount(Func<ICard, bool> filter)
     {
-        return character.Equipments.SelectMany(pair => pair.Value.Cards).Where(c => c != null).Count(filter);
+        return character.Equipments.SelectMany(pair => pair.Value.Cards).Where(c => c != null).Count(filter!);
     }
 
     private IEnumerable<IBonusBase> GetStampBonuses(ICharacterEquipmentData equipmentInfo)
@@ -411,7 +408,7 @@ public partial class CharacterCalculationStartupState
         {
             var equipment = equipmentInfo.Equipment;
 
-            var internalLevel = equipment.Info.InternalLevel;
+            var internalLevel = equipment.Info!.InternalLevel;
 
             foreach (var bonus in equipmentInfo.StampVariant.Bonuses.OrderBy(bonus => bonus.OrderIndex))
             {
@@ -427,7 +424,7 @@ public partial class CharacterCalculationStartupState
         }
     }
 
-    private IEnumerable<IEquipmentBonus> GetEquipmentBonuses(IEquipment equipment, bool? dynamic = null)
+    private static IEnumerable<IEquipmentBonus> GetEquipmentBonuses(IEquipment equipment, bool? dynamic = null)
     {
         if (equipment == null) throw new ArgumentNullException(nameof(equipment));
 

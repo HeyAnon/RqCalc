@@ -16,12 +16,14 @@ using RqCalc.Model._Extensions;
 namespace RqCalc.Application.Calculation;
 
 public partial class CharacterCalculationStartupState(
-    IStatService statService,
     ApplicationSettings settings,
+    IVersion lastVersion,
+    IStatService statService,
     IClassService classService,
     IFormulaService formulaService,
-    ICharacterSource character,
-    IVersion lastVersion) : ICharacterCalculationState
+    IBonusTypeService bonusTypeService,
+    IEquipmentForgeService equipmentForgeService,
+    ICharacterSource character) : ICharacterCalculationState
 {
     private readonly IReadOnlySet<IStat> currentClassStats = character.Class.GetStats().Concat(statService.BaseStats).ToHashSet();
 
@@ -97,7 +99,7 @@ public partial class CharacterCalculationStartupState(
             yield return new BonusEvaluator.ConstBonusEvaluator(BonusEvaluateRule.SumOffset, false, this.GetEquipmentStats());
         }
 
-        foreach (var bonus in this.GetBonuses(BonusSource.All).GroupBy(bonus => bonus.Type).SelectMany(g => g.Key.IsSingle ? (IEnumerable<IBonusBase>) [g.FirstOrDefault()] : g))
+        foreach (var bonus in this.GetBonuses(BonusSource.All).GroupBy(bonus => bonus.Type).SelectMany(g => g.Key.IsSingle ? (IEnumerable<IBonusBase>) [g.FirstOrDefault()] : g)) // Debug!
         {
             if (bonus.Type.IsMultiply != null)
             {
@@ -150,8 +152,6 @@ public partial class CharacterCalculationStartupState(
 
     private BonusEvaluator GetBonusEvaluator(IBonusBase bonus)
     {
-        if (bonus == null) throw new ArgumentNullException(nameof(bonus));
-
         var multiplicityVars = bonus.Type.Variables.Where(variable => variable.MultiplicityStat != null).ToList();
 
         if (multiplicityVars.Any())
@@ -197,8 +197,6 @@ public partial class CharacterCalculationStartupState(
 
     private BonusEvaluator.ConstBonusEvaluator GetConstBonusEvaluator(IBonusBase bonus, int priorityOffset = 0)
     {
-        if (bonus == null) throw new ArgumentNullException(nameof(bonus));
-
         if (bonus.Type.Variables.Any(var => var.IsDynamic()))
         {
             var internalBonus = this.EvaluateDynamicBonus(bonus);
@@ -213,15 +211,13 @@ public partial class CharacterCalculationStartupState(
 
     private IBonusBase EvaluateDynamicBonus(IBonusBase bonus)
     {
-        if (bonus == null) throw new ArgumentNullException(nameof(bonus));
-
         var variablesRequest = from varPair in bonus.Variables.Select((value, i) => new { Value = value, Index = i })
 
             let mulFunc = bonus.Type.Variables.SingleOrDefault(btv => btv.Index == varPair.Index && btv.IsDynamic())
                 .Maybe(btv => btv.MulFormula)
                 .Maybe(formulaService.GetFunc)
 
-            select mulFunc == null ? varPair.Value : mulFunc(new CharacterCalculationChangedState(this) { CustomVariable = varPair.Value });
+            select mulFunc?.Invoke(new CharacterCalculationChangedState(this) { CustomVariable = varPair.Value }) ?? varPair.Value;
 
         return new VirtualBonusBase
         {
@@ -233,8 +229,6 @@ public partial class CharacterCalculationStartupState(
 
     private BonusEvaluator.ConstBonusEvaluator GetInternalConstBonusEvaluator(IBonusBase bonus, int priorityOffset)
     {
-        if (bonus == null) throw new ArgumentNullException(nameof(bonus));
-
         var request = from typeStat in bonus.Type.Stats
 
             where this.currentClassStats.Contains(typeStat.Stat)
@@ -254,7 +248,7 @@ public partial class CharacterCalculationStartupState(
 
         var stats = request.ToDictionary(pair => pair.Stat, pair => pair.Value);
 
-        return new BonusEvaluator.ConstBonusEvaluator(context.BonusTypePriority[bonus.Type] + priorityOffset, bonus.Type.IsMultiply.Value, stats);
+        return new BonusEvaluator.ConstBonusEvaluator(bonusTypeService.BonusTypePriority[bonus.Type] + priorityOffset, bonus.Type.IsMultiply!.Value, stats);
     }
 
 
@@ -267,7 +261,9 @@ public partial class CharacterCalculationStartupState(
 
     private Dictionary<IStat, decimal> GetEquipmentStats()
     {
-        var baseRequest = from equipmentPair in character.Equipments
+        var baseRequest =
+            
+            from equipmentPair in character.Equipments
 
             let equipment = equipmentPair.Value.Equipment
 
@@ -279,14 +275,14 @@ public partial class CharacterCalculationStartupState(
 
             from statPair in equipmentInfo.Equipment.Info switch
             {
-                EquipmentInfo info => [new { Stat = context.DefenseStat, Value = (decimal)info.Defense }],
+                EquipmentInfo info => [new { Stat = settings.DefenseStat, Value = (decimal)info.Defense }],
 
-                WeaponInfo info => [new { Stat = context.AttackStat, Value = info.Attack * attackModifier }],
+                WeaponInfo info => [new { Stat = settings.AttackStat, Value = info.Attack * attackModifier }],
 
                 DefenseWeaponInfo info => new[]
                 {
-                    new { Stat = context.AttackStat, Value = info.Attack * attackModifier },
-                    new { Stat = context.DefenseStat, Value = (decimal)info.Defense }
+                    new { Stat = settings.AttackStat, Value = info.Attack * attackModifier },
+                    new { Stat = settings.DefenseStat, Value = (decimal)info.Defense }
                 },
 
                 _ => throw new ArgumentOutOfRangeException(nameof(equipmentInfo.Equipment.Info))
@@ -296,7 +292,9 @@ public partial class CharacterCalculationStartupState(
 
             select statPair;
 
-        var upgradeRequest = from equipmentPair in character.Equipments
+        var upgradeRequest =
+            
+            from equipmentPair in character.Equipments
 
             where this.HasCalcStats(equipmentPair.Value.Equipment)
 
@@ -312,19 +310,19 @@ public partial class CharacterCalculationStartupState(
             {
                 EquipmentUpgradeInfo info =>
                 [
-                    new { Stat = context.DefenseStat, Value = (decimal)info.Defense },
-                    new { Stat = context.HpStat, Value = (decimal)info.Hp }
+                    new { Stat = settings.DefenseStat, Value = (decimal)info.Defense },
+                    new { Stat = settings.HpStat, Value = (decimal)info.Hp }
                 ],
 
                 DefenseWeaponUpgradeInfo info => new[]
                 {
-                    new { Stat = context.AttackStat, Value = info.Attack * attackModifier },
-                    new { Stat = context.DefenseStat, Value = (decimal)info.Defense },
+                    new { Stat = settings.AttackStat, Value = info.Attack * attackModifier },
+                    new { Stat = settings.DefenseStat, Value = (decimal)info.Defense },
                 },
 
                 WeaponUpgradeInfo info =>
                 [
-                    new { Stat = context.AttackStat, Value = info.Attack * attackModifier }
+                    new { Stat = settings.AttackStat, Value = info.Attack * attackModifier }
                 ],
 
                 _ => throw new ArgumentOutOfRangeException(nameof(upgradeInfo))
@@ -335,7 +333,9 @@ public partial class CharacterCalculationStartupState(
             select statPair;
 
 
-        var allStatRequest = from equipmentPair in character.Equipments
+        var allStatRequest =
+            
+            from equipmentPair in character.Equipments
 
             where this.HasCalcStats(equipmentPair.Value.Equipment)
 
@@ -347,7 +347,7 @@ public partial class CharacterCalculationStartupState(
 
             where upgradeInfo.AllStatBonus != 0
 
-            from statPair in context.GetEditStats(character.Class).Select(stat => new { Stat = stat, Value = (decimal)upgradeInfo.AllStatBonus })
+            from statPair in statService.GetEditStats(character.Class).Select(stat => new { Stat = stat, Value = (decimal)upgradeInfo.AllStatBonus })
 
             select statPair;
 
@@ -375,7 +375,7 @@ public partial class CharacterCalculationStartupState(
 
             where equipment.Info != null && equipmentInfo.Upgrade != 0
 
-            let forgeInfo = context.EquipmentForges[equipmentInfo.Upgrade]
+            let forgeInfo = equipmentForgeService.GetEquipmentForge(equipmentInfo.Upgrade)
 
             let getDefenseFunc = FuncHelper.Create((decimal defense) =>
                 (int)Math.Round(Math.Ceiling(forgeInfo.Defense * defense)))
@@ -386,7 +386,7 @@ public partial class CharacterCalculationStartupState(
             let upgradeInfo = equipment.Info switch
             {
                 EquipmentInfo info => (EquipmentUpgradeBaseInfo)new EquipmentUpgradeInfo(forgeInfo.AllStatBonus, getDefenseFunc(info.Defense),
-                    context.EquipmentLevelForges.GetValueOrDefault(Tuple.Create(equipment.Info.InternalLevel, equipmentInfo.Upgrade))),
+                    equipmentForgeService.GetHpBonus(equipment.Info.InternalLevel, equipmentInfo.Upgrade)),
                 WeaponInfo info => new WeaponUpgradeInfo(forgeInfo.AllStatBonus, getAttackFunc(info.Attack)),
                 DefenseWeaponInfo info => new DefenseWeaponUpgradeInfo(forgeInfo.AllStatBonus, getAttackFunc(info.Attack), getDefenseFunc(info.Defense)),
                 _ => throw new ArgumentOutOfRangeException($"{nameof(equipment.Info)}")
@@ -435,7 +435,7 @@ public partial class CharacterCalculationStartupState(
                 pair.Key,
 
                 DynamicBonuses = (IBonusContainer<IBonusBase>)
-                    new VirtualBonusBaseContainer(this.GetEquipmentBonuses(equipmentInfo.Equipment, true).Select(this.EvaluateDynamicBonus))
+                    new VirtualBonusBaseContainer(GetEquipmentBonuses(equipmentInfo.Equipment, true).Select(this.EvaluateDynamicBonus))
             };
 
         return request.ToDictionary(pair => pair.Key, pair => pair.DynamicBonuses);
@@ -494,7 +494,7 @@ public partial class CharacterCalculationStartupState(
                || typeStat.Conditions.Any(condition => (condition.Event == null || condition.Event == character.Event)
                                                        && (condition.State == null || condition.State == character.State)
                                                        && (condition.Class == null || character.Class.IsSubsetOf(condition.Class))
-                                                       && (condition.EquipmentType == null || this.IsEvaluatedEquipmentType(condition.EquipmentType, condition.PairEquipment.Value))
+                                                       && (condition.EquipmentType == null || this.IsEvaluatedEquipmentType(condition.EquipmentType, condition.PairEquipment!.Value))
                                                        && (condition.IsMaxLevel == null || condition.IsMaxLevel.Value == (character.Level == lastVersion.MaxLevel))
                                                        && (condition.LostControl == null || condition.LostControl.Value == character.LostControl));
     }

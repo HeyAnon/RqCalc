@@ -1,10 +1,16 @@
-﻿using RqCalc.Application.Settings;
+﻿using Framework.DataBase;
+
+using RqCalc.Application.Settings;
+using RqCalc.Domain._Base;
+using RqCalc.Domain._Extensions;
 using RqCalc.Domain.Equipment;
 
 namespace RqCalc.Application;
 
-public class EquipmentSlotService(ApplicationSettings settings) : IEquipmentSlotService
+public class EquipmentSlotService(ApplicationSettings settings, IDataSource<IPersistentDomainObjectBase> dataSource) : IEquipmentSlotService
 {
+    public IEquipmentSlot PrimaryWeaponSlot { get; } = dataSource.GetFullList<IEquipmentSlot>().Single(s => s.IsPrimarySlot());
+
     public int GetMaxCardCount(IEquipmentSlot slot)
     {
         return slot.IsWeapon switch

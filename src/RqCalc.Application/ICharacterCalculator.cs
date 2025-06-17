@@ -8,7 +8,6 @@ public interface ICharacterCalculator
 
     //ISerializer<string, ICharacterSource> CharacterSerializer { get; }
 
-    int GetFreeStats(ICharacterSource characterInput);
     
     CharacterCalculationResult Calculate(ICharacterSource character);
 }
