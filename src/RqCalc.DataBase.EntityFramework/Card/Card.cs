@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+
 using Framework.Core;
+
 using RqCalc.DataBase.EntityFramework._Base;
 using RqCalc.DataBase.EntityFramework.Equipment;
 using RqCalc.Domain;
@@ -12,35 +14,35 @@ namespace RqCalc.DataBase.EntityFramework.Card
     [Table("Card")]
     public partial class Card : DirectoryBase
     {
-        public virtual HashSet<Buff> Buffs { get; set; }
+        public virtual HashSet<Buff> Buffs { get; set; } = null!;
 
-        public virtual HashSet<CardBonus> Bonuses { get; set; }
+        public virtual HashSet<CardBonus> Bonuses { get; set; } = null!;
 
-        public virtual HashSet<CardEquipmentSlot> EquipmentSlots { get; set; }
+        public virtual HashSet<CardEquipmentSlot> EquipmentSlots { get; set; } = null!;
 
-        public virtual HashSet<CardEquipmentType> EquipmentTypes { get; set; }
+        public virtual HashSet<CardEquipmentType> EquipmentTypes { get; set; } = null!;
 
-        public virtual HashSet<CardBuffDescription> BuffDescriptions { get; set; }
-
-
-        public virtual CardType Type { get; set; }
-
-        public virtual EquipmentClass MinEquipmentClass { get; set; }
-
-        public virtual CardSet Set { get; set; }
+        public virtual HashSet<CardBuffDescription> BuffDescriptions { get; set; } = null!;
 
 
-        public virtual Version StartVersion { get; set; }
+        public virtual CardType Type { get; set; } = null!;
 
-        public virtual Version EndVersion { get; set; }
+        public virtual EquipmentClass? MinEquipmentClass { get; set; }
+
+        public virtual CardSet? Set { get; set; }
+
+
+        public virtual Version? StartVersion { get; set; }
+
+        public virtual Version? EndVersion { get; set; }
 
 
         public bool IsLegacy { get; set; }
 
 
-        public string GroupKey { get; set; }
+        public string? GroupKey { get; set; }
 
-        public string GroupValue { get; set; }
+        public string? GroupValue { get; set; }
 
         public int? GroupOrderKey { get; set; }
 
@@ -67,50 +69,49 @@ namespace RqCalc.DataBase.EntityFramework.Card
 
     public partial class Card : ICard
     {
-        private readonly Lazy<CardGroupInfo> lazyCardGroup;
+        private readonly Lazy<CardGroupInfo?> lazyCardGroup;
 
         public Card()
         {
             this.lazyCardGroup = LazyHelper.Create(() =>
             {
-                var request = from groupKey in this.GroupKey.ToMaybe()
-
-                              from groupValue in this.GroupValue.ToMaybe<string>()
-
-                              from groupOrderKey in this.GroupOrderKey.ToMaybe()
-
-                              select new CardGroupInfo(groupKey, groupValue, groupOrderKey);
-
-                return request.GetValueOrDefault();
+                if (this.GroupKey == null || this.GroupValue == null || this.GroupOrderKey == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return new CardGroupInfo(this.GroupKey, this.GroupValue, this.GroupOrderKey.Value);
+                }
             });
         }
 
 
-        public CardGroupInfo Group => this.lazyCardGroup.Value;
+        public CardGroupInfo? Group => this.lazyCardGroup.Value;
 
 
-        IEnumerable<IBuff> ICard.Buffs => this.Buffs;
+        IReadOnlyCollection<IBuff> ICard.Buffs => this.Buffs;
 
-        IEnumerable<ICardEquipmentSlot> ICard.EquipmentSlots => this.EquipmentSlots;
+        IReadOnlyCollection<ICardEquipmentSlot> ICard.EquipmentSlots => this.EquipmentSlots;
 
-        IEnumerable<ICardEquipmentType> ICard.EquipmentTypes => this.EquipmentTypes;
+        IReadOnlyCollection<ICardEquipmentType> ICard.EquipmentTypes => this.EquipmentTypes;
 
 
-        IEnumerable<ICardBonus> IBonusContainer<ICardBonus>.Bonuses => this.Bonuses;
+        IReadOnlyCollection<ICardBonus> IBonusContainer<ICardBonus>.Bonuses => this.Bonuses;
 
 
         ICardType Framework.Persistent.ITypeObject<ICardType>.Type => this.Type;
 
 
-        IEnumerable<ICardBuffDescription> ICard.BuffDescriptions => this.BuffDescriptions;
+        IReadOnlyCollection<ICardBuffDescription> ICard.BuffDescriptions => this.BuffDescriptions;
 
-        IEquipmentClass ICard.MinEquipmentClass => this.MinEquipmentClass;
+        IEquipmentClass? ICard.MinEquipmentClass => this.MinEquipmentClass;
 
-        ICardSet ICard.Set => this.Set;
+        ICardSet? ICard.Set => this.Set;
 
 
-        IVersion IVersionObject.StartVersion => this.StartVersion;
+        IVersion? IVersionObject.StartVersion => this.StartVersion;
 
-        IVersion IVersionObject.EndVersion => this.EndVersion;
+        IVersion? IVersionObject.EndVersion => this.EndVersion;
     }
 }

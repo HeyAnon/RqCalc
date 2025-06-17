@@ -5,7 +5,7 @@ namespace RqCalc.Domain.Formula;
 
 public interface IFormula : IPersistentIdentityDomainObjectBase, IValueObject<string>, IDescriptionObject
 {
-    IEnumerable<IFormulaVariable> Variables { get; }
+    IReadOnlyCollection<IFormulaVariable> Variables { get; }
 
     bool Enabled { get; }
 }

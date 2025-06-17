@@ -16,6 +16,6 @@ namespace RqCalc.DataBase.EntityFramework
 
     public partial class Elixir : IElixir
     {
-        IEnumerable<IElixirBonus> IBonusContainer<IElixirBonus>.Bonuses => this.Bonuses;
+        IReadOnlyCollection<IElixirBonus> IBonusContainer<IElixirBonus>.Bonuses => this.Bonuses;
     }
 }

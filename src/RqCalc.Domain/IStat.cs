@@ -14,7 +14,7 @@ public interface IStat : IImageDirectoryBase, IBonusContainer<IStatBonus>, IPare
 
     IReadOnlyDictionary<RestoreStatType, IStat> RestoreStats { get; }
 
-    IEnumerable<IFormula> Sources { get; }
+    IReadOnlyCollection<IFormula> Sources { get; }
         
     IFormula DescriptionFormula { get; }
 

@@ -30,7 +30,7 @@ namespace RqCalc.DataBase.EntityFramework.BonusType
 
     public partial class BonusTypeStat : IBonusTypeStat
     {
-        IEnumerable<IBonusTypeStatCondition> IBonusTypeStat.Conditions => this.Conditions;
+        IReadOnlyCollection<IBonusTypeStatCondition> IBonusTypeStat.Conditions => this.Conditions;
 
         IBonusType IBonusTypeStat.BonusType => this.BonusType;
 

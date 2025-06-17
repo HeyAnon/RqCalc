@@ -2,5 +2,5 @@
 
 public interface IImageObject
 {
-    IImage Image { get; }
+    IImage? Image { get; }
 }

@@ -4,7 +4,7 @@ namespace RqCalc.Domain.Equipment;
 
 public interface IEquipmentSlot : IImageDirectoryBase
 {
-    IEnumerable<IEquipmentType> Types { get; }
+    IReadOnlyCollection<IEquipmentType> Types { get; }
 
 
     IState? State { get; }

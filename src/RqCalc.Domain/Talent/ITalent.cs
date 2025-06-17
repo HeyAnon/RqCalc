@@ -6,9 +6,9 @@ namespace RqCalc.Domain.Talent;
 
 public interface ITalent : IImageDirectoryBase, IDescriptionObject, IActiveObject, IBonusContainer<ITalentBonus>
 {
-    IEnumerable<ITalentVariable> Variables { get; }
+    IReadOnlyCollection<ITalentVariable> Variables { get; }
 
-    IEnumerable<ITalentBuffDescription> BuffDescriptions { get; }
+    IReadOnlyCollection<ITalentBuffDescription> BuffDescriptions { get; }
 
 
     ITalentBranch Branch { get; }

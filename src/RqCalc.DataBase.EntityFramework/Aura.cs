@@ -11,16 +11,16 @@ namespace RqCalc.DataBase.EntityFramework
     [Table("Aura")]
     public partial class Aura : ImageDirectoryBase
     {
-        public virtual HashSet<AuraBonus> Bonuses { get; set; }
+        public virtual HashSet<AuraBonus> Bonuses { get; set; } = null!;
 
-        public virtual HashSet<TalentBonus> DependencyTalentBonuses { get; set; }
+        public virtual HashSet<TalentBonus> DependencyTalentBonuses { get; set; } = null!;
 
 
-        public virtual Class Class { get; set; }
-        
-        public virtual Version StartVersion { get; set; }
+        public virtual Class Class { get; set; } = null!;
 
-        public virtual Version EndVersion { get; set; }
+        public virtual Version? StartVersion { get; set; }
+
+        public virtual Version? EndVersion { get; set; }
 
 
         public int Level { get; set; }
@@ -45,10 +45,10 @@ namespace RqCalc.DataBase.EntityFramework
         IReadOnlyCollection<IAuraBonus> IBonusContainer<IAuraBonus>.Bonuses => this.Bonuses;
 
 
-        IVersion IVersionObject.StartVersion => this.StartVersion;
+        IVersion? IVersionObject.StartVersion => this.StartVersion;
 
-        IVersion IVersionObject.EndVersion => this.EndVersion;
+        IVersion? IVersionObject.EndVersion => this.EndVersion;
 
-        IEnumerable<ITalentBonus> IAura.DependencyTalentBonuses => this.DependencyTalentBonuses;
+        IReadOnlyCollection<ITalentBonus> IAura.DependencyTalentBonuses => this.DependencyTalentBonuses;
     }
 }

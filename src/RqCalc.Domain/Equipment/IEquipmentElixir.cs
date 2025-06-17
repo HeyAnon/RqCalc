@@ -4,5 +4,5 @@ namespace RqCalc.Domain.Equipment;
 
 public interface IEquipmentElixir : IImageDirectoryBase, IBonusContainer<IEquipmentElixirBonus>, IVersionObject
 {
-    IEnumerable<IEquipmentSlot> Slots { get; }
+    IReadOnlyCollection<IEquipmentSlot> Slots { get; }
 }

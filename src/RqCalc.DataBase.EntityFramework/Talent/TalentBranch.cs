@@ -22,6 +22,6 @@ namespace RqCalc.DataBase.EntityFramework.Talent
     {
         IClass IClassObject.Class => this.Class;
 
-        IEnumerable<ITalent> ITalentBranch.Talents => this.Talents;
+        IReadOnlyCollection<ITalent> ITalentBranch.Talents => this.Talents;
     }
 }

@@ -20,10 +20,10 @@ namespace RqCalc.DataBase.EntityFramework.Stamp
 
     public partial class Stamp : IStamp
     {
-        IEnumerable<IBuff> IStamp.Buffs => this.Buffs;
+        IReadOnlyCollection<IBuff> IStamp.Buffs => this.Buffs;
 
-        IEnumerable<IStampVariant> IStamp.Variants => this.Variants;
+        IReadOnlyCollection<IStampVariant> IStamp.Variants => this.Variants;
 
-        IEnumerable<IStampEquipment> IStamp.Equipments => this.Equipments;
+        IReadOnlyCollection<IStampEquipment> IStamp.Equipments => this.Equipments;
     }
 }

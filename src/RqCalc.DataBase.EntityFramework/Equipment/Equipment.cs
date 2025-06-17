@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+
 using Framework.Core;
+
 using RqCalc.DataBase.EntityFramework._Base;
 using RqCalc.Domain;
 using RqCalc.Domain._Base;
@@ -11,23 +13,23 @@ namespace RqCalc.DataBase.EntityFramework.Equipment
     [Table("Equipment")]
     public partial class Equipment : ImageDirectoryBase
     {
-        public virtual HashSet<EquipmentCondition> Conditions { get; set; }
+        public virtual HashSet<EquipmentCondition> Conditions { get; set; } = null!;
 
-        public virtual HashSet<EquipmentBonus> Bonuses { get; set; }
+        public virtual HashSet<EquipmentBonus> Bonuses { get; set; } = null!;
 
-        public virtual EquipmentType Type { get; set; }
+        public virtual EquipmentType Type { get; set; } = null!;
 
-        public virtual Card.Card PrimaryCard { get; set; }
-
-
-        public virtual Version StartVersion { get; set; }
-
-        public virtual Version EndVersion { get; set; }
+        public virtual Card.Card? PrimaryCard { get; set; }
 
 
-        public virtual Gender Gender { get; set; }
+        public virtual Version? StartVersion { get; set; }
 
-        public virtual Image CostumeImage { get; set; }
+        public virtual Version? EndVersion { get; set; }
+
+
+        public virtual Gender? Gender { get; set; }
+
+        public virtual Image? CostumeImage { get; set; }
 
         public bool IsPersonal { get; set; }
 
@@ -65,7 +67,7 @@ namespace RqCalc.DataBase.EntityFramework.Equipment
 
     public partial class Equipment : IEquipment
     {
-        private readonly Lazy<EquipmentBaseInfo> lazyInfo;
+        private readonly Lazy<EquipmentBaseInfo?> lazyInfo;
 
 
         public Equipment()
@@ -74,27 +76,27 @@ namespace RqCalc.DataBase.EntityFramework.Equipment
         }
 
 
-        public EquipmentBaseInfo Info => this.lazyInfo.Value;
+        public EquipmentBaseInfo? Info => this.lazyInfo.Value;
 
 
-        IEnumerable<IEquipmentCondition> IEquipment.Conditions => this.Conditions;
+        IReadOnlyCollection<IEquipmentCondition> IEquipment.Conditions => this.Conditions;
 
-        IEnumerable<IEquipmentBonus> IBonusContainer<IEquipmentBonus>.Bonuses => this.Bonuses;
+        IReadOnlyCollection<IEquipmentBonus> IBonusContainer<IEquipmentBonus>.Bonuses => this.Bonuses;
 
         IEquipmentType Framework.Persistent.ITypeObject<IEquipmentType>.Type => this.Type;
 
-        IGender IEquipment.Gender => this.Gender;
+        IGender? IEquipment.Gender => this.Gender;
 
-        ICard IEquipment.PrimaryCard => this.PrimaryCard;
+        ICard? IEquipment.PrimaryCard => this.PrimaryCard;
 
-        IImage IEquipment.CostumeImage => this.CostumeImage;
+        IImage? IEquipment.CostumeImage => this.CostumeImage;
 
-        IVersion IVersionObject.StartVersion => this.StartVersion;
+        IVersion? IVersionObject.StartVersion => this.StartVersion;
 
-        IVersion IVersionObject.EndVersion => this.EndVersion;
+        IVersion? IVersionObject.EndVersion => this.EndVersion;
 
 
-        private EquipmentBaseInfo GetInfo()
+        private EquipmentBaseInfo? GetInfo()
         {
             if (this.InternalLevel == null && this.Attack == null && this.AttackSpeed == null && this.Defense == null)
             {

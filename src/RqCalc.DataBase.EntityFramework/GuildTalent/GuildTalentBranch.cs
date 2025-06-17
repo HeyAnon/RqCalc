@@ -14,6 +14,6 @@ namespace RqCalc.DataBase.EntityFramework.GuildTalent
 
     public partial class GuildTalentBranch : IGuildTalentBranch
     {
-        IEnumerable<IGuildTalent> IGuildTalentBranch.Talents => this.Talents;
+        IReadOnlyCollection<IGuildTalent> IGuildTalentBranch.Talents => this.Talents;
     }
 }

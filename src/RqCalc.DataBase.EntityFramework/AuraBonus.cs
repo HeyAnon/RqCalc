@@ -10,11 +10,11 @@ namespace RqCalc.DataBase.EntityFramework
     [Table("AuraBonus")]
     public partial class AuraBonus : Bonus
     {
-        public virtual Aura Aura { get; set; }
+        public virtual Aura Aura { get; set; } = null!;
 
-        public virtual Version StartVersion { get; set; }
+        public virtual Version? StartVersion { get; set; }
 
-        public virtual Version EndVersion { get; set; }
+        public virtual Version? EndVersion { get; set; }
 
 
         public decimal? SharedValue { get; set; }
@@ -33,8 +33,8 @@ namespace RqCalc.DataBase.EntityFramework
 
     public partial class AuraBonus : IAuraBonus
     {
-        IVersion IVersionObject.StartVersion => this.StartVersion;
+        IVersion? IVersionObject.StartVersion => this.StartVersion;
 
-        IVersion IVersionObject.EndVersion => this.EndVersion;
+        IVersion? IVersionObject.EndVersion => this.EndVersion;
     }
 }

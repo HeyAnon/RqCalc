@@ -4,7 +4,7 @@ namespace RqCalc.Domain.GuildTalent;
 
 public interface IGuildTalentBranch : IDirectoryBase
 {
-    IEnumerable<IGuildTalent> Talents { get; }
+    IReadOnlyCollection<IGuildTalent> Talents { get; }
 
     int MaxPoints { get; }
 }

@@ -4,9 +4,9 @@ namespace RqCalc.Domain.Equipment;
 
 public interface IEquipmentType : IDirectoryBase, IBonusContainer<IEquipmentTypeBonus>
 {
-    IEnumerable<IEquipmentTypeCondition> Conditions { get; }
+    IReadOnlyCollection<IEquipmentTypeCondition> Conditions { get; }
         
-    IEnumerable<IEquipment> Equipments { get; }
+    IReadOnlyCollection<IEquipment> Equipments { get; }
 
 
     IEquipmentSlot Slot { get; }

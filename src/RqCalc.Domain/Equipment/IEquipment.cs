@@ -7,13 +7,13 @@ namespace RqCalc.Domain.Equipment;
 
 public interface IEquipment : IImageDirectoryBase, ILevelObject, ITypeObject<IEquipmentType>, IBonusContainer<IEquipmentBonus>, IVersionObject
 {
-    IEnumerable<IEquipmentCondition> Conditions { get; }
+    IReadOnlyCollection<IEquipmentCondition> Conditions { get; }
         
     IGender? Gender { get; }
 
     EquipmentBaseInfo? Info { get; }
 
-    IImage CostumeImage { get; }
+    IImage? CostumeImage { get; }
 
     ICard? PrimaryCard { get; }
 

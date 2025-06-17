@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+
 using RqCalc.DataBase.EntityFramework._Base;
 using RqCalc.Domain;
 using RqCalc.Domain._Base;
@@ -7,7 +8,7 @@ namespace RqCalc.DataBase.EntityFramework
 {
     public  abstract partial class BuffElement : PersistentDomainObjectBase
     {
-        public virtual BuffDescription Description { get; set; }
+        public virtual BuffDescription Description { get; set; } = null!;
 
 
         public decimal? Value { get; set; }

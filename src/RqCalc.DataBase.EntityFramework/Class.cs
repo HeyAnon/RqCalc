@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+
 using Framework.Core;
 using Framework.Persistent;
+
 using RqCalc.DataBase.EntityFramework._Base;
 using RqCalc.DataBase.EntityFramework.Talent;
 using RqCalc.Domain;
@@ -100,20 +102,20 @@ namespace RqCalc.DataBase.EntityFramework
 
         public IStat EnergyStat => this.lazyEnergyStat.Value;
 
-        IEnumerable<IAura> IClass.Auras => this.Auras;
+        IReadOnlyCollection<IAura> IClass.Auras => this.Auras;
 
-        IEnumerable<IBuff> IClass.Buffs => this.Buffs;
+        IReadOnlyCollection<IBuff> IClass.Buffs => this.Buffs;
 
 
         public IEnumerable<IClassBonus> Bonuses => this.lazyBonuses.Value;
 
 
-        IEnumerable<ITalentBranch> IClass.TalentBranches => this.TalentBranches;
+        IReadOnlyCollection<ITalentBranch> IClass.TalentBranches => this.TalentBranches;
 
 
         IEnumerable<IClass> IChildrenSource<IClass>.Children => this.SubClasses;
 
-        IEnumerable<IClassLevelHpBonus> IClass.LevelHpBonuses => this.LevelHpBonuses;
+        IReadOnlyCollection<IClassLevelHpBonus> IClass.LevelHpBonuses => this.LevelHpBonuses;
 
         IClassSpecialization IClass.Specialization => this.Specialization;
 

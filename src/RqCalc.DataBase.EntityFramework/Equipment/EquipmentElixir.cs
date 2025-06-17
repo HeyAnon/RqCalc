@@ -15,9 +15,9 @@ namespace RqCalc.DataBase.EntityFramework.Equipment
         public virtual HashSet<EquipmentElixirSlot> NativeSlots { get; set; }
         
 
-        public virtual Version StartVersion { get; set; }
+        public virtual Version? StartVersion { get; set; }
 
-        public virtual Version EndVersion { get; set; }
+        public virtual Version? EndVersion { get; set; }
 
 
 
@@ -42,10 +42,10 @@ namespace RqCalc.DataBase.EntityFramework.Equipment
         public IEnumerable<IEquipmentSlot> Slots => this.lazySlots.Value;
 
 
-        IEnumerable<IEquipmentElixirBonus> IBonusContainer<IEquipmentElixirBonus>.Bonuses => this.Bonuses;
+        IReadOnlyCollection<IEquipmentElixirBonus> IBonusContainer<IEquipmentElixirBonus>.Bonuses => this.Bonuses;
 
-        IVersion IVersionObject.StartVersion => this.StartVersion;
+        IVersion? IVersionObject.StartVersion => this.StartVersion;
 
-        IVersion IVersionObject.EndVersion => this.EndVersion;
+        IVersion? IVersionObject.EndVersion => this.EndVersion;
     }
 }

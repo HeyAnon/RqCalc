@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 using RqCalc.DataBase.EntityFramework.Equipment;
 using RqCalc.Domain.Card;
 using RqCalc.Domain.Equipment;
@@ -9,9 +10,9 @@ namespace RqCalc.DataBase.EntityFramework.Card
     [Table("CardEquipmentSlot")]
     public partial class CardEquipmentSlot : VersionObject
     {
-        public virtual Card Card { get; set; }
+        public virtual Card Card { get; set; } = null!;
 
-        public virtual EquipmentSlot Slot { get; set; }
+        public virtual EquipmentSlot Slot { get; set; } = null!;
 
 
 

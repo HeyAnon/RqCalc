@@ -6,7 +6,7 @@ namespace RqCalc.Domain.GuildTalent;
 
 public interface IGuildTalentBonus : ITypeObject<IBonusType>, IPersistentDomainObjectBase
 {
-    IEnumerable<IGuildTalentBonusVariable> Variables { get; }
+    IReadOnlyCollection<IGuildTalentBonusVariable> Variables { get; }
 
     IGuildTalent Talent { get; }
 }

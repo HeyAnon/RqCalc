@@ -30,6 +30,6 @@ namespace RqCalc.DataBase.EntityFramework.Formula
         }
 
 
-        IEnumerable<IFormulaVariable> IFormula.Variables => this.Variables;
+        IReadOnlyCollection<IFormulaVariable> IFormula.Variables => this.Variables;
     }
 }

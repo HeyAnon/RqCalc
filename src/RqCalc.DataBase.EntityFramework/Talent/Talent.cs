@@ -43,13 +43,13 @@ namespace RqCalc.DataBase.EntityFramework.Talent
 
     public partial class Talent : ITalent
     {
-        IEnumerable<ITalentBonus> IBonusContainer<ITalentBonus>.Bonuses => this.Bonuses;
+        IReadOnlyCollection<ITalentBonus> IBonusContainer<ITalentBonus>.Bonuses => this.Bonuses;
 
         ITalentBranch ITalent.Branch => this.Branch;
 
-        IEnumerable<ITalentVariable> ITalent.Variables => this.Variables;
+        IReadOnlyCollection<ITalentVariable> ITalent.Variables => this.Variables;
 
-        IEnumerable<ITalentBuffDescription> ITalent.BuffDescriptions => this.BuffDescriptions;
+        IReadOnlyCollection<ITalentBuffDescription> ITalent.BuffDescriptions => this.BuffDescriptions;
 
         IImage ITalent.GrayImage => this.GrayImage;
     }

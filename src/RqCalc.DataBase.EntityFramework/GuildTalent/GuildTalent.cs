@@ -36,11 +36,11 @@ namespace RqCalc.DataBase.EntityFramework.GuildTalent
 
     public partial class GuildTalent : IGuildTalent
     {
-        IEnumerable<IGuildTalentBonus> IBonusContainer<IGuildTalentBonus>.Bonuses => this.Bonuses;
+        IReadOnlyCollection<IGuildTalentBonus> IBonusContainer<IGuildTalentBonus>.Bonuses => this.Bonuses;
 
         IGuildTalentBranch IGuildTalent.Branch => this.Branch;
 
-        IEnumerable<IGuildTalentVariable> IGuildTalent.Variables => this.Variables;
+        IReadOnlyCollection<IGuildTalentVariable> IGuildTalent.Variables => this.Variables;
         
         IImage IGuildTalent.GrayImage => this.GrayImage;
     }

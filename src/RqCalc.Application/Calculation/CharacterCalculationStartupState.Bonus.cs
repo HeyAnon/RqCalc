@@ -412,7 +412,7 @@ public partial class CharacterCalculationStartupState
 
             foreach (var bonus in equipmentInfo.StampVariant.Bonuses.OrderBy(bonus => bonus.OrderIndex))
             {
-                var value = MathHelper.GetStampValue(bonus.QualityValue, internalLevel, bonus.Type.StampQuality.MinCoef, bonus.Type.StampQuality.MaxCoef, 10, settings.QualityMaxLevel);
+                var value = MathHelper.GetStampValue(bonus.QualityValue, internalLevel, bonus.Type.StampQuality!.MinCoef, bonus.Type.StampQuality.MaxCoef, 10, settings.QualityMaxLevel);
 
                 yield return new VirtualBonusBase
                 {

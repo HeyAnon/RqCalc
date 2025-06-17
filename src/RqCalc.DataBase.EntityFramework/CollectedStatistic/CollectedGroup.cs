@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+
 using RqCalc.DataBase.EntityFramework._Base;
 using RqCalc.DataBase.EntityFramework.Equipment;
 using RqCalc.Domain.CollectedStatistic;
@@ -8,12 +9,12 @@ namespace RqCalc.DataBase.EntityFramework.CollectedStatistic
     [Table("CollectedGroup")]
     public partial class CollectedGroup : DirectoryBase
     {
-        public virtual HashSet<CollectedItem> Items { get; set; }
+        public virtual HashSet<CollectedItem> Items { get; set; } = null!;
 
-        public virtual EquipmentType EquipmentType { get; set; }
+        public virtual EquipmentType? EquipmentType { get; set; }
 
-        public virtual CollectedStatistic Statistic { get; set; }
-        
+        public virtual CollectedStatistic Statistic { get; set; } = null!;
+
 
         public int OrderIndex { get; set; }
 
@@ -26,7 +27,7 @@ namespace RqCalc.DataBase.EntityFramework.CollectedStatistic
 
     public partial class CollectedGroup : ICollectedGroup
     {
-        IEnumerable<ICollectedItem> ICollectedGroup.Items => this.Items;
+        IReadOnlyCollection<ICollectedItem> ICollectedGroup.Items => this.Items;
 
         ICollectedStatistic ICollectedGroup.Statistic => this.Statistic;
     }

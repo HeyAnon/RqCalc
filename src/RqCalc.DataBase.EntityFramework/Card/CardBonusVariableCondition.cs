@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+
 using RqCalc.DataBase.EntityFramework._Base;
 using RqCalc.DataBase.EntityFramework.Equipment;
 using RqCalc.Domain.Card;
@@ -9,9 +10,9 @@ namespace RqCalc.DataBase.EntityFramework.Card
     [Table("CardBonusVariableCondition")]
     public partial class CardBonusVariableCondition : PersistentDomainObjectBase
     {
-        public virtual EquipmentType EquipmentType { get; set; }
+        public virtual EquipmentType? EquipmentType { get; set; }
 
-        public virtual CardBonusVariable CardBonusVariable { get; set; }
+        public virtual CardBonusVariable CardBonusVariable { get; set; } = null!;
 
 
 
@@ -29,6 +30,6 @@ namespace RqCalc.DataBase.EntityFramework.Card
     {
         ICardBonusVariable ICardBonusVariableCondition.CardBonusVariable => this.CardBonusVariable;
 
-        IEquipmentType ICardBonusVariableCondition.EquipmentType => this.EquipmentType;
+        IEquipmentType? ICardBonusVariableCondition.EquipmentType => this.EquipmentType;
     }
 }

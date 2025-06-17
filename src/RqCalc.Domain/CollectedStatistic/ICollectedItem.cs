@@ -1,4 +1,5 @@
 ﻿using Framework.Persistent;
+
 using RqCalc.Domain._Base;
 
 namespace RqCalc.Domain.CollectedStatistic;
@@ -7,5 +8,5 @@ public interface ICollectedItem : IImageDirectoryBase, IBonusContainer<ICollecte
 {
     ICollectedGroup Group { get; }
 
-    IGender Gender { get; }
+    IGender? Gender { get; }
 }

@@ -49,12 +49,12 @@ namespace RqCalc.DataBase.EntityFramework.BonusType
     {
         IBonusTypeStat IBonusTypeStatCondition.BonusTypeStat => this.BonusTypeStat;
 
-        IEvent IBonusTypeStatCondition.Event => this.Event;
+        IEvent? IBonusTypeStatCondition.Event => this.Event;
 
-        IEquipmentType IBonusTypeStatCondition.EquipmentType => this.EquipmentType;
+        IEquipmentType? IBonusTypeStatCondition.EquipmentType => this.EquipmentType;
 
-        IClass IBonusTypeStatCondition.Class => this.Class;
+        IClass? IBonusTypeStatCondition.Class => this.Class;
 
-        IState IBonusTypeStatCondition.State => this.State;
+        IState? IBonusTypeStatCondition.State => this.State;
     }
 }

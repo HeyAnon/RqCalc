@@ -4,9 +4,9 @@ namespace RqCalc.Domain.BonusType;
 
 public interface IBonusType : IPersistentIdentityDomainObjectBase
 {
-    IEnumerable<IBonusTypeVariable> Variables { get; }
+    IReadOnlyCollection<IBonusTypeVariable> Variables { get; }
 
-    IEnumerable<IBonusTypeStat> Stats { get; }
+    IReadOnlyCollection<IBonusTypeStat> Stats { get; }
         
 
     bool? IsMultiply { get; }
@@ -15,5 +15,5 @@ public interface IBonusType : IPersistentIdentityDomainObjectBase
 
     string Template { get; }
 
-    StampQualityInfo StampQuality { get; }
+    StampQualityInfo? StampQuality { get; }
 }

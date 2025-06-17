@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
+
 using Framework.Core;
+
 using RqCalc.DataBase.EntityFramework._Base;
 using RqCalc.Domain;
 using RqCalc.Domain.BonusType;
@@ -10,19 +12,19 @@ namespace RqCalc.DataBase.EntityFramework.Card
     [Table("CardBonus")]
     public partial class CardBonus : PersistentDomainObjectBase
     {
-        public virtual HashSet<CardBonusVariable> Variables { get; set; }
+        public virtual HashSet<CardBonusVariable> Variables { get; set; } = null!;
 
-        public virtual Card Card { get; set; }
+        public virtual Card Card { get; set; } = null!;
 
-        public virtual BonusType.BonusType Type { get; set; }
+        public virtual BonusType.BonusType Type { get; set; } = null!;
 
-        public virtual Card RequiredCard { get; set; }
+        public virtual Card? RequiredCard { get; set; }
 
-        public virtual Card NegateCard { get; set; }
+        public virtual Card? NegateCard { get; set; }
 
-        public virtual Card MultiplyEffectCard { get; set; }
+        public virtual Card? MultiplyEffectCard { get; set; }
 
-        public virtual CardSet RequiredSet { get; set; }
+        public virtual CardSet? RequiredSet { get; set; }
 
 
 
@@ -63,7 +65,7 @@ namespace RqCalc.DataBase.EntityFramework.Card
 
     public partial class CardBonus : ICardBonus
     {   
-        private readonly Lazy<CardUpgradeEquipmentInfo> lazyInfo;
+        private readonly Lazy<CardUpgradeEquipmentInfo?> lazyInfo;
 
 
         public CardBonus()
@@ -72,24 +74,24 @@ namespace RqCalc.DataBase.EntityFramework.Card
         }
 
 
-        public CardUpgradeEquipmentInfo UpgradeEquipmentInfo => this.lazyInfo.Value;
+        public CardUpgradeEquipmentInfo? UpgradeEquipmentInfo => this.lazyInfo.Value;
 
 
-        IEnumerable<ICardBonusVariable> ICardBonus.Variables => this.Variables;
+        IReadOnlyCollection<ICardBonusVariable> ICardBonus.Variables => this.Variables;
 
         ICard ICardBonus.Card => this.Card;
 
-        ICard ICardBonus.RequiredCard => this.RequiredCard;
+        ICard? ICardBonus.RequiredCard => this.RequiredCard;
 
-        ICard ICardBonus.NegateCard => this.NegateCard;
+        ICard? ICardBonus.NegateCard => this.NegateCard;
 
-        ICard ICardBonus.MultiplyEffectCard => this.MultiplyEffectCard;
+        ICard? ICardBonus.MultiplyEffectCard => this.MultiplyEffectCard;
 
-        ICardSet ICardBonus.RequiredSet => this.RequiredSet;
+        ICardSet? ICardBonus.RequiredSet => this.RequiredSet;
 
         IBonusType Framework.Persistent.ITypeObject<IBonusType>.Type => this.Type;
 
-        private CardUpgradeEquipmentInfo GetInfo()
+        private CardUpgradeEquipmentInfo? GetInfo()
         {
             if (this.UpgConditionVariable != null && this.UpgLevelStepVariable != null)
             {

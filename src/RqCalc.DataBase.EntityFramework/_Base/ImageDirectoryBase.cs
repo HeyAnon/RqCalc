@@ -13,6 +13,6 @@ namespace RqCalc.DataBase.EntityFramework._Base
 
     public abstract partial class ImageDirectoryBase : IImageDirectoryBase
     {
-        IImage IImageObject.Image => this.Image;
+        IImage? IImageObject.Image => this.Image;
     }
 }

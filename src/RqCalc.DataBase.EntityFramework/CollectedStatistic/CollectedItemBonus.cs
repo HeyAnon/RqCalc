@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 using RqCalc.DataBase.EntityFramework._Base;
 using RqCalc.Domain.CollectedStatistic;
 
@@ -8,7 +9,7 @@ namespace RqCalc.DataBase.EntityFramework.CollectedStatistic
     [Table("CollectedItemBonus")]
     public partial class CollectedItemBonus : Bonus
     {
-        public virtual CollectedItem CollectedItem { get; set; }
+        public virtual CollectedItem CollectedItem { get; set; } = null!;
         
 
         [Key]

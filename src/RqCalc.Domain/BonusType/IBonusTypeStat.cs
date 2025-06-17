@@ -4,7 +4,7 @@ namespace RqCalc.Domain.BonusType;
 
 public interface IBonusTypeStat : IPersistentIdentityDomainObjectBase, IVariableObject
 {
-    IEnumerable<IBonusTypeStatCondition> Conditions { get; }
+    IReadOnlyCollection<IBonusTypeStatCondition> Conditions { get; }
 
 
     IBonusType BonusType { get; }

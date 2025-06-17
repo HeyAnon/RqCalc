@@ -1,4 +1,5 @@
 ﻿using Framework.Persistent;
+
 using RqCalc.Domain._Base;
 using RqCalc.Domain.Talent;
 
@@ -6,14 +7,14 @@ namespace RqCalc.Domain;
 
 public interface IClass : IImageDirectoryBase, IHierarchicalSource<IClass>, IBonusContainer<IClassBonus>
 {
-    IEnumerable<IClassLevelHpBonus> LevelHpBonuses { get; }
+    IReadOnlyCollection<IClassLevelHpBonus> LevelHpBonuses { get; }
 
-    IEnumerable<ITalentBranch> TalentBranches { get; }
+    IReadOnlyCollection<ITalentBranch> TalentBranches { get; }
 
 
-    IEnumerable<IAura> Auras { get; }
+    IReadOnlyCollection<IAura> Auras { get; }
 
-    IEnumerable<IBuff> Buffs { get; }
+    IReadOnlyCollection<IBuff> Buffs { get; }
 
 
     IStat PrimaryStat { get; }

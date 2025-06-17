@@ -82,7 +82,7 @@ namespace RqCalc.DataBase.EntityFramework
         public IEnumerable<IFormula> Sources => this.lazySources.Value;
 
 
-        IEnumerable<IStatBonus> IBonusContainer<IStatBonus>.Bonuses => this.Bonuses;
+        IReadOnlyCollection<IStatBonus> IBonusContainer<IStatBonus>.Bonuses => this.Bonuses;
 
         IRace IStat.Race => this.Race;
 

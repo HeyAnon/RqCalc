@@ -5,7 +5,7 @@ namespace RqCalc.Domain.GuildTalent;
 
 public interface IGuildTalent : IImageDirectoryBase, IDescriptionObject, IActiveObject, IBonusContainer<IGuildTalentBonus>, IOrderObject<int>
 {
-    IEnumerable<IGuildTalentVariable> Variables { get; }
+    IReadOnlyCollection<IGuildTalentVariable> Variables { get; }
 
     IGuildTalentBranch Branch { get; }
 

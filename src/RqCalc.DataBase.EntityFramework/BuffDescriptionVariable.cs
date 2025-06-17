@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 using RqCalc.Domain;
 
 namespace RqCalc.DataBase.EntityFramework
@@ -7,7 +8,7 @@ namespace RqCalc.DataBase.EntityFramework
     [Table("BuffDescriptionVariable")]
     public partial class BuffDescriptionVariable
     {
-        public virtual BuffDescription BuffDescription { get; set; }
+        public virtual BuffDescription BuffDescription { get; set; } = null!;
 
 
         public decimal Value { get; set; }

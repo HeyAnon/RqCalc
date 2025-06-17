@@ -7,9 +7,9 @@ public interface ICardType : IImageDirectoryBase
 {
     IElement? Element { get; }
 
-    IEquipmentClass MaxEquipmentClass { get; }
+    IEquipmentClass? MaxEquipmentClass { get; }
 
-    IImage ToolTipImage { get; }
+    IImage? ToolTipImage { get; }
 
     bool HasToolTipImage { get; }
 }

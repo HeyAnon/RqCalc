@@ -6,5 +6,5 @@ public interface ITalentBranch : IDirectoryBase
 {
     IClass Class { get; }
 
-    IEnumerable<ITalent> Talents { get; }
+    IReadOnlyCollection<ITalent> Talents { get; }
 }

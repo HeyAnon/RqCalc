@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
+
 using Framework.Core;
+
 using RqCalc.DataBase.EntityFramework._Base;
 using RqCalc.Domain.BonusType;
 using RqCalc.Domain.Equipment;
@@ -9,7 +11,7 @@ namespace RqCalc.DataBase.EntityFramework.Equipment
     [Table("EquipmentBonus")]
     public partial class EquipmentBonus : PersistentDomainObjectBase
     {
-        public virtual HashSet<EquipmentBonusVariable> NativeVariables { get; set; }
+        public virtual HashSet<EquipmentBonusVariable> NativeVariables { get; set; } = null!;
 
         public virtual Equipment Equipment { get; set; }
 

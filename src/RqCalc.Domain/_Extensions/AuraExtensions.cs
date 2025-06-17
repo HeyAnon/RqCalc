@@ -38,7 +38,9 @@ public static class AuraExtensions
             select new { Bonus = expandedBonus, Priority = 1 };
 
 
-        return from pair in auraBonusesRequest.Concat(talentAuraBonusesRequest)
+        return 
+            
+            from pair in auraBonusesRequest.Concat(talentAuraBonusesRequest)
 
             group pair by pair.Bonus.Type into bonusTypeGroup
 

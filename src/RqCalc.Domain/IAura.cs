@@ -7,5 +7,5 @@ public interface IAura : IImageDirectoryBase, IBonusContainer<IAuraBonus>, ILeve
 {
     IClass Class { get; }
 
-    IEnumerable<ITalentBonus> DependencyTalentBonuses { get; }
+    IReadOnlyCollection<ITalentBonus> DependencyTalentBonuses { get; }
 }

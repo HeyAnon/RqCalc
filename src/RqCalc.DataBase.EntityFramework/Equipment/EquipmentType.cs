@@ -43,11 +43,11 @@ namespace RqCalc.DataBase.EntityFramework.Equipment
         public WeaponTypeInfo WeaponInfo => this.lazyWeaponInfo.Value;
 
 
-        IEnumerable<IEquipmentTypeBonus> IBonusContainer<IEquipmentTypeBonus>.Bonuses => this.Bonuses;
+        IReadOnlyCollection<IEquipmentTypeBonus> IBonusContainer<IEquipmentTypeBonus>.Bonuses => this.Bonuses;
 
-        IEnumerable<IEquipmentTypeCondition> IEquipmentType.Conditions => this.Conditions;
+        IReadOnlyCollection<IEquipmentTypeCondition> IEquipmentType.Conditions => this.Conditions;
 
-        IEnumerable<IEquipment> IEquipmentType.Equipments => this.Equipments;
+        IReadOnlyCollection<IEquipment> IEquipmentType.Equipments => this.Equipments;
 
         IEquipmentSlot IEquipmentType.Slot => this.Slot;
 

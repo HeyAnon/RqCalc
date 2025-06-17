@@ -13,6 +13,6 @@ namespace RqCalc.DataBase.EntityFramework
 
     public partial class Consumable : IConsumable
     {
-        IEnumerable<IConsumableBonus> IBonusContainer<IConsumableBonus>.Bonuses => this.Bonuses;
+        IReadOnlyCollection<IConsumableBonus> IBonusContainer<IConsumableBonus>.Bonuses => this.Bonuses;
     }
 }

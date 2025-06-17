@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+
 using RqCalc.DataBase.EntityFramework._Base;
 using RqCalc.Domain;
 using RqCalc.Domain._Base;
@@ -14,18 +15,18 @@ namespace RqCalc.DataBase.EntityFramework
         public virtual HashSet<BuffBonus> Bonuses { get; set; } = null!;
 
 
-        public virtual Class Class { get; set; } = null!;
+        public virtual Class? Class { get; set; }
 
-        public virtual Card.Card Card { get; set; }
+        public virtual Card.Card? Card { get; set; }
 
-        public virtual Stamp.Stamp Stamp { get; set; }
+        public virtual Stamp.Stamp? Stamp { get; set; }
 
 
-        public virtual Talent.Talent TalentCondition { get; set; }
+        public virtual Talent.Talent? TalentCondition { get; set; }
         
-        public virtual Version StartVersion { get; set; }
+        public virtual Version? StartVersion { get; set; }
 
-        public virtual Version EndVersion { get; set; }
+        public virtual Version? EndVersion { get; set; }
 
         
         public int Level { get; set; }
@@ -63,17 +64,17 @@ namespace RqCalc.DataBase.EntityFramework
     {
         IReadOnlyCollection<IBuffBonus> IBonusContainer<IBuffBonus>.Bonuses => this.Bonuses;
 
-        IClass IBuff.Class => this.Class;
+        IClass? IBuff.Class => this.Class;
 
-        ITalent IBuff.TalentCondition => this.TalentCondition;
+        ITalent? IBuff.TalentCondition => this.TalentCondition;
 
-        IStamp IBuff.Stamp => this.Stamp;
+        IStamp? IBuff.Stamp => this.Stamp;
 
-        ICard IBuff.Card => this.Card;
+        ICard? IBuff.Card => this.Card;
 
 
-        IVersion IVersionObject.StartVersion => this.StartVersion;
+        IVersion? IVersionObject.StartVersion => this.StartVersion;
 
-        IVersion IVersionObject.EndVersion => this.EndVersion;
+        IVersion? IVersionObject.EndVersion => this.EndVersion;
     }
 }

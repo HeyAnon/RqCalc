@@ -1,6 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+
 using Framework.Core;
+
 using RqCalc.DataBase.EntityFramework._Base;
+using RqCalc.Domain._Legacy;
 using RqCalc.Domain.BonusType;
 
 namespace RqCalc.DataBase.EntityFramework._Legacy
@@ -8,7 +11,7 @@ namespace RqCalc.DataBase.EntityFramework._Legacy
     [Table("Legacy_GuildBonus")]
     public partial class LegacyGuildBonus : ImageDirectoryBase
     {
-        public virtual BonusType.BonusType Type { get; set; }
+        public virtual BonusType.BonusType Type { get; set; } = null!;
 
 
         public int Value { get; set; }
@@ -21,7 +24,7 @@ namespace RqCalc.DataBase.EntityFramework._Legacy
         public int? TypeId { get; set; }
     }
 
-    public partial class LegacyGuildBonus : ILegacy_GuildBonus
+    public partial class LegacyGuildBonus : ILegacyGuildBonus
     {
         private readonly Lazy<List<decimal>> lazyVariables;
 

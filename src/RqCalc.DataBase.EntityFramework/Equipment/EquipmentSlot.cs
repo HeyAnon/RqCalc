@@ -48,7 +48,7 @@ namespace RqCalc.DataBase.EntityFramework.Equipment
         public EquipmentSlot PrimarySlot => this.lazyWeaponInfo.Value;
 
 
-        IEnumerable<IEquipmentType> IEquipmentSlot.Types => this.Types;
+        IReadOnlyCollection<IEquipmentType> IEquipmentSlot.Types => this.Types;
 
         IState IEquipmentSlot.State => this.State;
 

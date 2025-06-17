@@ -18,8 +18,8 @@ namespace RqCalc.DataBase.EntityFramework.BonusType
 
         public bool IsSingle { get; set; }
 
-        public string Template { get; set; }
-        
+        public string Template { get; set; } = null!;
+
 
         public decimal? StampQualityMinCoef { get; set; }
 
@@ -39,23 +39,26 @@ namespace RqCalc.DataBase.EntityFramework.BonusType
         public BonusType()
         {
             this.lazyIsMultiply = new Lazy<bool?>(() =>
-                this.Stats.IsEmpty()               ? null
-              : this.Stats.All(s => s.IsMultiply)  ? new bool?(true)
-              : this.Stats.All(s => !s.IsMultiply) ? new bool?(false)
-                                                   : null);
+                this.Stats.IsEmpty()
+                    ? null
+                    : this.Stats.All(s => s.IsMultiply)
+                        ? true
+                        : this.Stats.All(s => !s.IsMultiply)
+                            ? false
+                            : null);
         }
 
-        IEnumerable<IBonusTypeStat> IBonusType.Stats => this.Stats;
+        IReadOnlyCollection<IBonusTypeStat> IBonusType.Stats => this.Stats;
 
-        IEnumerable<IBonusTypeVariable> IBonusType.Variables => this.Variables;
+        IReadOnlyCollection<IBonusTypeVariable> IBonusType.Variables => this.Variables;
 
 
-        public StampQualityInfo StampQuality => this.GetStampQuality();
+        public StampQualityInfo? StampQuality => this.GetStampQuality();
         
         public bool? IsMultiply => this.lazyIsMultiply.Value;
 
 
-        private StampQualityInfo GetStampQuality()
+        private StampQualityInfo? GetStampQuality()
         {
             if (this.StampQualityMinCoef == null && this.StampQualityMaxCoef == null)
             {

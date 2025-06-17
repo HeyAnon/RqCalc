@@ -24,7 +24,7 @@ namespace RqCalc.DataBase.EntityFramework.Card
 
     public partial class CardBonusVariable : ICardBonusVariable
     {
-        IEnumerable<ICardBonusVariableCondition> ICardBonusVariable.Conditions => this.Conditions;
+        IReadOnlyCollection<ICardBonusVariableCondition> ICardBonusVariable.Conditions => this.Conditions;
 
         ICardBonus ICardBonusVariable.CardBonus => this.CardBonus;
     }

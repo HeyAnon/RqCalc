@@ -4,7 +4,7 @@ namespace RqCalc.Domain;
 
 public interface IBuffDescription : IDirectoryBase
 {
-    IEnumerable<IBuffDescriptionVariable> Variables { get; }
+    IReadOnlyCollection<IBuffDescriptionVariable> Variables { get; }
 
     string Template { get; }
 
