@@ -1,35 +1,29 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+
 using RqCalc.DataBase.EntityFramework._Base;
 using RqCalc.Domain.Formula;
 
-namespace RqCalc.DataBase.EntityFramework.Formula
+namespace RqCalc.DataBase.EntityFramework.Formula;
+
+[Table("Formula")]
+public partial class Formula : PersistentDomainObjectBase
 {
-    [Table("Formula")]
-    public partial class Formula : PersistentDomainObjectBase
-    {
-        public virtual HashSet<FormulaVariable> Variables { get; set; }
+    public virtual HashSet<FormulaVariable> Variables { get; set; } = null!;
         
 
-        public string Value { get; set; }
+    public string Value { get; set; } = null!;
 
-        public string Description { get; set; }
+    public string Description { get; set; } = null!;
 
-        public bool Enabled { get; set; }
+    public bool Enabled { get; set; }
 
-        public override string ToString()
-        {
-            return this.Value;
-        }
-    }
-
-    public partial class Formula : IFormula
+    public override string ToString()
     {
-        public Formula()
-        {
-
-        }
-
-
-        IReadOnlyCollection<IFormulaVariable> IFormula.Variables => this.Variables;
+        return this.Value;
     }
+}
+
+public partial class Formula : IFormula
+{
+    IReadOnlyCollection<IFormulaVariable> IFormula.Variables => this.Variables;
 }

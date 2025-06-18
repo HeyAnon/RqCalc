@@ -1,13 +1,13 @@
-﻿using Framework.Core;
+﻿using System.Linq.Expressions;
+
+using Framework.Core;
 using Framework.DataBase;
 using Framework.ExpressionParsers;
+
+using RqCalc.Application.Calculation;
 using RqCalc.Domain;
 using RqCalc.Domain._Base;
 using RqCalc.Domain.Formula;
-
-using System.Linq.Expressions;
-
-using RqCalc.Application.Calculation;
 using RqCalc.Model;
 
 namespace RqCalc.Application;
@@ -21,7 +21,8 @@ public class FormulaService : IFormulaService
 
     private readonly IReadOnlyDictionary<IFormula, Func<ICharacterCalculationChangedState, decimal>> formulas;
 
-    public FormulaService(IDataSource<IPersistentDomainObjectBase> dataSource,
+    public FormulaService(
+        IDataSource<IPersistentDomainObjectBase> dataSource,
         IVersion lastVersion,
         INativeExpressionParser nativeParser,
         ApplicationSettings settings)
@@ -45,7 +46,8 @@ public class FormulaService : IFormulaService
             formula => formula,
             formula =>
             {
-                var expr = this.nativeParser.Parse(new NativeExpressionParsingData(new MethodTypeInfo(formula.Variables.Select(ParseVariableType), typeof(decimal)), formula.Value));
+                var expr = this.nativeParser.Parse(new NativeExpressionParsingData(new MethodTypeInfo(formula.Variables.Select(ParseVariableType), typeof(decimal)),
+                    formula.Value));
 
                 var stateParam = Expression.Parameter(typeof(ICharacterCalculationChangedState));
 
@@ -62,7 +64,7 @@ public class FormulaService : IFormulaService
 
                 return lambda.Compile();
             });
-	}
+    }
 
     private static Type ParseVariableType(IFormulaVariable variable)
     {
@@ -87,13 +89,13 @@ public class FormulaService : IFormulaService
             case FormulaVariableType.CurrentWeaponInfo:
                 return typeof(WeaponInfo);
 
-			default:
+            default:
                 throw new ArgumentOutOfRangeException(nameof(variable));
 
-		}
+        }
     }
 
-	private Expression GetCompileSourceFormulaArgExpression(IFormulaVariable variable)
+    private Expression GetCompileSourceFormulaArgExpression(IFormulaVariable variable)
     {
         if (variable == null) throw new ArgumentNullException(nameof(variable));
 
@@ -112,22 +114,22 @@ public class FormulaService : IFormulaService
                 return Expression.Constant(this.lastVersion.MaxLevel);
 
             case FormulaVariableType.Stat:
-                {
-                    var stat = variable.TypeStat.FromMaybe(() => "Null stat");
+            {
+                var stat = variable.TypeStat.FromMaybe(() => "Null stat");
 
-                    return ExpressionHelper.Create((ICharacterCalculationChangedState state) => state.Stats[stat]);
-                }
+                return ExpressionHelper.Create((ICharacterCalculationChangedState state) => state.Stats[stat]);
+            }
 
             case FormulaVariableType.StatDescription:
-                {
-                    var stat = variable.TypeStat.FromMaybe(() => "Null stat");
+            {
+                var stat = variable.TypeStat.FromMaybe(() => "Null stat");
 
-                    var descFormula = stat.DescriptionFormula.FromMaybe(() => "Null Desc Formula");
+                var descFormula = stat.DescriptionFormula.FromMaybe(() => "Null Desc Formula");
 
-                    var descDel = LazyHelper.Create(() => this.formulas[descFormula]);
+                var descDel = LazyHelper.Create(() => this.formulas[descFormula]);
 
-                    return ExpressionHelper.Create((ICharacterCalculationChangedState state) => descDel.Value(state.ChangeVariable(state.Stats[stat])));
-                }
+                return ExpressionHelper.Create((ICharacterCalculationChangedState state) => descDel.Value(state.ChangeVariable(state.Stats[stat])));
+            }
 
             case FormulaVariableType.CurrentWeaponInfo:
                 return ExpressionHelper.Create((ICharacterCalculationChangedState state) => state.CurrentWeaponInfo);

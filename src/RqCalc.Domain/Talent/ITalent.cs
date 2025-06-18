@@ -19,7 +19,7 @@ public interface ITalent : IImageDirectoryBase, IDescriptionObject, IActiveObjec
 
     int HIndex { get; }
 
-    string PassiveDescription { get; }
+    string? PassiveDescription { get; }
 
-    string EquipmentCondition { get; }
+    string? EquipmentCondition { get; }
 }

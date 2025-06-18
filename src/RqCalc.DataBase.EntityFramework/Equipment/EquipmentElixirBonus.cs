@@ -1,23 +1,23 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 using RqCalc.DataBase.EntityFramework._Base;
 using RqCalc.Domain.Equipment;
 
-namespace RqCalc.DataBase.EntityFramework.Equipment
+namespace RqCalc.DataBase.EntityFramework.Equipment;
+
+[Table("EquipmentElixirBonus")]
+public partial class EquipmentElixirBonus : Bonus
 {
-    [Table("EquipmentElixirBonus")]
-    public partial class EquipmentElixirBonus : Bonus
-    {
-        public virtual EquipmentElixir EquipmentElixir { get; set; }
+    public virtual EquipmentElixir EquipmentElixir { get; set; } = null!;
 
 
-        [Key]
-        [Column("EquipmentElixir_Id", Order = 0)]
-        public int? EquipmentElixirId { get; set; }
-    }
+    [Key]
+    [Column("EquipmentElixir_Id", Order = 0)]
+    public int? EquipmentElixirId { get; set; }
+}
 
-    public partial class EquipmentElixirBonus : IEquipmentElixirBonus
-    {
-        IEquipmentElixir IEquipmentElixirBonus.EquipmentElixir => this.EquipmentElixir;
-    }
+public partial class EquipmentElixirBonus : IEquipmentElixirBonus
+{
+    IEquipmentElixir IEquipmentElixirBonus.EquipmentElixir => this.EquipmentElixir;
 }

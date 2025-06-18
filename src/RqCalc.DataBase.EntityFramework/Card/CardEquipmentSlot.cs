@@ -5,30 +5,29 @@ using RqCalc.DataBase.EntityFramework.Equipment;
 using RqCalc.Domain.Card;
 using RqCalc.Domain.Equipment;
 
-namespace RqCalc.DataBase.EntityFramework.Card
+namespace RqCalc.DataBase.EntityFramework.Card;
+
+[Table("CardEquipmentSlot")]
+public partial class CardEquipmentSlot : VersionObject
 {
-    [Table("CardEquipmentSlot")]
-    public partial class CardEquipmentSlot : VersionObject
-    {
-        public virtual Card Card { get; set; } = null!;
+    public virtual Card Card { get; set; } = null!;
 
-        public virtual EquipmentSlot Slot { get; set; } = null!;
+    public virtual EquipmentSlot Slot { get; set; } = null!;
 
 
 
-        [Key]
-        [Column("Card_Id", Order = 0)]
-        public int? CardId { get; set; }
+    [Key]
+    [Column("Card_Id", Order = 0)]
+    public int? CardId { get; set; }
 
-        [Key]
-        [Column("Slot_Id", Order = 1)]
-        public int? SlotId { get; set; }
-    }
+    [Key]
+    [Column("Slot_Id", Order = 1)]
+    public int? SlotId { get; set; }
+}
 
-    public partial class CardEquipmentSlot : ICardEquipmentSlot
-    {
-        ICard ICardEquipmentSlot.Card => this.Card;
+public partial class CardEquipmentSlot : ICardEquipmentSlot
+{
+    ICard ICardEquipmentSlot.Card => this.Card;
 
-        IEquipmentSlot ICardEquipmentSlot.Slot => this.Slot;
-    }
+    IEquipmentSlot ICardEquipmentSlot.Slot => this.Slot;
 }

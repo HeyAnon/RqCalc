@@ -1,17 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+
 using RqCalc.DataBase.EntityFramework._Base;
 using RqCalc.Domain;
 
-namespace RqCalc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework;
+
+[Table("StaticImage")]
+public partial class StaticImage : DirectoryBase
 {
-    [Table("StaticImage")]
-    public partial class StaticImage : DirectoryBase
-    {
-        public byte[] Data { get; set; }
-    }
+    public byte[] Data { get; set; } = null!;
+}
 
-    public partial class StaticImage : IStaticImage
-    {
+public partial class StaticImage : IStaticImage
+{
 
-    }
 }

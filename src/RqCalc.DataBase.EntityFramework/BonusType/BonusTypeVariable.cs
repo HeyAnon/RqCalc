@@ -5,43 +5,42 @@ using RqCalc.Domain;
 using RqCalc.Domain.BonusType;
 using RqCalc.Domain.Formula;
 
-namespace RqCalc.DataBase.EntityFramework.BonusType
+namespace RqCalc.DataBase.EntityFramework.BonusType;
+
+[Table("BonusTypeVariable")]
+public partial class BonusTypeVariable : PersistentDomainObjectBase
 {
-    [Table("BonusTypeVariable")]
-    public partial class BonusTypeVariable : PersistentDomainObjectBase
-    {
-        public virtual Stat? MultiplicityStat { get; set; }
+    public virtual Stat? MultiplicityStat { get; set; }
         
-        public virtual BonusType BonusType { get; set; } = null!;
+    public virtual BonusType BonusType { get; set; } = null!;
 
-        public virtual Formula.Formula? MulFormula { get; set; }
+    public virtual Formula.Formula? MulFormula { get; set; }
 
 
-        public int? MultiplicityValue { get; set; }
+    public int? MultiplicityValue { get; set; }
 
-        public bool HasSign { get; set; }
+    public bool HasSign { get; set; }
 
-        public int Index { get; set; }
+    public int Index { get; set; }
 
         
 
 
-        [Column("BonusType_Id")]
-        public int? BonusTypeId { get; set; }
+    [Column("BonusType_Id")]
+    public int? BonusTypeId { get; set; }
 
-        [Column("MultiplicityStat_Id")]
-        public int? MultiplicityStatId { get; set; }
+    [Column("MultiplicityStat_Id")]
+    public int? MultiplicityStatId { get; set; }
 
-        [Column("MulFormula_Id")]
-        public int? MulFormulaId { get; set; }
-    }
+    [Column("MulFormula_Id")]
+    public int? MulFormulaId { get; set; }
+}
 
-    public partial class BonusTypeVariable : IBonusTypeVariable
-    {
-        IStat? IBonusTypeVariable.MultiplicityStat => this.MultiplicityStat;
+public partial class BonusTypeVariable : IBonusTypeVariable
+{
+    IStat? IBonusTypeVariable.MultiplicityStat => this.MultiplicityStat;
 
-        IBonusType IBonusTypeVariable.BonusType => this.BonusType;
+    IBonusType IBonusTypeVariable.BonusType => this.BonusType;
 
-        IFormula? IBonusTypeVariable.MulFormula => this.MulFormula;
-    }
+    IFormula? IBonusTypeVariable.MulFormula => this.MulFormula;
 }

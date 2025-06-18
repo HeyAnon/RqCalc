@@ -2,20 +2,19 @@
 
 using RqCalc.Domain.Card;
 
-namespace RqCalc.DataBase.EntityFramework.Card
+namespace RqCalc.DataBase.EntityFramework.Card;
+
+[Table("CardBuffDescription")]
+public partial class CardBuffDescription : BuffElement
 {
-    [Table("CardBuffDescription")]
-    public partial class CardBuffDescription : BuffElement
-    {
-        public virtual Card Card { get; set; } = null!;
+    public virtual Card Card { get; set; } = null!;
         
 
-        [Column("Card_Id")]
-        public int? CardId { get; set; }
-    }
+    [Column("Card_Id")]
+    public int? CardId { get; set; }
+}
 
-    public partial class CardBuffDescription : ICardBuffDescription
-    {
-        ICard ICardBuffDescription.Card => this.Card;
-    }
+public partial class CardBuffDescription : ICardBuffDescription
+{
+    ICard ICardBuffDescription.Card => this.Card;
 }

@@ -1,29 +1,28 @@
 using Framework.Core;
 
-namespace RqCalc.DataBase.EntityFramework._Extensions
+namespace RqCalc.DataBase.EntityFramework._Extensions;
+
+internal static class TypeExtensions
 {
-    internal static class TypeExtensions
+    private static readonly HashSet<Type> DictionaryTypes = new[]
     {
-        private static readonly HashSet<Type> DictionaryTypes = new[]
-        {
-            typeof(IReadOnlyDictionary<,>),
-            typeof(IDictionary<,>),
-            typeof(Dictionary<,>)
-        }.Pipe(System.Linq.Enumerable.ToHashSet);
+        typeof(IReadOnlyDictionary<,>),
+        typeof(IDictionary<,>),
+        typeof(Dictionary<,>)
+    }.Pipe(System.Linq.Enumerable.ToHashSet);
 
 
-        public static Type GetCollectionElementType(this Type type)
-        {
-            if (type == null) throw new ArgumentNullException(nameof(type));
+    public static Type GetCollectionElementType(this Type type)
+    {
+        if (type == null) throw new ArgumentNullException(nameof(type));
 
-            return type.GetCollectionType() != null ? type.GetGenericArguments().Single() : null;
-        }
+        return type.GetCollectionType() != null ? type.GetGenericArguments().Single() : null;
+    }
 
-        public static bool IsDictionaryType(this Type type)
-        {
-            if (type == null) throw new ArgumentNullException(nameof(type));
+    public static bool IsDictionaryType(this Type type)
+    {
+        if (type == null) throw new ArgumentNullException(nameof(type));
 
-            return type.IsGenericType && DictionaryTypes.Contains(type.GetGenericTypeDefinition());
-        }
+        return type.IsGenericType && DictionaryTypes.Contains(type.GetGenericTypeDefinition());
     }
 }

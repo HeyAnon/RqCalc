@@ -7,16 +7,16 @@ namespace RqCalc.Domain;
 
 public interface IStat : IImageDirectoryBase, IBonusContainer<IStatBonus>, IParentSource<IStat>, IOrderObject<int>
 {
-    IRace Race { get; }
+    IRace? Race { get; }
 
-    IElement Element { get; }
+    IElement? Element { get; }
 
 
     IReadOnlyDictionary<RestoreStatType, IStat> RestoreStats { get; }
 
     IReadOnlyCollection<IFormula> Sources { get; }
         
-    IFormula DescriptionFormula { get; }
+    IFormula? DescriptionFormula { get; }
 
 
     StatType Type { get; }
@@ -32,8 +32,8 @@ public interface IStat : IImageDirectoryBase, IBonusContainer<IStatBonus>, IPare
 
     bool? IsMelee { get; }
 
-    string ProgressName { get; }
+    string? ProgressName { get; }
 
 
-    string DescriptionTemplate { get; }
+    string? DescriptionTemplate { get; }
 }

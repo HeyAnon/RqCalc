@@ -8,157 +8,156 @@ using RqCalc.DataBase.EntityFramework.Talent;
 using RqCalc.Domain;
 using RqCalc.Domain.Talent;
 
-namespace RqCalc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework;
+
+[Table("Class")]
+public partial class Class : ImageDirectoryBase
 {
-    [Table("Class")]
-    public partial class Class : ImageDirectoryBase
+    public virtual HashSet<Class> SubClasses { get; set; } = null!;
+
+    public virtual HashSet<ClassBonus> NativeBonuses { get; set; } = null!;
+
+    public virtual HashSet<ClassLevelHpBonus> LevelHpBonuses { get; set; } = null!;
+
+    public virtual HashSet<TalentBranch> TalentBranches { get; set; } = null!;
+
+
+    public virtual HashSet<Aura> Auras { get; set; } = null!;
+
+    public virtual HashSet<Buff> Buffs { get; set; } = null!;
+
+
+    public virtual Class? Base { get; set; }
+
+    public virtual Stat NativePrimaryStat { get; set; } = null!;
+
+    public virtual Stat NativeEnergyStat { get; set; } = null!;
+
+    public virtual ClassSpecialization Specialization { get; set; } = null!;
+
+
+
+    [Column("IsMelee")]
+    public bool? NativeIsMelee { get; set; }
+
+    [Column("AllowExtraWeapon")]
+    public bool? NativeAllowExtraWeapon { get; set; }
+
+    [Column("HpPerVitality")]
+    public decimal? NativeHpPerVitality { get; set; }
+
+
+    [Column("Base_Id")]
+    public int? BaseId { get; set; }
+
+    [Column("PrimaryStat_Id")]
+    public int? NativePrimaryStatId { get; set; }
+
+    [Column("EnergyStat_Id")]
+    public int? NativeEnergyStatId { get; set; }
+
+    [Column("Specialization_Id")]
+    public int? SpecializationId { get; set; }
+}
+
+
+public partial class Class : IClass
+{
+    private readonly Lazy<bool> lazyAllowExtraWeapon;
+        
+    private readonly Lazy<bool> lazyIsMelee;
+
+    private readonly Lazy<decimal> lazyHpPerVitality;
+
+    private readonly Lazy<Stat> lazyPrimaryStat;
+
+    private readonly Lazy<Stat> lazyEnergyStat;
+
+    private readonly Lazy<IReadOnlyCollection<ClassBonus>> lazyBonuses;
+
+
+    public Class()
     {
-        public virtual HashSet<Class> SubClasses { get; set; }
+        this.lazyAllowExtraWeapon = LazyHelper.Create(() => this.GetFirst(c => c.NativeAllowExtraWeapon));
 
-        public virtual HashSet<ClassBonus> NativeBonuses { get; set; }
+        this.lazyIsMelee = LazyHelper.Create(() => this.GetFirst(c => c.NativeIsMelee));
 
-        public virtual HashSet<ClassLevelHpBonus> LevelHpBonuses { get; set; }
+        this.lazyHpPerVitality = LazyHelper.Create(() => this.GetFirst(c => c.NativeHpPerVitality));
 
-        public virtual HashSet<TalentBranch> TalentBranches { get; set; }
+        this.lazyPrimaryStat = LazyHelper.Create(() => this.GetFirst(c => c.NativePrimaryStat));
 
-
-        public virtual HashSet<Aura> Auras { get; set; }
-
-        public virtual HashSet<Buff> Buffs { get; set; }
-
-
-        public virtual Class Base { get; set; }
-
-        public virtual Stat NativePrimaryStat { get; set; }
-
-        public virtual Stat NativeEnergyStat { get; set; }
-
-        public virtual ClassSpecialization Specialization { get; set; }
-
-
-
-        [Column("IsMelee")]
-        public bool? NativeIsMelee { get; set; }
-
-        [Column("AllowExtraWeapon")]
-        public bool? NativeAllowExtraWeapon { get; set; }
-
-        [Column("HpPerVitality")]
-        public decimal? NativeHpPerVitality { get; set; }
-
-
-        [Column("Base_Id")]
-        public int? BaseId { get; set; }
-
-        [Column("PrimaryStat_Id")]
-        public int? NativePrimaryStatId { get; set; }
-
-        [Column("EnergyStat_Id")]
-        public int? NativeEnergyStatId { get; set; }
-
-        [Column("Specialization_Id")]
-        public int? SpecializationId { get; set; }
+        this.lazyEnergyStat = LazyHelper.Create(() => this.GetFirst(c => c.NativeEnergyStat));
+            
+        this.lazyBonuses = LazyHelper.Create(() => this.GetMany(c => c.NativeBonuses));
     }
 
 
-    public partial class Class : IClass
+    public bool AllowExtraWeapon => this.lazyAllowExtraWeapon.Value;
+
+    public bool IsMelee => this.lazyIsMelee.Value;
+
+    public decimal HpPerVitality => this.lazyHpPerVitality.Value;
+
+    public IStat PrimaryStat => this.lazyPrimaryStat.Value;
+
+    public IStat EnergyStat => this.lazyEnergyStat.Value;
+
+    IReadOnlyCollection<IAura> IClass.Auras => this.Auras;
+
+    IReadOnlyCollection<IBuff> IClass.Buffs => this.Buffs;
+
+
+    public IReadOnlyCollection<IClassBonus> Bonuses => this.lazyBonuses.Value; // For wpf binging
+
+
+    IReadOnlyCollection<ITalentBranch> IClass.TalentBranches => this.TalentBranches;
+
+
+    IEnumerable<IClass> IChildrenSource<IClass>.Children => this.SubClasses;
+
+    IReadOnlyCollection<IClassLevelHpBonus> IClass.LevelHpBonuses => this.LevelHpBonuses;
+
+    IClassSpecialization IClass.Specialization => this.Specialization;
+
+    IClass? IParentSource<IClass>.Parent => this.Base;
+
+
+    private T GetFirst<T>(Func<Class, T> selector)
+        where T : class
     {
-        private readonly Lazy<bool> lazyAllowExtraWeapon;
-        
-        private readonly Lazy<bool> lazyIsMelee;
+        var request = from c in this.GetAllElements(v => v.Base)
 
-        private readonly Lazy<decimal> lazyHpPerVitality;
+            let val = selector(c)
 
-        private readonly Lazy<Stat> lazyPrimaryStat;
+            where val != null
 
-        private readonly Lazy<Stat> lazyEnergyStat;
+            select val;
 
-        private readonly Lazy<IReadOnlyCollection<ClassBonus>> lazyBonuses;
+        return request.First();
+    }
 
+    private T GetFirst<T>(Func<Class, T?> selector)
+        where T : struct 
+    {
+        var request = from c in this.GetAllElements(v => v.Base)
 
-        public Class()
-        {
-            this.lazyAllowExtraWeapon = LazyHelper.Create(() => this.GetFirst(c => c.NativeAllowExtraWeapon));
+            let val = selector(c)
 
-            this.lazyIsMelee = LazyHelper.Create(() => this.GetFirst(c => c.NativeIsMelee));
+            where val != null
 
-            this.lazyHpPerVitality = LazyHelper.Create(() => this.GetFirst(c => c.NativeHpPerVitality));
+            select val.Value;
 
-            this.lazyPrimaryStat = LazyHelper.Create(() => this.GetFirst(c => c.NativePrimaryStat));
+        return request.First();
+    }
 
-            this.lazyEnergyStat = LazyHelper.Create(() => this.GetFirst(c => c.NativeEnergyStat));
-            
-            this.lazyBonuses = LazyHelper.Create(() => this.GetMany(c => c.NativeBonuses));
-        }
+    private IReadOnlyCollection<T> GetMany<T>(Func<Class, IEnumerable<T>> selector, bool reverse = true)
+    {
+        var request = from c in this.GetAllElements(v => v.Base).Pipe(reverse, c => c.Reverse())
 
+            from val in selector(c)
 
-        public bool AllowExtraWeapon => this.lazyAllowExtraWeapon.Value;
+            select val;
 
-        public bool IsMelee => this.lazyIsMelee.Value;
-
-        public decimal HpPerVitality => this.lazyHpPerVitality.Value;
-
-        public IStat PrimaryStat => this.lazyPrimaryStat.Value;
-
-        public IStat EnergyStat => this.lazyEnergyStat.Value;
-
-        IReadOnlyCollection<IAura> IClass.Auras => this.Auras;
-
-        IReadOnlyCollection<IBuff> IClass.Buffs => this.Buffs;
-
-
-        public IEnumerable<IClassBonus> Bonuses => this.lazyBonuses.Value;
-
-
-        IReadOnlyCollection<ITalentBranch> IClass.TalentBranches => this.TalentBranches;
-
-
-        IEnumerable<IClass> IChildrenSource<IClass>.Children => this.SubClasses;
-
-        IReadOnlyCollection<IClassLevelHpBonus> IClass.LevelHpBonuses => this.LevelHpBonuses;
-
-        IClassSpecialization IClass.Specialization => this.Specialization;
-
-        IClass IParentSource<IClass>.Parent => this.Base;
-
-
-        private T GetFirst<T>(Func<Class, T> selector)
-            where T : class
-        {
-            var request = from c in this.GetAllElements(v => v.Base)
-
-                          let val = selector(c)
-
-                          where val != null
-
-                          select val;
-
-            return request.First();
-        }
-
-        private T GetFirst<T>(Func<Class, T?> selector)
-            where T : struct 
-        {
-            var request = from c in this.GetAllElements(v => v.Base)
-
-                          let val = selector(c)
-
-                          where val != null
-
-                          select val.Value;
-
-            return request.First();
-        }
-
-        private IReadOnlyCollection<T> GetMany<T>(Func<Class, IEnumerable<T>> selector, bool reverse = true)
-        {
-            var request = from c in this.GetAllElements(v => v.Base).Pipe(reverse, c => c.Reverse())
-
-                          from val in selector(c)
-
-                          select val;
-
-            return request.ToList();
-        }
+        return request.ToList();
     }
 }

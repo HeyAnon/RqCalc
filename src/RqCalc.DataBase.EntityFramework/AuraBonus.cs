@@ -5,36 +5,35 @@ using RqCalc.DataBase.EntityFramework._Base;
 using RqCalc.Domain;
 using RqCalc.Domain._Base;
 
-namespace RqCalc.DataBase.EntityFramework
+namespace RqCalc.DataBase.EntityFramework;
+
+[Table("AuraBonus")]
+public partial class AuraBonus : Bonus
 {
-    [Table("AuraBonus")]
-    public partial class AuraBonus : Bonus
-    {
-        public virtual Aura Aura { get; set; } = null!;
+    public virtual Aura Aura { get; set; } = null!;
 
-        public virtual Version? StartVersion { get; set; }
+    public virtual Version? StartVersion { get; set; }
 
-        public virtual Version? EndVersion { get; set; }
+    public virtual Version? EndVersion { get; set; }
 
 
-        public decimal? SharedValue { get; set; }
+    public decimal? SharedValue { get; set; }
 
 
-        [Key]
-        [Column("Aura_Id", Order = 0)]
-        public int? AuraId { get; set; }
+    [Key]
+    [Column("Aura_Id", Order = 0)]
+    public int? AuraId { get; set; }
 
-        [Column("StartVersion_Id")]
-        public int? StartVersionId { get; set; }
+    [Column("StartVersion_Id")]
+    public int? StartVersionId { get; set; }
 
-        [Column("EndVersion_Id")]
-        public int? EndVersionId { get; set; }
-    }
+    [Column("EndVersion_Id")]
+    public int? EndVersionId { get; set; }
+}
 
-    public partial class AuraBonus : IAuraBonus
-    {
-        IVersion? IVersionObject.StartVersion => this.StartVersion;
+public partial class AuraBonus : IAuraBonus
+{
+    IVersion? IVersionObject.StartVersion => this.StartVersion;
 
-        IVersion? IVersionObject.EndVersion => this.EndVersion;
-    }
+    IVersion? IVersionObject.EndVersion => this.EndVersion;
 }

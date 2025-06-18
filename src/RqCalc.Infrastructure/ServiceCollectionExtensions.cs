@@ -1,9 +1,15 @@
+using Framework.DataBase;
 using Framework.DependencyInjection;
+using Framework.ExpressionParsers;
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using RqCalc.Application;
 using RqCalc.Application.Settings;
+using RqCalc.DataBase.EntityFramework._DBContext;
+using RqCalc.Domain._Base;
 
 namespace RqCalc.Infrastructure;
 
@@ -12,7 +18,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddRqCalc(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
         return serviceCollection
-            
+
             .AddSingleton<IApplicationSettingsFactory, ApplicationSettingsFactory>()
             .AddSingletonFrom((IApplicationSettingsFactory factory) => factory.Create())
 
@@ -32,8 +38,14 @@ public static class ServiceCollectionExtensions
             .AddSingleton<IGuildTalentValidator, GuildTalentValidator>()
 
             .AddSingleton<IEquipmentSlotService, EquipmentSlotService>()
-        
-            .add
-            ;
+
+            .AddSingleton<INativeBodyExpressionParser, RoslynCSharpExpressionParser>()
+
+            .AddKeyedSingleton(ImplementTypeResolver.Key, (_, _) => ImplementTypeResolver.Default)
+
+            .AddDbContext<RqCalcDbContext>(options =>
+                options.UseSqlite(configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Singleton, ServiceLifetime.Singleton)
+
+            .AddSingletonFrom<IDataSource<IPersistentDomainObjectBase>, RqCalcDbContext>();
     }
 }

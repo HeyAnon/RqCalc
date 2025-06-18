@@ -1,7 +1,10 @@
+using System.Collections.ObjectModel;
+
 using Framework.Core;
 using Framework.DataBase;
 using Framework.HierarchicalExpand;
 
+using RqCalc.Application.IndexedDict;
 using RqCalc.Application.Serializer._Internal;
 using RqCalc.Domain;
 using RqCalc.Domain._Base;
@@ -17,9 +20,6 @@ using RqCalc.Domain.VirtualBonus;
 using RqCalc.Model;
 using RqCalc.Model._Extensions;
 using RqCalc.Model.Impl;
-
-using System.Collections.ObjectModel;
-using RqCalc.Application.IndexedDict;
 
 namespace RqCalc.Application.Serializer.Character;
 
