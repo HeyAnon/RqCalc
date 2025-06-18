@@ -19,6 +19,7 @@ public class EnvironmentInitializer : IFrameworkInitializer
     public IServiceProvider ConfigureTestEnvironment(IServiceCollection services, IConfiguration configuration)
     {
         return services
+            .AddSingleton(configuration)
             .AddRqCalc(configuration)
             .ValidateDuplicateDeclaration()
             .BuildServiceProvider(

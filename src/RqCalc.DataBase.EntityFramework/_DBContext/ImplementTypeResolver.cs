@@ -19,5 +19,5 @@ public class ImplementTypeResolver(Assembly assembly) : ITypeResolver<Type>
     }
 
 
-    public static ImplementTypeResolver Default { get; } = new(typeof(ImplementTypeResolver).Assembly);
+    public static ITypeResolver<Type> Default { get; } = new ImplementTypeResolver(typeof(ImplementTypeResolver).Assembly);
 }
