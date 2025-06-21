@@ -1,8 +1,9 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Documents;
+using RqCalc.Wpf.Models.Window.Dialog;
+using RqCalc.Wpf.Windows.Dialog._Base;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Windows.Dialog
 {
     public partial class AboutWindow : IModelContainer<AboutWindowModel>
     {

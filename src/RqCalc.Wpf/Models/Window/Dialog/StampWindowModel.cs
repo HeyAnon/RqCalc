@@ -1,38 +1,34 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-
 using Framework.Core;
+using RqCalc.Domain;
+using RqCalc.Domain._Extensions;
+using RqCalc.Domain.Equipment;
+using RqCalc.Domain.Stamp;
+using RqCalc.Wpf.Models._Base;
+using RqCalc.Wpf.Models.Window.Dialog._Base;
 
-using Framework.Reactive;
-using Framework.Reactive.ObservableRecurse;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models.Window.Dialog
 {
     public class StampWindowModel : ContextModel, IClearModel, ILegacyModel
     {
-        private readonly IEquipment _equipment;
+        private readonly IEquipment equipment;
 
-        private readonly IClass _currentClass;
+        private readonly IClass currentClass;
 
-        private readonly IStampColor _bestColor;
+        private readonly IStampColor bestColor;
 
-        private readonly IReadOnlyDictionary<IStampVariant, bool> _baseVariants;
+        private readonly IReadOnlyDictionary<IStampVariant, bool> baseVariants;
 
 
-        public StampWindowModel(IApplicationContext context, IReadOnlyDictionary<TextTemplateVariableType, decimal> evaluateStats, IEquipment equipment, IClass currentClass, IStampVariant startupStampVariant)
+        public StampWindowModel(IServiceProvider context, IReadOnlyDictionary<TextTemplateVariableType, decimal> evaluateStats, IEquipment equipment, IClass currentClass, IStampVariant startupStampVariant)
             : base(context)
         {
-            this._equipment = equipment ?? throw new ArgumentNullException(nameof(equipment));
-            this._currentClass = currentClass ?? throw new ArgumentNullException(nameof(currentClass));
+            this.equipment = equipment ?? throw new ArgumentNullException(nameof(equipment));
+            this.currentClass = currentClass ?? throw new ArgumentNullException(nameof(currentClass));
             
             this.StampColors = this.Context.DataSource.GetFullList<IStampColor>().OrderById().ToObservableCollection();
 
-            this._bestColor = this.StampColors.Last();
+            this.bestColor = this.StampColors.Last();
 
             this.StampVariant = startupStampVariant;
             
@@ -43,23 +39,23 @@ namespace Anon.RQ_Calc.WPF
 
                                           where allowed != false
                                          
-                                          let variant = stamp.GetByColor(this._bestColor)
+                                          let variant = stamp.GetByColor(this.bestColor)
                                          
                                           select variant.ToKeyValuePair(allowed == true);
 
-                this._baseVariants = baseVariantsRequest.ToDictionary();
+                this.baseVariants = baseVariantsRequest.ToDictionary();
             }
             
 
 
             if (this.StampColor == null)
             {
-                this.StampColor = this._bestColor;
+                this.StampColor = this.bestColor;
             }
 
 
             this.ShowLegacy = this.Stamp.Maybe(stamp => stamp.IsLegacy);
-            this.ShowShared = this.Stamp.Maybe(stamp => this._baseVariants.Any(pair => pair.Key.Stamp == stamp && !pair.Value));
+            this.ShowShared = this.Stamp.Maybe(stamp => this.baseVariants.Any(pair => pair.Key.Stamp == stamp && !pair.Value));
 
             this.Refresh();
 
@@ -68,9 +64,9 @@ namespace Anon.RQ_Calc.WPF
         }
 
 
-        public bool HasLegacy => this._baseVariants.Keys.Any(v => v.Stamp.IsLegacy);
+        public bool HasLegacy => this.baseVariants.Keys.Any(v => v.Stamp.IsLegacy);
 
-        public bool HasShared => this._baseVariants.Values.Any(v => !v);
+        public bool HasShared => this.baseVariants.Values.Any(v => !v);
 
         public bool ShowShared
         {
@@ -107,7 +103,7 @@ namespace Anon.RQ_Calc.WPF
         public IStamp Stamp
         {
             get { return this.DesignStampVariant.Maybe(sv => sv.Stamp); }
-            set { this.DesignStampVariant = value.Maybe(stamp => stamp.GetByColor(this._bestColor)); }
+            set { this.DesignStampVariant = value.Maybe(stamp => stamp.GetByColor(this.bestColor)); }
         }
 
         public IStampVariant StampVariant
@@ -119,7 +115,7 @@ namespace Anon.RQ_Calc.WPF
             set
             {
                 this.Stamp = value.Maybe(v => v.Stamp);
-                this.StampColor = value.Maybe(v => v.Color, this._bestColor);
+                this.StampColor = value.Maybe(v => v.Color, this.bestColor);
             }
         }
 
@@ -139,7 +135,7 @@ namespace Anon.RQ_Calc.WPF
 
         private void Refresh()
         {
-            var request = from pair in this._baseVariants
+            var request = from pair in this.baseVariants
 
                           let variant = pair.Key
 
@@ -147,7 +143,7 @@ namespace Anon.RQ_Calc.WPF
 
                           where !variant.Stamp.IsLegacy || this.ShowLegacy
 
-                          orderby variant.GetOrderIndex(this._currentClass) descending
+                          orderby variant.GetOrderIndex(this.currentClass) descending
 
                           select variant;
 

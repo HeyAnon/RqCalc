@@ -1,13 +1,11 @@
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
+using RqCalc.Domain.CollectedStatistic;
+using RqCalc.Wpf.Models._Base;
 
-
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models
 {
     public class CollectedItemModel : ActiveImageChangeModel<ICollectedItem>
     {
-        public CollectedItemModel(IApplicationContext context)
+        public CollectedItemModel(IServiceProvider context)
             : base(context)
         {
         }

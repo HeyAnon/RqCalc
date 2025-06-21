@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 using RqCalc.Domain;
 using RqCalc.Domain.BonusType;
@@ -18,15 +17,13 @@ public partial class StatBonus
 
 
     [Column("Formula_Id")]
-    public int? FormulaId { get; set; }
+    public int FormulaId { get; set; }
         
-    [Key]
-    [Column("Stat_Id", Order = 0)]
-    public int? StatId { get; set; }
+    [Column("Stat_Id")]
+    public int StatId { get; set; }
 
-    [Key]
-    [Column("Type_Id", Order = 1)]
-    public virtual int? TypeId { get; set; }
+    [Column("Type_Id")]
+    public virtual int TypeId { get; set; }
 }
 
 

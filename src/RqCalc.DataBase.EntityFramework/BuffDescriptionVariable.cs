@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using RqCalc.Domain;
@@ -16,13 +15,10 @@ public partial class BuffDescriptionVariable
     public TextTemplateVariableType Type { get; set; }
 
 
-    [Key]
-    [Column(Order = 0)]
     public int Index { get; set; }
 
-    [Key]
-    [Column("BuffDescription_Id", Order = 1)]
-    public int? BuffDescriptionId { get; set; }
+    [Column("BuffDescription_Id")]
+    public int BuffDescriptionId { get; set; }
 }
 
 

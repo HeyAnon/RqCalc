@@ -1,29 +1,26 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-
 using Framework.Core;
+using Framework.HierarchicalExpand;
+using RqCalc.Domain;
+using RqCalc.Domain._Extensions;
+using RqCalc.Domain.Talent;
+using RqCalc.Model;
+using RqCalc.Wpf.Exception;
+using RqCalc.Wpf.Models._Base;
+using RqCalc.Wpf.Models.Window.Dialog._Base;
 
-using Framework.Core.Serialization;
-using Framework.Reactive;
-using Framework.Persistent;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models.Window.Dialog
 {
     public class TalentsWindowModel : UpdateModel, IClearModel, ITalentBuildSource
     {
-        private readonly ITalentBuildSource _talentBuildSource;
+        private readonly ITalentBuildSource talentBuildSource;
 
 
-        public TalentsWindowModel(IApplicationContext context, IReadOnlyDictionary<TextTemplateVariableType, decimal> evaluateStats, ITalentBuildSource talentBuildSource)
+        public TalentsWindowModel(IServiceProvider context, IReadOnlyDictionary<TextTemplateVariableType, decimal> evaluateStats, ITalentBuildSource talentBuildSource)
             : base(context)
         {
             if (evaluateStats == null) throw new ArgumentNullException(nameof(evaluateStats));
-            this._talentBuildSource = talentBuildSource ?? throw new ArgumentNullException(nameof(talentBuildSource));
+            this.talentBuildSource = talentBuildSource ?? throw new ArgumentNullException(nameof(talentBuildSource));
 
             this.Branches = talentBuildSource.Class.GetAllTalentBranches().ToObservableCollection(branch => new TalentBranchModel(this.Context, evaluateStats, this, branch));
             
@@ -31,9 +28,9 @@ namespace Anon.RQ_Calc.WPF
         }
 
 
-        public IClass Class => this._talentBuildSource.Class;
+        public IClass Class => this.talentBuildSource.Class;
 
-        public int Level => this._talentBuildSource.Level;
+        public int Level => this.talentBuildSource.Level;
 
         public string Code
         {
@@ -53,7 +50,7 @@ namespace Anon.RQ_Calc.WPF
                 {
                     this.SetData(this.Context.TalentSerializer.Deserialize(this.Code));
                 }
-                catch (Exception ex)
+                catch (System.Exception ex)
                 {
                     this.SetValue(v => v.Code, prevValue);
 
@@ -158,7 +155,7 @@ namespace Anon.RQ_Calc.WPF
             {
                 if (character.Class.GetAllParents().IsIntersected(this.Class.GetAllParents()))
                 {
-                    this.ActiveTalents = this.Context.GetLimitedTalents(this._talentBuildSource.OverrideTalents(character.Talents))
+                    this.ActiveTalents = this.Context.GetLimitedTalents(this.talentBuildSource.OverrideTalents(character.Talents))
                                                .Where(tal => this.Class.GetAllTalentBranches().Contains(tal.Branch));
                 }
             });

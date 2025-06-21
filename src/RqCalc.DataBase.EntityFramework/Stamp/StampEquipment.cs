@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 using RqCalc.DataBase.EntityFramework.Equipment;
 using RqCalc.Domain.Equipment;
@@ -15,13 +14,11 @@ public partial class StampEquipment : VersionObject
     public virtual Stamp Stamp { get; set; } = null!;
 
 
-    [Key]
-    [Column("Type_Id", Order = 0)]
-    public int? TypeId { get; set; }
+    [Column("Type_Id")]
+    public int TypeId { get; set; }
 
-    [Key]
-    [Column("Stamp_Id", Order = 1)]
-    public int? StampId { get; set; }
+    [Column("Stamp_Id")]
+    public int StampId { get; set; }
 }
 
 public partial class StampEquipment : IStampEquipment

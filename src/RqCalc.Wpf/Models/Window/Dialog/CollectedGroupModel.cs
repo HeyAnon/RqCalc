@@ -1,21 +1,15 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-
-using Anon.RQ_Calc.Domain;
-
 using Framework.Core;
+using RqCalc.Domain._Extensions;
+using RqCalc.Domain.CollectedStatistic;
+using RqCalc.Model;
+using RqCalc.Wpf.Models._Base;
 
-using Framework.Reactive;
-
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models.Window.Dialog
 {
     public class CollectedGroupModel : ContextModel
     {
-        public CollectedGroupModel(IApplicationContext context, ICollectedGroup group, ICharacterSource characterSource)
+        public CollectedGroupModel(IServiceProvider context, ICollectedGroup group, ICharacterSource characterSource)
             : base(context)
         {
             if (group == null) throw new ArgumentNullException(nameof(group));

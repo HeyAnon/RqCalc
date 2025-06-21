@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 using Framework.Core;
-
 using RqCalc.DataBase.EntityFramework._Base;
 using RqCalc.Domain;
 using RqCalc.Domain.BonusType;
@@ -23,7 +22,7 @@ public partial class CardBonus : PersistentDomainObjectBase
     public virtual Card? NegateCard { get; set; }
 
     public virtual Card? MultiplyEffectCard { get; set; }
-
+    
     public virtual CardSet? RequiredSet { get; set; }
 
 
@@ -36,19 +35,7 @@ public partial class CardBonus : PersistentDomainObjectBase
 
     public int? UpgLevelStepVariable { get; set; }
 
-
-    [Column("Card_Id")]
-    public int? CardId { get; set; }
-
-    [Column("RequiredCard_Id")]
-    public int? RequiredCardId { get; set; }
-
-    [Column("NegateCard_Id")]
-    public int? NegateCardId { get; set; }
-
-    [Column("MultiplyEffectCard_Id")]
-    public int? MultiplyEffectCardId { get; set; }
-
+    
     [Column("RequiredSet_Id")]
     public int? RequiredSetId { get; set; }
 

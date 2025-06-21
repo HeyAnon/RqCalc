@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="Anon.RQ_Calc.WPF.StatsControl"
+﻿<UserControl x:Class="RqCalc.Wpf.Controls.StatsControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Anon.RQ_Calc.WPF"
+             xmlns:controls="clr-namespace:RqCalc.Wpf.Controls"
              mc:Ignorable="d">
 
 
@@ -87,10 +87,10 @@
 
                 <Label Grid.Row="7" Grid.Column="1" Content="{Binding FreeStats}" Style="{StaticResource Label_FreeStats}" />
 
-                <local:EditStatControl Grid.Row="3" Grid.Column="2" DataContext="{Binding EditStats[%primaryStat%]}" Grid.ZIndex="1" />
-                <local:EditStatControl Grid.Row="4" Grid.Column="2" DataContext="{Binding EditStats[Ловкость]}"  Grid.ZIndex="1" />
-                <local:EditStatControl Grid.Row="5" Grid.Column="2" DataContext="{Binding EditStats[Выносливость]}"  Grid.ZIndex="1" />
-                <local:EditStatControl Grid.Row="6" Grid.Column="2" DataContext="{Binding EditStats[Удача]}"  Grid.ZIndex="1" />
+                <controls:EditStatControl Grid.Row="3" Grid.Column="2" DataContext="{Binding EditStats[%primaryStat%]}" Grid.ZIndex="1" />
+                <controls:EditStatControl Grid.Row="4" Grid.Column="2" DataContext="{Binding EditStats[Ловкость]}"  Grid.ZIndex="1" />
+                <controls:EditStatControl Grid.Row="5" Grid.Column="2" DataContext="{Binding EditStats[Выносливость]}"  Grid.ZIndex="1" />
+                <controls:EditStatControl Grid.Row="6" Grid.Column="2" DataContext="{Binding EditStats[Удача]}"  Grid.ZIndex="1" />
 
                 <Button Grid.Row="7" Grid.Column="2" Content="Сброс" Click="Button_ResetStats_Click" />
 
@@ -106,10 +106,10 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <local:StatControl Grid.Row="0" Grid.Column="0" DataContext="{Binding EditStats[%primaryStat%]}" />
-                    <local:StatControl Grid.Row="0" Grid.Column="1" DataContext="{Binding EditStats[Ловкость]}"  />
-                    <local:StatControl Grid.Row="1" Grid.Column="0" DataContext="{Binding EditStats[Выносливость]}"  />
-                    <local:StatControl Grid.Row="1" Grid.Column="1" DataContext="{Binding EditStats[Удача]}"  />
+                    <controls:StatControl Grid.Row="0" Grid.Column="0" DataContext="{Binding EditStats[%primaryStat%]}" />
+                    <controls:StatControl Grid.Row="0" Grid.Column="1" DataContext="{Binding EditStats[Ловкость]}"  />
+                    <controls:StatControl Grid.Row="1" Grid.Column="0" DataContext="{Binding EditStats[Выносливость]}"  />
+                    <controls:StatControl Grid.Row="1" Grid.Column="1" DataContext="{Binding EditStats[Удача]}"  />
 
                 </Grid>
 

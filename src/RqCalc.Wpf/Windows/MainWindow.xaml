@@ -1,27 +1,28 @@
-﻿<Window x:Class="Anon.RQ_Calc.WPF.MainWindow"
+﻿<Window x:Class="RqCalc.Wpf.Windows.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:Anon.RQ_Calc.WPF"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:convertes="clr-namespace:RqCalc.Wpf.Convertes"
+        xmlns:controls="clr-namespace:RqCalc.Wpf.Controls"
         Title="{Binding TitleInfo, StringFormat='RQ Calc ({0})'}"
         
         Height="669" Width="661" Background="#30302C" ResizeMode="CanMinimize" FontFamily="Cambria" FontSize="14" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
 
-        <local:ClassOffsetConverter x:Key="ClassOffsetConverter" />
+        <convertes:ClassOffsetConverter x:Key="ClassOffsetConverter" />
 
-        <local:CompositeValueConverter x:Key="NullTupleCollectionConverter" >
+        <convertes:CompositeValueConverter x:Key="NullTupleCollectionConverter" >
 
-            <local:AddNullElementConverter />
+            <convertes:AddNullElementConverter />
 
-            <local:ToTupleElementsConverter />
+            <convertes:ToTupleElementsConverter />
 
-        </local:CompositeValueConverter>
+        </convertes:CompositeValueConverter>
 
-        <local:TupleWrapConverter x:Key="TupleWrapConverter" />
+        <convertes:TupleWrapConverter x:Key="TupleWrapConverter" />
 
-        <local:DisplayTupleConverter x:Key="DisplayTupleConverter" />
+        <convertes:DisplayTupleConverter x:Key="DisplayTupleConverter" />
 
     </Window.Resources>
 
@@ -147,10 +148,10 @@
         
 
 
-        <local:EquipmentsControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" DataContext="{Binding Character}" />
+        <controls:EquipmentsControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" DataContext="{Binding Character}" />
 
 
-        <local:StatsControl Grid.Row ="1" Grid.Column="3" Grid.ColumnSpan="2" Margin="0,3,0,0" Grid.RowSpan="4" Width="293" Height="453" DataContext="{Binding Character}" />
+        <controls:StatsControl Grid.Row ="1" Grid.Column="3" Grid.ColumnSpan="2" Margin="0,3,0,0" Grid.RowSpan="4" Width="293" Height="453" DataContext="{Binding Character}" />
 
         
 
@@ -159,7 +160,7 @@
             <Grid>
 
                 <Grid.Resources>
-                    <Style TargetType="local:ActiveImageControl">
+                    <Style TargetType="controls:ActiveImageControl">
                         <Setter Property="Margin" Value="3" />
                     </Style>
 
@@ -187,19 +188,19 @@
                     <ColumnDefinition Width="140" />
                 </Grid.ColumnDefinitions>
 
-                <local:ActiveImageControl Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" DataContext="{Binding Character.ElixirModel}" ToolTip="Эликсир" MouseLeftButtonDown="Elixir_Click_MouseDown" />
+                <controls:ActiveImageControl Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" DataContext="{Binding Character.ElixirModel}" ToolTip="Эликсир" MouseLeftButtonDown="Elixir_Click_MouseDown" />
 
-                <local:ActiveImageControl Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding Character.ConsumableList}" ToolTip="Расходка" MouseLeftButtonDown="Consumables_Click_MouseDown" />
+                <controls:ActiveImageControl Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding Character.ConsumableList}" ToolTip="Расходка" MouseLeftButtonDown="Consumables_Click_MouseDown" />
 
-                <local:ActiveImageControl Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" DataContext="{Binding Character.GuildTalentDict}" ToolTip="Гильдийные таланты" MouseLeftButtonDown="GuildTalents_Click_MouseDown" />
+                <controls:ActiveImageControl Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" DataContext="{Binding Character.GuildTalentDict}" ToolTip="Гильдийные таланты" MouseLeftButtonDown="GuildTalents_Click_MouseDown" />
 
-                <local:ActiveImageControl Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" DataContext="{Binding Character.TalentList}" ToolTip="Таланты" MouseLeftButtonDown="Talents_Click_MouseDown" />
+                <controls:ActiveImageControl Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" DataContext="{Binding Character.TalentList}" ToolTip="Таланты" MouseLeftButtonDown="Talents_Click_MouseDown" />
 
-                <local:ActiveImageControl Grid.Row="0" Grid.Column="4" Grid.RowSpan="2" DataContext="{Binding Character.AuraModel}" ToolTip="Аура" MouseLeftButtonDown="Aura_Click_MouseDown" />
+                <controls:ActiveImageControl Grid.Row="0" Grid.Column="4" Grid.RowSpan="2" DataContext="{Binding Character.AuraModel}" ToolTip="Аура" MouseLeftButtonDown="Aura_Click_MouseDown" />
 
-                <local:ActiveImageControl Grid.Row="0" Grid.Column="5" Grid.RowSpan="2" DataContext="{Binding Character.BuffDict}" ToolTip="Бафы" MouseLeftButtonDown="Buffs_Click_MouseDown" />
+                <controls:ActiveImageControl Grid.Row="0" Grid.Column="5" Grid.RowSpan="2" DataContext="{Binding Character.BuffDict}" ToolTip="Бафы" MouseLeftButtonDown="Buffs_Click_MouseDown" />
                 
-                <local:ActiveImageControl Grid.Row="0" Grid.Column="6" Grid.RowSpan="2" DataContext="{Binding Character.CollectedEquipmentList}" ToolTip="Коллекции" MouseLeftButtonDown="Collections_Click_MouseDown" />
+                <controls:ActiveImageControl Grid.Row="0" Grid.Column="6" Grid.RowSpan="2" DataContext="{Binding Character.CollectedEquipmentList}" ToolTip="Коллекции" MouseLeftButtonDown="Collections_Click_MouseDown" />
 
                 <Label Grid.Row="0" Grid.Column="8" Content="Евент:" Foreground="White" />
 

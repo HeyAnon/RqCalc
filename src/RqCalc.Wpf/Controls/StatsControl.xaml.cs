@@ -1,27 +1,24 @@
-﻿using System;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-
 using Framework.Core;
+using RqCalc.Domain;
+using RqCalc.Wpf._Extensions;
+using RqCalc.Wpf.Convertes;
+using RqCalc.Wpf.Models;
 
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Controls
 {
     public partial class StatsControl : UserControl
     {
-        private bool _isInitialized;
+        private bool isInitialized;
 
 
         public StatsControl()
         {
             this.InitializeComponent();
 
-            this.DataContextChanged += StatsControl_DataContextChanged;
+            this.DataContextChanged += this.StatsControl_DataContextChanged;
         }
         
 
@@ -30,17 +27,17 @@ namespace Anon.RQ_Calc.WPF
 
         private void StatsControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (this._isInitialized)
+            if (this.isInitialized)
             {
                 return;
             }
 
             this.BindStats(this.Model.Context);
 
-            this._isInitialized = true;
+            this.isInitialized = true;
         }
 
-        private void BindStats(IApplicationContext context)
+        private void BindStats(IServiceProvider context)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
 
@@ -50,7 +47,7 @@ namespace Anon.RQ_Calc.WPF
         }
 
 
-        private void InitStasValueLabels(IApplicationContext context, Grid grid)
+        private void InitStasValueLabels(IServiceProvider context, Grid grid)
         {
             if (grid == null) throw new ArgumentNullException(nameof(grid));
             if (context == null) throw new ArgumentNullException(nameof(context));

@@ -1,15 +1,11 @@
+using RqCalc.Domain._Base;
 
-using Framework.Reactive;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models._Base
 {
     public class ActiveImageChangeModelItem<T, TValue> : ActiveImageChangeModel<T>
-        where T : class, Domain.IImageObject
+        where T : class, IImageObject
     {
-        public ActiveImageChangeModelItem(IApplicationContext context, IImage defaultImage = null)
+        public ActiveImageChangeModelItem(IServiceProvider context, IImage? defaultImage = null)
             : base(context, defaultImage)
         {
         }

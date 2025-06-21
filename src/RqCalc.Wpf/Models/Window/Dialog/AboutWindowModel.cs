@@ -1,12 +1,10 @@
-using System;
+using RqCalc.Wpf.Models._Base;
 
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models.Window.Dialog
 {
     public class AboutWindowModel : ContextModel
     {
-        public AboutWindowModel(IApplicationContext context, Version version)
+        public AboutWindowModel(IServiceProvider context, Version version)
             : base(context)
         {
             this.Version = version;

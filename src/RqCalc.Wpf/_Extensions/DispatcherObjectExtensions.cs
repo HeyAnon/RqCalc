@@ -1,7 +1,6 @@
-using System;
 using System.Windows.Threading;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf._Extensions
 {
     public static class DispatcherObjectExtensions
     {

@@ -1,21 +1,20 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using Anon.RQ_Calc.DataBase;
 using Framework.Core;
+using RqCalc.Domain;
+using RqCalc.Domain._Base;
+using RqCalc.Domain._Extensions;
+using RqCalc.Domain.Card;
+using RqCalc.Domain.Equipment;
+using RqCalc.Domain.Stamp;
+using RqCalc.Domain.VirtualBonus;
+using RqCalc.Model;
+using RqCalc.Wpf.Models._Base;
 
-using Framework.Reactive;
-using Framework.Reactive.ObservableRecurse;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models
 {
     public class EquipmentDataChangeModel : ContextModel, ICharacterEquipmentData
     {
-        public EquipmentDataChangeModel(IApplicationContext context, ICharacterEquipmentData data)
+        public EquipmentDataChangeModel(IServiceProvider context, ICharacterEquipmentData data)
             : base (context)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
@@ -155,7 +154,7 @@ namespace Anon.RQ_Calc.WPF
             private set { this.SetValue(v => v.AttackSpeed, value); }
         }
 
-        public decimal DPS
+        public decimal Dps
         {
             get { return this.GetValue(v => v.DPS); }
             private set { this.SetValue(v => v.DPS, value); }
@@ -224,7 +223,7 @@ namespace Anon.RQ_Calc.WPF
 
                 this.AttackSpeed = this.Equipment.Info.Maybe(v => v.Match(_ => 0, info => info.AttackSpeed, info => info.AttackSpeed));
 
-                this.DPS = ((mainAttack + upgradeAttack) * this.AttackSpeed).Normalize();
+                this.Dps = ((mainAttack + upgradeAttack) * this.AttackSpeed).Normalize();
             }
 
             {

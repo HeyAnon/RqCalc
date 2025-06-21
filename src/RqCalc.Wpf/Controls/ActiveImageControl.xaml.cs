@@ -3,16 +3,17 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Media;
+using RqCalc.Wpf.Convertes;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Controls
 {
     public partial class ActiveImageControl : UserControl
     {
-        private string _imageSourceBindingPath;
+        private string imageSourceBindingPath;
 
-        private string _checkBoxIsCheckedBindingPath;
+        private string checkBoxIsCheckedBindingPath;
 
-        private string _checkBoxVisibilityBindingPath;
+        private string checkBoxVisibilityBindingPath;
         
 
         public static readonly DependencyProperty IsGrayProperty = DependencyProperty.Register("IsGray", typeof(bool), typeof(ActiveImageControl));
@@ -36,10 +37,10 @@ namespace Anon.RQ_Calc.WPF
 
         public string ImageSourceBindingPath
         {
-            get { return this._imageSourceBindingPath; }
+            get { return this.imageSourceBindingPath; }
             set
             {
-                this._imageSourceBindingPath = value;
+                this.imageSourceBindingPath = value;
 
                 this.RefreshImageBinding();
             }
@@ -47,10 +48,10 @@ namespace Anon.RQ_Calc.WPF
 
         public string CheckBoxIsCheckedBindingPath
         {
-            get { return this._checkBoxIsCheckedBindingPath; }
+            get { return this.checkBoxIsCheckedBindingPath; }
             set
             {
-                this._checkBoxIsCheckedBindingPath = value;
+                this.checkBoxIsCheckedBindingPath = value;
 
                 this.CheckBox_Main.SetBinding(ToggleButton.IsCheckedProperty, new Binding(value));
             }
@@ -58,10 +59,10 @@ namespace Anon.RQ_Calc.WPF
 
         public string CheckBoxVisibilityBindingPath
         {
-            get { return this._checkBoxVisibilityBindingPath; }
+            get { return this.checkBoxVisibilityBindingPath; }
             set
             {
-                this._checkBoxVisibilityBindingPath = value;
+                this.checkBoxVisibilityBindingPath = value;
                 
                 this.CheckBox_Main.SetBinding(UIElement.VisibilityProperty, new Binding(value) { Converter = new BooleanToVisibilityConverter(), FallbackValue = "Collapsed" });
             }

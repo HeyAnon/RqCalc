@@ -1,7 +1,6 @@
 ﻿using System.Windows.Controls;
-using System.Windows.Input;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Controls
 {
     public partial class TalentControl : UserControl
     {

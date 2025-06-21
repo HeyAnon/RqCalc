@@ -1,23 +1,20 @@
-using System;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-
 using Framework.Core;
 
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Controls
 {
     public class StuckButton : Button
     {
-        private readonly DispatcherTimer _timer = new DispatcherTimer();
+        private readonly DispatcherTimer timer = new DispatcherTimer();
 
-        private bool _isFirst;
+        private bool isFirst;
 
 
         public StuckButton()
         {
-            this._timer.Tick += this.Timer_Tick;
+            this.timer.Tick += this.Timer_Tick;
 
             this.FirstDuration = TimeSpan.FromSeconds(0.2);
             this.NextDuration = TimeSpan.FromSeconds(0.01);
@@ -37,11 +34,11 @@ namespace Anon.RQ_Calc.WPF
 
         private void Timer_Tick(object sender, System.EventArgs e)
         {
-            if (this._isFirst)
+            if (this.isFirst)
             {
-                this._timer.Interval = this.NextDuration;
+                this.timer.Interval = this.NextDuration;
 
-                this._isFirst = false;
+                this.isFirst = false;
             }
 
             this.OnStuckMouseClick(EventArgs.Empty);
@@ -53,17 +50,17 @@ namespace Anon.RQ_Calc.WPF
         {
             base.OnPreviewMouseLeftButtonDown(e);
 
-            this._isFirst = true;
+            this.isFirst = true;
 
-            this._timer.Interval = this.FirstDuration;
-            this._timer.Start();
+            this.timer.Interval = this.FirstDuration;
+            this.timer.Start();
         }
 
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             base.OnPreviewMouseLeftButtonUp(e);
             
-            this._timer.Stop();
+            this.timer.Stop();
             this.OnStuckMouseClick(EventArgs.Empty);
         }
         

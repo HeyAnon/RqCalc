@@ -5,10 +5,12 @@
   </PropertyGroup>
   <!-- App -->
   <ItemGroup>
+    <PackageVersion Include="Extended.Wpf.Toolkit" Version="4.7.25104.5739" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Proxies" Version="9.0.6" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.6" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.6" />
+    <PackageVersion Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
   </ItemGroup>
   <!-- Tests -->
   <ItemGroup>

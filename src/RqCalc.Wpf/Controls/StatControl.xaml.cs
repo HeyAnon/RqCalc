@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Controls
 {
     public partial class StatControl : UserControl
     {

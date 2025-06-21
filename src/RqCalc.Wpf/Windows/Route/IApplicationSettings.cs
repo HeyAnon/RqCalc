@@ -1,4 +1,4 @@
-﻿namespace Anon.RQ_Calc.WPF
+﻿namespace RqCalc.Wpf.Windows.Route
 {
     public interface IApplicationSettings
     {

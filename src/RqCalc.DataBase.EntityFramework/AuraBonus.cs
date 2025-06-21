@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 using RqCalc.DataBase.EntityFramework._Base;
 using RqCalc.Domain;
@@ -20,9 +19,8 @@ public partial class AuraBonus : Bonus
     public decimal? SharedValue { get; set; }
 
 
-    [Key]
-    [Column("Aura_Id", Order = 0)]
-    public int? AuraId { get; set; }
+    [Column("Aura_Id")]
+    public int AuraId { get; set; }
 
     [Column("StartVersion_Id")]
     public int? StartVersionId { get; set; }

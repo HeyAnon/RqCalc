@@ -1,6 +1,7 @@
-﻿using System;
+﻿using RqCalc.Wpf.Models.Window.Dialog;
+using RqCalc.Wpf.Windows.Dialog._Base;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Windows.Dialog
 {
     public partial class CollectionsWindow : IModelContainer<CollectionsWindowModel>
     {

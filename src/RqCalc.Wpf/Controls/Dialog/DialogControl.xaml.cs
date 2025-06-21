@@ -1,12 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
-
 using Framework.Core;
+using RqCalc.Wpf.Models.Window.Dialog._Base;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Controls.Dialog
 {
     [ContentProperty("InnerContent")]
     public partial class DialogControl : UserControl

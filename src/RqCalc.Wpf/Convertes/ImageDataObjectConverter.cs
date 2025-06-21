@@ -1,16 +1,14 @@
-using System;
 using System.Globalization;
 using System.Windows.Data;
-
-using Anon.RQ_Calc.Domain;
-
 using Framework.Core;
+using RqCalc.Domain._Base;
+using RqCalc.Wpf._Extensions;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Convertes
 {
     public class ImageDataObjectConverter : IValueConverter
     {
-        private readonly bool _isGray;
+        private readonly bool isGray;
 
 
         public ImageDataObjectConverter()
@@ -20,7 +18,7 @@ namespace Anon.RQ_Calc.WPF
 
         public ImageDataObjectConverter(bool isGray)
         {
-            this._isGray = isGray;
+            this.isGray = isGray;
         }
 
         public virtual object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -29,7 +27,7 @@ namespace Anon.RQ_Calc.WPF
             {
                 var bitmap = image.ToBitmapFrame();
 
-                if (this._isGray)
+                if (this.isGray)
                 {
                     return new BitmapGrayObjectConverter().Convert(bitmap, null, null, null);
                 }
@@ -42,9 +40,9 @@ namespace Anon.RQ_Calc.WPF
 
         private IImage GetImage(object value)
         {
-            if (value is Domain.IImageObject)
+            if (value is IImageObject)
             {
-                var imageDataObject = value as Domain.IImageObject;
+                var imageDataObject = value as IImageObject;
 
                 return imageDataObject.Image;
             }

@@ -16,5 +16,5 @@ public class EquipmentBonusVariable : PersistentDomainObjectBase
 
 
     [Column("EquipmentBonus_Id")]
-    public int? EquipmentBonusId { get; set; }
+    public int EquipmentBonusId { get; set; }
 }

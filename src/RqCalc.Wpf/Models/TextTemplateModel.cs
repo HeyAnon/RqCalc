@@ -1,17 +1,13 @@
-using System;
-using System.Collections.Generic;
+using RqCalc.Domain;
+using RqCalc.Model;
+using RqCalc.Model._Extensions;
+using RqCalc.Wpf.Models._Base;
 
-
-using Framework.Reactive;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models
 {
     public class TextTemplateModel : ContextModel
     {
-        public TextTemplateModel(IApplicationContext context, IReadOnlyDictionary<TextTemplateVariableType, decimal> evaluateStats, ITextTemplate textTemplate)
+        public TextTemplateModel(IServiceProvider context, IReadOnlyDictionary<TextTemplateVariableType, decimal> evaluateStats, ITextTemplate textTemplate)
             : base(context)
         {
             if (evaluateStats == null) throw new ArgumentNullException(nameof(evaluateStats));

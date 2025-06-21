@@ -1,9 +1,7 @@
-﻿using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+﻿namespace RqCalc.Wpf.Models._Base
 {
     public interface IClientContext
     {
-        IApplicationContext Context { get; }
+        IServiceProvider Context { get; }
     }
 }

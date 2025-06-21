@@ -1,13 +1,10 @@
-using System;
 using System.Globalization;
-using System.Linq;
 using System.Windows.Data;
-
 using Framework.Core;
+using RqCalc.Domain._Extensions;
+using RqCalc.Domain.Equipment;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Convertes
 {
     public class EquipmentClassConditionsConverter : IValueConverter
     {

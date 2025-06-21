@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Windows;
-using Anon.RQ_Calc.Domain;
-using Framework.Reactive;
+﻿using System.Windows;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Windows
 {
     public partial class LoadWindow : Window
     {

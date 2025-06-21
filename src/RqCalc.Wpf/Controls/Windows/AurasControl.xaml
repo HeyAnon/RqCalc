@@ -1,16 +1,18 @@
-﻿<UserControl x:Class="Anon.RQ_Calc.WPF.AurasControl"
+﻿<UserControl x:Class="RqCalc.Wpf.Controls.Windows.AurasControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Anon.RQ_Calc.WPF"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:convertes="clr-namespace:RqCalc.Wpf.Convertes"
+             xmlns:extensions="clr-namespace:RqCalc.Wpf._Extensions"
+             xmlns:controls="clr-namespace:RqCalc.Wpf.Controls"
              mc:Ignorable="d"
              d:DesignHeight="500"
              d:DesignWidth="740">
 
     <UserControl.Resources>
-        <local:ImageDataObjectConverter x:Key="ImageDataObjectConverter" />
+        <convertes:ImageDataObjectConverter x:Key="ImageDataObjectConverter" />
     </UserControl.Resources>
     
     <TabControl>
@@ -20,7 +22,7 @@
             <ListView ItemsSource="{Binding Auras}" SelectedItem="{Binding Aura}" Background="Wheat">
 
                 <i:Interaction.Behaviors>
-                    <local:ScrollIntoViewForListBox />
+                    <extensions:ScrollIntoViewForListBox />
                 </i:Interaction.Behaviors>
 
                 <ListView.View>
@@ -49,7 +51,7 @@
 
                                 <DataTemplate>
 
-                                    <local:BonusCollectionControl VerticalAlignment="Center" />
+                                    <controls:BonusCollectionControl VerticalAlignment="Center" />
 
                                 </DataTemplate>
 
@@ -115,7 +117,7 @@
 
                                 <DataTemplate>
 
-                                    <local:BonusCollectionControl DataContext="{Binding Bonuses}" VerticalAlignment="Center" />
+                                    <controls:BonusCollectionControl DataContext="{Binding Bonuses}" VerticalAlignment="Center" />
 
                                 </DataTemplate>
 

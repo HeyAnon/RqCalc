@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using RqCalc.DataBase.EntityFramework._Base;
@@ -12,9 +11,8 @@ public partial class EquipmentElixirBonus : Bonus
     public virtual EquipmentElixir EquipmentElixir { get; set; } = null!;
 
 
-    [Key]
-    [Column("EquipmentElixir_Id", Order = 0)]
-    public int? EquipmentElixirId { get; set; }
+    [Column("EquipmentElixir_Id")]
+    public int EquipmentElixirId { get; set; }
 }
 
 public partial class EquipmentElixirBonus : IEquipmentElixirBonus

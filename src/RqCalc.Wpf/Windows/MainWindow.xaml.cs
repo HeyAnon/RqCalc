@@ -1,20 +1,21 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-
-using Framework.Core.Serialization;
-
-using Anon.RQ_Calc.Logic;
 using Microsoft.Win32;
+using RqCalc.Wpf.Exception;
+using RqCalc.Wpf.Models;
+using RqCalc.Wpf.Models.Window;
+using RqCalc.Wpf.Models.Window.Dialog;
+using RqCalc.Wpf.Windows.Dialog;
+using RqCalc.Wpf.Windows.Dialog._Base;
+using RqCalc.Wpf.Windows.Route;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Windows
 {
     public partial class MainWindow
     {
-        private readonly ICodeRouter _router;
+        private readonly ICodeRouter router;
 
 
         protected MainWindow()
@@ -22,13 +23,13 @@ namespace Anon.RQ_Calc.WPF
             this.InitializeComponent();
         }
 
-        public MainWindow(IApplicationContext context, Version version, IApplicationSettings settings, string startupCode)
+        public MainWindow(IServiceProvider context, Version version, IApplicationSettings settings, string startupCode)
             : this()
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
             if (settings == null) throw new ArgumentNullException(nameof(settings));
 
-            this._router = new WebRouter(settings);
+            this.router = new WebRouter(settings);
             this.DataContext = new MainWindowModel(context, version);
 
             if (startupCode != null)
@@ -40,12 +41,12 @@ namespace Anon.RQ_Calc.WPF
 
         private MainWindowModel Model => (MainWindowModel)this.DataContext;
 
-        private IApplicationContext Context => this.Model.Context;
+        private IServiceProvider Context => this.Model.Context;
 
 
         private void Button_Link_Click(object sender, RoutedEventArgs e)
         {
-            this._router.RouteMain(this.Model.Character.Code);
+            this.router.RouteMain(this.Model.Character.Code);
         }
 
         private void Button_Save_Click(object sender, RoutedEventArgs e)
@@ -61,7 +62,7 @@ namespace Anon.RQ_Calc.WPF
                 {
                     File.WriteAllBytes(dialog.FileName, this.Model.Character.BinaryData);
                 }
-                catch (Exception ex)
+                catch (System.Exception ex)
                 {
                     throw new ClientException("Can't Save File: " + ex.Message, ex);
                 }
@@ -81,7 +82,7 @@ namespace Anon.RQ_Calc.WPF
                 {
                     this.Model.Character.BinaryData = File.ReadAllBytes(dialog.FileName);
                 }
-                catch (Exception ex)
+                catch (System.Exception ex)
                 {
                     throw new ClientException("Can't Open File: " + ex.Message, ex);
                 }
@@ -136,14 +137,14 @@ namespace Anon.RQ_Calc.WPF
         {
             var windowModel = new GuildTalentsWindowModel(this.Context, this.Model.Character);
 
-            new GuildTalentsWindow(this._router) { Model = windowModel, Owner = this }.SucessDialog(() => this.Model.Character.GuildTalents = windowModel.ActiveTalents);
+            new GuildTalentsWindow(this.router) { Model = windowModel, Owner = this }.SucessDialog(() => this.Model.Character.GuildTalents = windowModel.ActiveTalents);
         }
 
         private void Talents_Click_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var windowModel = new TalentsWindowModel(this.Context, this.Model.Character.GetTemplateEvaluateStats(), this.Model.Character);
 
-            new TalentsWindow(this._router) { Model = windowModel, Owner = this }.SucessDialog(() => this.Model.Character.Talents = windowModel.ActiveTalents.ToList());
+            new TalentsWindow(this.router) { Model = windowModel, Owner = this }.SucessDialog(() => this.Model.Character.Talents = windowModel.ActiveTalents.ToList());
         }
 
         private void Aura_Click_MouseDown(object sender, MouseButtonEventArgs e)

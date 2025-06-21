@@ -4,23 +4,29 @@ using Framework.DependencyInjection;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using RqCalc.Infrastructure;
 
 namespace RqCalc.Tests.__Support;
 
 public class EnvironmentInitializer : IFrameworkInitializer
 {
+    public static readonly IConfiguration RootConfiguration = new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json", false)
+        .Build();
+
     public IServiceCollection ConfigureFramework(IServiceCollection services)
     {
-        return services;
+        return services.AddSingleton(RootConfiguration)
+            
+            .ValidateDuplicateDeclaration();
     }
 
     public IServiceProvider ConfigureTestEnvironment(IServiceCollection services, IConfiguration configuration)
     {
         return services
             .AddSingleton(configuration)
-            .AddRqCalc(configuration)
             .ValidateDuplicateDeclaration()
             .BuildServiceProvider(
                 new ServiceProviderOptions
@@ -32,11 +38,33 @@ public class EnvironmentInitializer : IFrameworkInitializer
 
     public IServiceProvider GetFrameworkServiceProvider()
     {
-        var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", false)
-            .Build();
+        var frameworkServices = new ServiceCollection();
 
-        return this.ConfigureTestEnvironment(new ServiceCollection(), configuration);
+        this.ConfigureFramework(frameworkServices);
+
+        frameworkServices.TryAddSingleton<ITestServiceProviderPool, TestServiceProviderPool>();
+
+        return this.ConfigureTestEnvironment(frameworkServices, RootConfiguration);
+    }
+}
+
+public class TestServiceProviderPool : ITestServiceProviderPool
+{
+    public IServiceProvider Get()
+    {
+        return new ServiceCollection()
+            .ValidateDuplicateDeclaration()
+            .AddRqCalc(EnvironmentInitializer.RootConfiguration)
+            .BuildServiceProvider(
+                new ServiceProviderOptions
+                {
+                    ValidateScopes = true,
+                    ValidateOnBuild = true
+                });
+    }
+
+    public void Release(IServiceProvider? serviceProvider)
+    {
+
     }
 }

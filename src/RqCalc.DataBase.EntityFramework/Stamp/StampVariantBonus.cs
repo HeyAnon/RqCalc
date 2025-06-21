@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 using RqCalc.DataBase.EntityFramework._Base;
 using RqCalc.Domain.Stamp;
@@ -15,7 +14,6 @@ public class StampVariantBonus : Bonus, IStampVariantBonus
     public int QualityValue { get; set; }
 
 
-    [Key]
-    [Column("StampVariant_Id", Order = 0)]
+    [Column("StampVariant_Id")]
     public int StampVariantId { get; set; }
 }

@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using RqCalc.DataBase.EntityFramework._Base;
@@ -11,17 +10,7 @@ public partial class EquipmentTypeBonus : BonusBase
 {
     public virtual EquipmentType EquipmentType { get; set; } = null!;
 
-
-    [Key]
-    [Column("Type_Id", Order = 1)]
-    public override int TypeId
-    {
-        get { return base.TypeId; }
-        set { base.TypeId = value; }
-    }
-
-    [Key]
-    [Column("EquipmentType_Id", Order = 0)]
+    [Column("EquipmentType_Id")]
     public int? EquipmentTypeId { get; set; }
 }
 

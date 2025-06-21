@@ -1,6 +1,6 @@
-using System.Collections.Generic;
+using RqCalc.Domain;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models._Base
 {
     public interface IEvaluateClientContext : IClientContext
     {

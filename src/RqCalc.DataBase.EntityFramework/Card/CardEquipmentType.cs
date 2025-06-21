@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using RqCalc.DataBase.EntityFramework.Equipment;
@@ -14,15 +13,11 @@ public partial class CardEquipmentType : VersionObject
 
     public virtual EquipmentType Type { get; set; } = null!;
 
+    [Column("Card_Id")]
+    public int CardId { get; set; }
 
-
-    [Key]
-    [Column("Card_Id", Order = 0)]
-    public int? CardId { get; set; }
-
-    [Key]
-    [Column("Type_Id", Order = 1)]
-    public int? TypeId { get; set; }
+    [Column("Type_Id")]
+    public int TypeId { get; set; }
 }
 
 public partial class CardEquipmentType : ICardEquipmentType

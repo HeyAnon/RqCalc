@@ -1,10 +1,9 @@
-using System;
 using System.Globalization;
 using System.Windows.Data;
-
 using Framework.Core;
+using RqCalc.Wpf.Models.Window.Dialog._Base;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Convertes
 {
     public class LegacyModelConverter : IValueConverter
     {

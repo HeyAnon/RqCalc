@@ -1,10 +1,8 @@
-using System;
 using System.Globalization;
 using System.Windows.Data;
+using RqCalc.Domain;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Convertes
 {
     public class DisplayStatValueConverter : IMultiValueConverter
     {

@@ -1,24 +1,25 @@
-﻿<UserControl x:Class="Anon.RQ_Calc.WPF.GuildTalentControl"
+﻿<UserControl x:Class="RqCalc.Wpf.Controls.GuildTalentControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Anon.RQ_Calc.WPF"
+             xmlns:convertes="clr-namespace:RqCalc.Wpf.Convertes"
+             xmlns:controls="clr-namespace:RqCalc.Wpf.Controls"
              mc:Ignorable="d">
 
     <UserControl.Resources>
 
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
-        <local:ImageDataObjectConverter x:Key="ImageDataObjectConverter" />
+        <convertes:ImageDataObjectConverter x:Key="ImageDataObjectConverter" />
 
-        <local:CompositeValueConverter x:Key="ImageDataGrayObjectConverter">
+        <convertes:CompositeValueConverter x:Key="ImageDataGrayObjectConverter">
 
-            <local:ImageDataObjectConverter />
+            <convertes:ImageDataObjectConverter />
             
-            <local:BitmapGrayObjectConverter />
+            <convertes:BitmapGrayObjectConverter />
 
-        </local:CompositeValueConverter>
+        </convertes:CompositeValueConverter>
 
     </UserControl.Resources>
 
@@ -26,7 +27,7 @@
         
         <Grid.ToolTip>
             <ToolTip>
-                <local:TalentToolTipControl Width="280" />
+                <controls:TalentToolTipControl Width="280" />
             </ToolTip>
             
         </Grid.ToolTip>

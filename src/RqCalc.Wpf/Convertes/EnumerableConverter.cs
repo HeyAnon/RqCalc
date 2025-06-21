@@ -1,11 +1,8 @@
-using System;
 using System.Globalization;
-using System.Linq;
 using System.Windows.Data;
-
 using Framework.Core;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Convertes
 {
     public class EnumerableConverter : IValueConverter
     {

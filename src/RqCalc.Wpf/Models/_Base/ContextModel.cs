@@ -1,21 +1,7 @@
-﻿using System;
-
-
-using Framework.Reactive;
-
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+﻿namespace RqCalc.Wpf.Models._Base
 {
-    public class ContextModel : NotifyModelBase, IClientContext
+    public class ContextModel(IServiceProvider context) : NotifyModelBase, IClientContext
     {
-        public ContextModel(IApplicationContext context)
-        {
-            if (context == null) throw new ArgumentNullException(nameof(context));
-
-            this.Context = context;
-        }
-
-        public IApplicationContext Context { get; }
+        public IServiceProvider Context { get; } = context;
     }
 }

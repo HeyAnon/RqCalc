@@ -1,19 +1,17 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 using Framework.Core;
 
-using Framework.Reactive;
+using RqCalc.Domain;
+using RqCalc.Domain.Card;
+using RqCalc.Model._Extensions;
+using RqCalc.Wpf.Models._Base;
 
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models
 {
     public class CardDescriptionModel : ContextModel
     {
-        public CardDescriptionModel(IApplicationContext context, IReadOnlyDictionary<TextTemplateVariableType, decimal> evaluateStats, ICard card)
+        public CardDescriptionModel(IServiceProvider context, IReadOnlyDictionary<TextTemplateVariableType, decimal> evaluateStats, ICard card)
             : base(context)
         {
             if (evaluateStats == null) throw new ArgumentNullException(nameof(evaluateStats));

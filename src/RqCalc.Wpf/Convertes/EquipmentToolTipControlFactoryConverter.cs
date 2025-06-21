@@ -1,8 +1,8 @@
-using System;
 using System.Globalization;
 using System.Windows.Data;
+using RqCalc.Wpf.Controls;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Convertes
 {
     /// <summary>
     ///  остыль. Ќеверно рассчитываетс€ высота под карты при изменение количества карт в типе шмотки(лева€ рука -> щит -> оружие)

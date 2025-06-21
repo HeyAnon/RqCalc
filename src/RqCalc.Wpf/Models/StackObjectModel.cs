@@ -1,12 +1,7 @@
-﻿using System;
+﻿using RqCalc.Domain._Base;
+using RqCalc.Wpf.Models._Base;
 
-
-using Framework.Reactive;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models
 {
     public interface IStackObjectModel<out T>
     {
@@ -16,9 +11,9 @@ namespace Anon.RQ_Calc.WPF
     }
 
     public class StackObjectModel<T> : ContextModel, IStackObjectModel<T>
-        where T : class, Domain.IImageObject, IStackObject
+        where T : class, IImageObject, IStackObject
     {
-        public StackObjectModel(IApplicationContext context, T selectObject)
+        public StackObjectModel(IServiceProvider context, T selectObject)
             : base (context)
         {
             this.SelectedObject = selectObject ?? throw new ArgumentNullException(nameof(selectObject));

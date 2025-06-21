@@ -1,16 +1,12 @@
+using RqCalc.Domain;
+using RqCalc.Domain._Base;
+using RqCalc.Wpf.Models._Base;
 
-using Framework.Reactive;
-using Framework.Reactive.ObservableRecurse;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models
 {
     public class SharedAuraModel : ActiveImageChangeModel<IAura>
     {
-        public SharedAuraModel(IApplicationContext context, IAura aura)
+        public SharedAuraModel(IServiceProvider context, IAura aura)
             : base(context)
         {
             this.SelectedObject = aura;

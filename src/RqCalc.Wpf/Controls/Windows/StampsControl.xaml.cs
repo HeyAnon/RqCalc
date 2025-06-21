@@ -1,7 +1,6 @@
-﻿using System;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Controls.Windows
 {
     public partial class StampsControl : UserControl
     {

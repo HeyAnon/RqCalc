@@ -1,17 +1,12 @@
-﻿using System;
+﻿using RqCalc.Domain._Base;
+using RqCalc.Wpf.Models._Base;
 
-
-using Framework.Reactive;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models
 {
     public class StackObjectItem<T> : ContextModel
-        where T : class, Domain.IImageObject, IStackObject, IBonusBase
+        where T : class, IImageObject, IStackObject, IBonusBase
     {
-        public StackObjectItem(IApplicationContext context, T selectObject, int value)
+        public StackObjectItem(IServiceProvider context, T selectObject, int value)
             : base(context)
         {
             if (selectObject == null) throw new ArgumentNullException(nameof(selectObject));

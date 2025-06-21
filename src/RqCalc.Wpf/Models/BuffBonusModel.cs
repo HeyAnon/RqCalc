@@ -1,13 +1,10 @@
+using RqCalc.Domain;
 
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models
 {
     public class BuffModel : StackObjectModel<IBuff>
     {
-        public BuffModel(IApplicationContext context, IBuff selectObject)
+        public BuffModel(IServiceProvider context, IBuff selectObject)
             : base(context, selectObject)
         {
         }
@@ -15,7 +12,7 @@ namespace Anon.RQ_Calc.WPF
 
     //public class BuffModel : StackObjectModel<IBuff>
     //{
-    //    public BuffModel(IApplicationContext context, IBuff selectObject)
+    //    public BuffModel(IServiceProvider context, IBuff selectObject)
     //        : base(context, selectObject)
     //    {
     //    }

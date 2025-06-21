@@ -1,11 +1,10 @@
-using System;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
-
 using Framework.Core;
+using RqCalc.Wpf._Extensions;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Convertes
 {
     public class BitmapGrayObjectConverter : IValueConverter
     {

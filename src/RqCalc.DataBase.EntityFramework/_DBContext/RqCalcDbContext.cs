@@ -14,7 +14,9 @@ using RqCalc.DataBase.EntityFramework.Talent;
 
 namespace RqCalc.DataBase.EntityFramework._DBContext;
 
-public partial class RqCalcDbContext ([FromKeyedServices(ImplementTypeResolver.Key)]ITypeResolver<Type> implementTypeResolver) : DbContext
+public partial class RqCalcDbContext (
+    DbContextOptions<RqCalcDbContext> dbContextOptions,
+    [FromKeyedServices(ImplementTypeResolver.Key)]ITypeResolver<Type> implementTypeResolver) : DbContext(dbContextOptions)
 {
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -34,8 +36,93 @@ public partial class RqCalcDbContext ([FromKeyedServices(ImplementTypeResolver.K
         modelBuilder.Entity<CardBonus>()
             .HasOne(m => m.Card)
             .WithMany(t => t.Bonuses)
-            .HasForeignKey(m => m.CardId)
+            .HasForeignKey("Card_Id")
             .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<CardBonus>()
+            .HasOne(m => m.MultiplyEffectCard)
+            .WithMany()
+            .HasForeignKey("MultiplyEffectCard_Id")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<CardBonus>()
+            .HasOne(m => m.RequiredCard)
+            .WithMany()
+            .HasForeignKey("RequiredCard_Id")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<CardBonus>()
+            .HasOne(m => m.NegateCard)
+            .WithMany()
+            .HasForeignKey("NegateCard_Id")
+            .OnDelete(DeleteBehavior.Restrict);
+
+
+        modelBuilder.Entity<AuraBonus>()
+            .HasKey(e => new { e.AuraId, e.TypeId });
+
+        modelBuilder.Entity<BuffBonus>()
+            .HasKey(e => new { e.BuffId, e.TypeId });
+
+        modelBuilder.Entity<CollectedItemBonus>()
+            .HasKey(e => new { e.CollectedItemId, e.TypeId });
+
+        modelBuilder.Entity<ConsumableBonus>()
+            .HasKey(e => new { e.ConsumableId, e.TypeId });
+
+        modelBuilder.Entity<ElixirBonus>()
+            .HasKey(e => new { e.ElixirId, e.TypeId });
+
+        modelBuilder.Entity<EquipmentElixirBonus>()
+            .HasKey(e => new { e.EquipmentElixirId, e.TypeId });
+
+        modelBuilder.Entity<StampVariantBonus>()
+            .HasKey(e => new { e.StampVariantId, e.TypeId });
+
+        modelBuilder.Entity<BuffDescriptionVariable>()
+            .HasKey(e => new { e.Index, e.BuffDescriptionId });
+        
+        modelBuilder.Entity<CardEquipmentSlot>()
+            .HasKey(e => new { e.CardId, e.SlotId });
+
+        modelBuilder.Entity<CardEquipmentType>()
+            .HasKey(e => new { e.CardId, e.TypeId });
+
+        modelBuilder.Entity<ClassBonus>()
+            .HasKey(e => new { e.TypeId, e.ClassId });
+
+        modelBuilder.Entity<ClassLevelHpBonus>()
+            .HasKey(e => new { e.Level, e.ClassId });
+
+        modelBuilder.Entity<EquipmentCondition>()
+            .HasKey(e => new { e.EquipmentId, e.ClassId });
+
+        modelBuilder.Entity<EquipmentElixirSlot>()
+            .HasKey(e => new { e.EquipmentElixirId, e.EquipmentSlotId });
+
+        modelBuilder.Entity<EquipmentLevelForge>()
+            .HasKey(e => new { e.Level, e.EquipmentLevel });
+
+        modelBuilder.Entity<EquipmentTypeBonus>()
+            .HasKey(e => new { e.EquipmentTypeId, e.TypeId });
+
+        modelBuilder.Entity<EquipmentTypeCondition>()
+            .HasKey(e => new { e.TypeId, e.ClassId });
+
+        modelBuilder.Entity<GuildTalentVariable>()
+            .HasKey(e => new { e.Index, e.TalentId, e.Points });
+
+        modelBuilder.Entity<StampEquipment>()
+            .HasKey(e => new { e.TypeId, e.StampId });
+
+        modelBuilder.Entity<StatBonus>()
+            .HasKey(e => new { e.StatId, e.TypeId });
+
+        modelBuilder.Entity<StatSource>()
+            .HasKey(e => new { e.StatId, e.FormulaId });
+
+        modelBuilder.Entity<TalentVariable>()
+            .HasKey(e => new { e.Index, e.TalentId });
     }
         
 

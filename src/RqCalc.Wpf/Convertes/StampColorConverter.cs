@@ -1,13 +1,10 @@
-using System;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
-
 using Framework.Core;
+using RqCalc.Domain.Stamp;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Convertes
 {
     public class StampColorConverter : IValueConverter
     {

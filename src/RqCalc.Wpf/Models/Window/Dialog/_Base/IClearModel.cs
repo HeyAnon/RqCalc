@@ -1,4 +1,4 @@
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models.Window.Dialog._Base
 {
     public interface IClearModel
     {

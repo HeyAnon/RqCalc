@@ -14,5 +14,6 @@
   <Project Path="RqCalc.Infrastructure/RqCalc.Infrastructure.csproj" />
   <Project Path="RqCalc.Model/RqCalc.Model.csproj" />
   <Project Path="RqCalc.Tests/RqCalc.Tests.csproj" />
+  <Project Path="RqCalc.Wpf/RqCalc.Wpf.csproj" />
   
 </Solution>

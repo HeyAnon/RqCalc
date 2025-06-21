@@ -1,20 +1,14 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-
 using Framework.Core;
+using RqCalc.Domain;
+using RqCalc.Domain._Extensions;
+using RqCalc.Wpf.Models._Base;
 
-using Framework.Reactive;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models.Window.Dialog
 {
     public class AurasWindowModel : ContextModel
     {
-        public AurasWindowModel(IApplicationContext context, IClass currentClass, IAura currentAura, int currentLevel, IReadOnlyDictionary<IAura, bool> startupSharedAuras) 
+        public AurasWindowModel(IServiceProvider context, IClass currentClass, IAura currentAura, int currentLevel, IReadOnlyDictionary<IAura, bool> startupSharedAuras) 
             : base(context)
         {
             if (currentClass == null) throw new ArgumentNullException(nameof(currentClass));

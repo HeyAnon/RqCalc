@@ -1,31 +1,29 @@
-using System;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Windows.Route
 {
     public class WebRouter : ICodeRouter
     {
-        private readonly IApplicationSettings _settings;
+        private readonly IApplicationSettings settings;
 
         public WebRouter(IApplicationSettings settings)
         {
-            this._settings = settings ?? throw new ArgumentNullException(nameof(settings));
+            this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
 
 
         public void RouteMain(string code)
         {
-            System.Diagnostics.Process.Start($"{this._settings.WebSite}{this._settings.MainPage}?code={code}");
+            System.Diagnostics.Process.Start($"{this.settings.WebSite}{this.settings.MainPage}?code={code}");
         }
 
         public void RouteTalent(string code)
         {
-            System.Diagnostics.Process.Start($"{this._settings.WebSite}{this._settings.TalentPage}?code={code}");
+            System.Diagnostics.Process.Start($"{this.settings.WebSite}{this.settings.TalentPage}?code={code}");
         }
 
         public void RouteGuildTalent(string code)
         {
-            System.Diagnostics.Process.Start($"{this._settings.WebSite}{this._settings.GuildTalentPage}?code={code}");
+            System.Diagnostics.Process.Start($"{this.settings.WebSite}{this.settings.GuildTalentPage}?code={code}");
         }
     }
 }

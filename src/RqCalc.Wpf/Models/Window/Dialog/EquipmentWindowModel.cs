@@ -1,45 +1,45 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-
 using Framework.Core;
+using RqCalc.Domain;
+using RqCalc.Domain._Base;
+using RqCalc.Domain._Extensions;
+using RqCalc.Domain.Card;
+using RqCalc.Domain.Equipment;
+using RqCalc.Domain.Stamp;
+using RqCalc.Model;
+using RqCalc.Wpf._Extensions;
+using RqCalc.Wpf.Models._Base;
+using RqCalc.Wpf.Models.Window.Dialog._Base;
 
-using Framework.Reactive;
-using Framework.Reactive.ObservableRecurse;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models.Window.Dialog
 {
     public class EquipmentWindowModel : ContextModel, ICharacterEquipmentData, IClearModel, IEvaluateClientContext
     {
-        private readonly IEquipmentSlot _slot;
+        private readonly IEquipmentSlot slot;
 
-        private readonly IEquipmentType _reverseWeaponType;
+        private readonly IEquipmentType reverseWeaponType;
 
 
-        public EquipmentWindowModel(IApplicationContext context, IReadOnlyDictionary<TextTemplateVariableType, decimal> evaluateStats, ICharacterSourceBase character, IEquipmentSlot slot, ICharacterEquipmentData currentData, IEquipment reverseEquipment)
+        public EquipmentWindowModel(IServiceProvider context, IReadOnlyDictionary<TextTemplateVariableType, decimal> evaluateStats, ICharacterSourceBase character, IEquipmentSlot slot, ICharacterEquipmentData currentData, IEquipment reverseEquipment)
             : base(context)
         {
             this.Character = character ?? throw new ArgumentNullException(nameof(character));
             this.EvaluateStats = evaluateStats ?? throw new ArgumentNullException(nameof(evaluateStats));
-            this._slot = slot ?? throw new ArgumentNullException(nameof(slot));
-            this._reverseWeaponType = reverseEquipment.Maybe(e => e.Type.Slot.IsWeapon == true, e => e.Type);
+            this.slot = slot ?? throw new ArgumentNullException(nameof(slot));
+            this.reverseWeaponType = reverseEquipment.Maybe(e => e.Type.Slot.IsWeapon == true, e => e.Type);
 
 
 
             this.Active = currentData.Maybe(data => data.Equipment.IsActivate() && data.Active);
             this.Equipment = currentData.Maybe(data => data.Equipment);
 
-            var allowWeapon = this._slot.IsWeapon == true || (this._slot.IsExtraSlot() && this.Character.Class.AllowExtraWeapon);
-            var allowEquip = !this._slot.IsWeapon.GetValueOrDefault() && character.Class.IsAllowed(this._slot);
+            var allowWeapon = this.slot.IsWeapon == true || (this.slot.IsExtraSlot() && this.Character.Class.AllowExtraWeapon);
+            var allowEquip = !this.slot.IsWeapon.GetValueOrDefault() && character.Class.IsAllowed(this.slot);
 
 
             this.AllowChangeType = allowWeapon == allowEquip;
 
-            this.IsWeapon = !allowEquip || this.Equipment.Maybe(e => e.Type.Slot, this._slot).IsWeapon == true;
+            this.IsWeapon = !allowEquip || this.Equipment.Maybe(e => e.Type.Slot, this.slot).IsWeapon == true;
 
             this.CardList = new ObservableCollection<EquipmentCardModel>();
             this.UpdateCards();
@@ -144,11 +144,11 @@ namespace Anon.RQ_Calc.WPF
 
         
 
-        public bool HasUpgrade => this._slot.IsWeapon != null;
+        public bool HasUpgrade => this.slot.IsWeapon != null;
 
-        private bool IsExtraWeapon => this.IsWeapon && this._slot.IsExtraSlot();
+        private bool IsExtraWeapon => this.IsWeapon && this.slot.IsExtraSlot();
 
-        private IEquipmentSlot ActualSlot => this.IsExtraWeapon ? this._slot.PrimarySlot : this._slot;
+        private IEquipmentSlot ActualSlot => this.IsExtraWeapon ? this.slot.PrimarySlot : this.slot;
 
         public int MaxUpgradeLevel
         {
@@ -276,8 +276,8 @@ namespace Anon.RQ_Calc.WPF
                                       .GetFullList<IEquipment>()
                                       .WhereVersion(this.Context.LastVersion)
                                       .Where(equipment => equipment.IsAllowed(this.Character) && equipment.Type.Slot == this.ActualSlot)
-                                      .Where(equipment => !this.IsWeapon || equipment.IsDoubleHand() || this._reverseWeaponType == null || equipment.Type == this._reverseWeaponType)
-                                      .Where(equipment => !this._slot.HasReverseSlot() || !equipment.IsDoubleHand() || this._slot.IsPrimarySlot())
+                                      .Where(equipment => !this.IsWeapon || equipment.IsDoubleHand() || this.reverseWeaponType == null || equipment.Type == this.reverseWeaponType)
+                                      .Where(equipment => !this.slot.HasReverseSlot() || !equipment.IsDoubleHand() || this.slot.IsPrimarySlot())
                                       .OrderByDescending(equipment => equipment.Level)
 
                                       .ThenBy(equipment => equipment.Name);

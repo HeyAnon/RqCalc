@@ -1,8 +1,7 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Controls.Windows
 {
     public partial class CollectionsControl : UserControl
     {

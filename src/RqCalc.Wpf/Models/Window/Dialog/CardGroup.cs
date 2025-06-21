@@ -1,15 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-
 using Framework.Core;
-using Framework.Reactive;
-using Framework.Reactive.ObservableRecurse;
+using RqCalc.Domain.Card;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models.Window.Dialog
 {
     public interface ICardGroup
     {
@@ -70,7 +63,7 @@ namespace Anon.RQ_Calc.WPF
 
     public class MultiCardGroup : NotifyModelBase, ICardGroup
     {
-        private readonly ICard[] _baseCards;
+        private readonly ICard[] baseCards;
 
 
         public MultiCardGroup(string name, IEnumerable<ICard> cards)
@@ -80,7 +73,7 @@ namespace Anon.RQ_Calc.WPF
             
             this.Name = name;
 
-            this._baseCards = cards.OrderBy(card => card.Group.OrderKey).ToArray();
+            this.baseCards = cards.OrderBy(card => card.Group.OrderKey).ToArray();
 
             this.RefreshSource();
 
@@ -90,7 +83,7 @@ namespace Anon.RQ_Calc.WPF
 
         public string Name { get; }
 
-        public bool IsLegacy => this._baseCards.All(bc => bc.IsLegacy);
+        public bool IsLegacy => this.baseCards.All(bc => bc.IsLegacy);
 
         public ICard ActiveCard
         {
@@ -113,12 +106,12 @@ namespace Anon.RQ_Calc.WPF
 
         public IEnumerable<ICard> GetAvailableCards()
         {
-            return this._baseCards;
+            return this.baseCards;
         }
 
         public void RefreshSource()
         {
-            this.Cards = this._baseCards.Where(card => !card.IsLegacy || this.ShowLegacy).ToObservableCollection();
+            this.Cards = this.baseCards.Where(card => !card.IsLegacy || this.ShowLegacy).ToObservableCollection();
 
             if (this.ActiveCard == null)
             {

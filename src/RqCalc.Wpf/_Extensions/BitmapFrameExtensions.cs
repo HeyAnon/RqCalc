@@ -1,18 +1,13 @@
-using System;
 using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using RqCalc.Domain._Base;
 
-using Framework.Core;
-
-
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf._Extensions
 {
     public static class BitmapFrameExtensions
     {
-        public static BitmapFrame TryToBitmapFrame(this Domain.IImageObject dataObject)
+        public static BitmapFrame TryToBitmapFrame(this IImageObject dataObject)
         {
             return dataObject.Maybe(v => v.Image.ToBitmapFrame());
         }

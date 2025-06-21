@@ -1,10 +1,9 @@
-using System;
 using System.Globalization;
 using System.Windows.Data;
-
 using Framework.Core;
+using RqCalc.Domain;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Convertes
 {
     public class EquipmentRoleStatValueConverter : IValueConverter
     {

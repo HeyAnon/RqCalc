@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf._Extensions
 {
     internal static class StatConst
     {

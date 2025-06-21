@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Data;
-
 using Framework.Core;
 
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Convertes
 {
     public abstract class CollectionModifyConverter : IValueConverter
     {

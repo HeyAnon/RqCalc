@@ -1,10 +1,11 @@
-using System;
 using System.Globalization;
 using System.Windows.Data;
+using RqCalc.Domain.Card;
+using RqCalc.Wpf.Models;
+using RqCalc.Wpf.Models._Base;
+using RqCalc.Wpf.Models.Window.Dialog;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Convertes
 {
     public class CardDescriptionConverter : IMultiValueConverter
     {

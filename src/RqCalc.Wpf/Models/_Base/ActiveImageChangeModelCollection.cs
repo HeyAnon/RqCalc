@@ -1,16 +1,11 @@
-using System.Collections.Generic;
+using RqCalc.Domain._Base;
 
-
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models._Base
 {
     public class ActiveImageChangeModelCollection<T, TItem> : ActiveImageChangeModelItem<T, IReadOnlyList<TItem>>
-        where T : class, Domain.IImageObject
+        where T : class, IImageObject
     {
-        public ActiveImageChangeModelCollection(IApplicationContext context, IImage defaultImage = null)
+        public ActiveImageChangeModelCollection(IServiceProvider context, IImage defaultImage = null)
             : base(context, defaultImage)
         {
             this.Value = new TItem[0];

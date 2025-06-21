@@ -1,14 +1,12 @@
-using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Linq;
 using System.Windows.Data;
-
 using Framework.Core;
+using RqCalc.Domain._Base;
+using RqCalc.Domain._Extensions;
+using RqCalc.Wpf.Models;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Convertes
 {
     public class StackObjectConverter : IValueConverter
     {

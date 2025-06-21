@@ -1,17 +1,11 @@
-﻿using System;
+﻿using RqCalc.Domain;
+using RqCalc.Wpf.Models._Base;
 
-
-using Framework.Reactive;
-using Framework.Reactive.ObservableRecurse;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models
 {
     public class CharacterStatEditModel : ContextModel
     {
-        public CharacterStatEditModel(IApplicationContext context, CharacterChangeModel rootModel)
+        public CharacterStatEditModel(IServiceProvider context, CharacterChangeModel rootModel)
             : base(context)
         {
             if (rootModel == null) throw new ArgumentNullException(nameof(rootModel));

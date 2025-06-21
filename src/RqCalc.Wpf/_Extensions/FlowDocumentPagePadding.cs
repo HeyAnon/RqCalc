@@ -1,9 +1,8 @@
-using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Documents;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf._Extensions
 {
     public static class FlowDocumentPagePadding
     {

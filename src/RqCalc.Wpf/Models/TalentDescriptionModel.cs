@@ -1,19 +1,14 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-
 using Framework.Core;
+using RqCalc.Domain;
+using RqCalc.Model;
+using RqCalc.Wpf.Models._Base;
 
-using Framework.Reactive;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models
 {
     public class TalentDescriptionModel : ContextModel
     {
-        public TalentDescriptionModel(IApplicationContext context, IReadOnlyDictionary<TextTemplateVariableType, decimal> evaluateStats, ITalentDescription talentDescription)
+        public TalentDescriptionModel(IServiceProvider context, IReadOnlyDictionary<TextTemplateVariableType, decimal> evaluateStats, ITalentDescription talentDescription)
             : base(context)
         {
             if (evaluateStats == null) throw new ArgumentNullException(nameof(evaluateStats));

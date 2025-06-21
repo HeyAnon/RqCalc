@@ -1,22 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 using Framework.Core;
+using RqCalc.Domain;
+using RqCalc.Domain.Talent;
+using RqCalc.Model._Extensions;
+using RqCalc.Wpf.Models._Base;
 
-using Framework.Reactive;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models
 {
     public class TalentModel : ActiveImageChangeModel<ITalent>
     {
         public readonly TalentBranchModel Branch;
 
 
-        public TalentModel(IApplicationContext context, IReadOnlyDictionary<TextTemplateVariableType, decimal> evaluateStats, TalentBranchModel branch, bool isUltimate, ITalent talent)
+        public TalentModel(IServiceProvider context, IReadOnlyDictionary<TextTemplateVariableType, decimal> evaluateStats, TalentBranchModel branch, bool isUltimate, ITalent talent)
             : base(context)
         {
             if (evaluateStats == null) throw new ArgumentNullException(nameof(evaluateStats));

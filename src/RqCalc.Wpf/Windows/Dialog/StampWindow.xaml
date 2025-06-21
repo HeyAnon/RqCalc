@@ -1,13 +1,14 @@
-﻿<Window x:Class="Anon.RQ_Calc.WPF.StampWindow"
+﻿<Window x:Class="RqCalc.Wpf.Windows.Dialog.StampWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:Anon.RQ_Calc.WPF"
+        xmlns:dialog="clr-namespace:RqCalc.Wpf.Controls.Dialog"
+        xmlns:windows="clr-namespace:RqCalc.Wpf.Controls.Windows"
         Title="Выбор печати" Background="#30302C" ResizeMode="CanMinimize" FontFamily="Cambria" FontSize="14" WindowStartupLocation="CenterOwner" Height="480" Width="640">
 
-    <local:DialogControl Closed="DialogControl_OnClosed">
+    <dialog:DialogControl Closed="DialogControl_OnClosed">
 
-        <local:StampsControl />
+        <windows:StampsControl />
 
-    </local:DialogControl>
+    </dialog:DialogControl>
 
 </Window>

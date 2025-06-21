@@ -1,8 +1,7 @@
-using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Convertes
 {
     public class EquipmentRoleStatHeaderConverter : IValueConverter
     {

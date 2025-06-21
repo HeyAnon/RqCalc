@@ -1,21 +1,18 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-
 using Framework.Core;
+using Framework.HierarchicalExpand;
+using RqCalc.Domain;
+using RqCalc.Domain._Extensions;
+using RqCalc.Model;
+using RqCalc.Model._Extensions;
+using RqCalc.Wpf.Models._Base;
+using RqCalc.Wpf.Models.Window.Dialog._Base;
 
-using Framework.Reactive;
-using Framework.Persistent;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models.Window.Dialog
 {
     public class BuffsWindowModel : ContextModel, IClearModel
     {
-        public BuffsWindowModel(IApplicationContext context, ICharacterSource character)
+        public BuffsWindowModel(IServiceProvider context, ICharacterSource character)
             : base(context)
         {
             if (character == null) throw new ArgumentNullException(nameof(character));

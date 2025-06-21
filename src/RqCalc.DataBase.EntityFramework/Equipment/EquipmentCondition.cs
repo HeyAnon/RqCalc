@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 using RqCalc.Domain;
 using RqCalc.Domain.Equipment;
@@ -13,14 +12,11 @@ public partial class EquipmentCondition
 
     public virtual Equipment Equipment { get; set; } = null!;
 
+    [Column("Class_Id")]
+    public int ClassId { get; set; }
 
-    [Key]
-    [Column("Class_Id", Order = 1)]
-    public int? ClassId { get; set; }
-
-    [Key]
-    [Column("Equipment_Id", Order = 0)]
-    public int? EquipmentId { get; set; }
+    [Column("Equipment_Id")]
+    public int EquipmentId { get; set; }
 }
 
 public partial class EquipmentCondition : IEquipmentCondition

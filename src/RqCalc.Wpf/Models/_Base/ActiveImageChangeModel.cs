@@ -1,23 +1,10 @@
-﻿using System;
+﻿using Framework.Core;
+using RqCalc.Domain._Base;
 
-
-using Framework.Reactive;
-using Framework.Reactive.ObservableRecurse;
-using Framework.Core;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models._Base
 {
-    public abstract class ActiveImageChangeModel : ContextModel, IImageObject
+    public abstract class ActiveImageChangeModel(IServiceProvider context) : ContextModel(context), IImageObject
     {
-        protected ActiveImageChangeModel(IApplicationContext context)
-            : base(context)
-        {
-        }
-
-
         public abstract IImage Image
         {
             get; protected set;
@@ -37,15 +24,15 @@ namespace Anon.RQ_Calc.WPF
     }
 
     public class ActiveImageChangeModel<T> : ActiveImageChangeModel
-        where T : class, Domain.IImageObject
+        where T : class, IImageObject
     {
-        private readonly IImage _defaultImage;
+        private readonly IImage? defaultImage;
 
 
-        public ActiveImageChangeModel(IApplicationContext context, IImage defaultImage = null)
+        public ActiveImageChangeModel(IServiceProvider context, IImage? defaultImage = null)
             : base(context)
         {
-            this._defaultImage = defaultImage;
+            this.defaultImage = defaultImage;
             this.Image = defaultImage;
 
             this.SubscribeExplicit(rule => rule.Subscribe(model => model.SelectedObject, this.SelectedObjectChanged));
@@ -61,7 +48,7 @@ namespace Anon.RQ_Calc.WPF
 
         
 
-        public sealed override IImage Image
+        public sealed override IImage? Image
         {
             get { return this.GetValue(v => v.Image); }
             protected set { this.SetValue(v => v.Image, value); }
@@ -72,9 +59,9 @@ namespace Anon.RQ_Calc.WPF
             this.Image = this.GetImage();
         }
 
-        protected virtual IImage GetImage()
+        protected virtual IImage? GetImage()
         {
-            return this.SelectedObject.Maybe(obj => obj.Image) ?? this._defaultImage;
+            return this.SelectedObject.Maybe(obj => obj.Image) ?? this.defaultImage;
         }
 
         public bool HasSelectedObject
@@ -83,7 +70,7 @@ namespace Anon.RQ_Calc.WPF
             private set { this.SetValue(v => v.HasSelectedObject, value); }
         }
 
-        public T SelectedObject
+        public T? SelectedObject
         {
             get { return this.GetValue(v => v.SelectedObject); }
             set { this.SetValue(v => v.SelectedObject, value); }

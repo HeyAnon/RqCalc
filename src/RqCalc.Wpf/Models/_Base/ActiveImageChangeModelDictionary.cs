@@ -1,16 +1,11 @@
-using System.Collections.Generic;
+using RqCalc.Domain._Base;
 
-
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models._Base
 {
     public class ActiveImageChangeModelDictionary<T, TKey, TValue> : ActiveImageChangeModelItem<T, IReadOnlyDictionary<TKey, TValue>>
-        where T : class, Domain.IImageObject
+        where T : class, IImageObject
     {
-        public ActiveImageChangeModelDictionary(IApplicationContext context, IImage defaultImage = null) 
+        public ActiveImageChangeModelDictionary(IServiceProvider context, IImage? defaultImage = null) 
             : base(context, defaultImage)
         {
             this.Value = new Dictionary<TKey, TValue>();

@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using Framework.Persistent;
@@ -15,14 +14,11 @@ public partial class EquipmentTypeCondition
 
     public virtual Class Class { get; set; } = null!;
 
+    [Column("Type_Id")]
+    public int TypeId { get; set; }
 
-    [Key]
-    [Column("Type_Id", Order = 0)]
-    public int? TypeId { get; set; }
-
-    [Key]
-    [Column("Class_Id", Order = 1)]
-    public int? ClassId { get; set; }
+    [Column("Class_Id")]
+    public int ClassId { get; set; }
 }
 
 public partial class EquipmentTypeCondition : IEquipmentTypeCondition

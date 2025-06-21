@@ -1,10 +1,7 @@
-using System;
-
 using Framework.Persistent;
+using RqCalc.Domain;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf._Extensions
 {
     public static class StatExtensions
     {

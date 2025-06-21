@@ -1,8 +1,6 @@
-using System;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Exception
 {
-    public class ClientException : Exception
+    public class ClientException : System.Exception
     {
         public ClientException(string message)
             : base (message)
@@ -10,7 +8,7 @@ namespace Anon.RQ_Calc.WPF
             
         }
 
-        public ClientException(string message, Exception innerException)
+        public ClientException(string message, System.Exception innerException)
             : base(message, innerException)
         {
             

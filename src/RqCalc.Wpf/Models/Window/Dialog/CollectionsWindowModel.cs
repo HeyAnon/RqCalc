@@ -1,21 +1,15 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
 using Framework.Core;
+using RqCalc.Domain.CollectedStatistic;
+using RqCalc.Model;
+using RqCalc.Wpf.Models._Base;
+using RqCalc.Wpf.Models.Window.Dialog._Base;
 
-using Framework.Reactive;
-using Framework.Reactive.ObservableRecurse;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models.Window.Dialog
 {
     public class CollectionsWindowModel : ContextModel, IMultiSelectModel
     {
-        public CollectionsWindowModel(IApplicationContext context, ICharacterSource characterSource)
+        public CollectionsWindowModel(IServiceProvider context, ICharacterSource characterSource)
             : base(context)
         {
             if (characterSource == null) throw new ArgumentNullException(nameof(characterSource));

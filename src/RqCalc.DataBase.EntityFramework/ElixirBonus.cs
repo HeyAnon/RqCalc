@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 using RqCalc.DataBase.EntityFramework._Base;
 using RqCalc.Domain;
@@ -12,9 +11,8 @@ public partial class ElixirBonus : Bonus
     public virtual Elixir Elixir { get; set; } = null!;
 
 
-    [Key]
-    [Column("Elixir_Id", Order = 0)]
-    public int? ElixirId { get; set; }
+    [Column("Elixir_Id")]
+    public int ElixirId { get; set; }
 }
     
 public partial class ElixirBonus : IElixirBonus

@@ -1,14 +1,8 @@
-using System;
-
-using Anon.RQ_Calc.Logic;
-
-using Framework.Reactive;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models._Base
 {
     public abstract class UpdateModel : ContextModel
     {
-        protected UpdateModel(IApplicationContext context)
+        protected UpdateModel(IServiceProvider context)
             : base(context)
         {
         }
@@ -33,7 +27,7 @@ namespace Anon.RQ_Calc.WPF
                 }
                 else
                 {
-                    throw new Exception("Already updating");
+                    throw new System.Exception("Already updating");
                 }
             }
 

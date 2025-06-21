@@ -1,18 +1,14 @@
-using System;
-
 using Framework.Core;
+using RqCalc.Domain;
+using RqCalc.Domain._Base;
+using RqCalc.Domain.Card;
+using RqCalc.Wpf.Models._Base;
 
-using Framework.Reactive;
-using Framework.Reactive.ObservableRecurse;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models
 {
     public class EquipmentCardModel : ContextModel
     {
-        public EquipmentCardModel(IApplicationContext context, int index)
+        public EquipmentCardModel(IServiceProvider context, int index)
             : base(context)
         {
             this.Index = index;

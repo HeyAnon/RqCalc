@@ -1,28 +1,22 @@
-using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-
 using Framework.Core;
+using RqCalc.Domain;
+using RqCalc.Wpf.Models._Base;
+using RqCalc.Wpf.Models.Window.Dialog._Base;
 
-using Framework.Reactive;
-using Framework.Reactive.ObservableRecurse;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models.Window.Dialog
 {
     public class ElixirWindowModel : ContextModel, ILegacyModel, IClearModel
     {
-        private readonly IClass _currentClass;
+        private readonly IClass currentClass;
 
 
-        public ElixirWindowModel(IApplicationContext context, IClass currentClass, IElixir startupElixir)
+        public ElixirWindowModel(IServiceProvider context, IClass currentClass, IElixir startupElixir)
             : base(context)
         {
             if (currentClass == null) throw new ArgumentNullException(nameof(currentClass));
 
-            this._currentClass = currentClass;
+            this.currentClass = currentClass;
 
             this.Elixir = startupElixir;
 
@@ -71,7 +65,7 @@ namespace Anon.RQ_Calc.WPF
 
                           where !elixir.IsLegacy || this.ShowLegacy
 
-                          orderby elixir.GetOrderIndex(this._currentClass) descending
+                          orderby elixir.GetOrderIndex(this.currentClass) descending
                           
                           select elixir;
 

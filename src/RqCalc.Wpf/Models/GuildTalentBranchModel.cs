@@ -1,23 +1,17 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-
 using Framework.Core;
+using RqCalc.Domain.GuildTalent;
+using RqCalc.Wpf.Models._Base;
+using RqCalc.Wpf.Models.Window.Dialog;
 
-using Framework.Reactive;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models
 {
     public class GuildTalentBranchModel : ContextModel
     {
         public readonly GuildTalentsWindowModel WindowModel;
 
 
-        public GuildTalentBranchModel(IApplicationContext context, GuildTalentsWindowModel windowModel, IGuildTalentBranch talentBranch)
+        public GuildTalentBranchModel(IServiceProvider context, GuildTalentsWindowModel windowModel, IGuildTalentBranch talentBranch)
             : base (context)
         {
             this.WindowModel = windowModel ?? throw new ArgumentNullException(nameof(windowModel));

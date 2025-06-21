@@ -1,25 +1,20 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-
 using Framework.Core;
+using RqCalc.Domain;
+using RqCalc.Domain.Card;
+using RqCalc.Domain.Equipment;
+using RqCalc.Wpf.Models._Base;
+using RqCalc.Wpf.Models.Window.Dialog._Base;
 
-using Framework.Reactive;
-using Framework.Reactive.ObservableRecurse;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models.Window.Dialog
 {
     public class CardWindowModel : ContextModel, IClearModel, ILegacyModel, IEvaluateClientContext
     {
-        private readonly ICardGroup[] _baseGroups;
+        private readonly ICardGroup[] baseGroups;
 
 
 
-        public CardWindowModel(IApplicationContext context, IReadOnlyDictionary<TextTemplateVariableType, decimal> evaluateStats, IEquipmentType equipmentType, int cardIndex, IClass currentClass, ICard startupCard, IEquipmentClass equipmentClass)
+        public CardWindowModel(IServiceProvider context, IReadOnlyDictionary<TextTemplateVariableType, decimal> evaluateStats, IEquipmentType equipmentType, int cardIndex, IClass currentClass, ICard startupCard, IEquipmentClass equipmentClass)
             : base(context)
         {
             if (equipmentType == null) throw new ArgumentNullException(nameof(equipmentType));
@@ -29,19 +24,19 @@ namespace Anon.RQ_Calc.WPF
             this.EvaluateStats = evaluateStats;
 
 
-            this._baseGroups = this.Context.DataSource.GetFullList<ICard>()
+            this.baseGroups = this.Context.DataSource.GetFullList<ICard>()
                                                       .WhereVersion(this.Context.LastVersion)
                                                       .Where(card => card.IsAllowed(equipmentType, this.Context.LastVersion, equipmentClass))
                                                       .Where(card => card.Type.Element == null || cardIndex == 0)
                                                       .OrderBy(card => card.Type.Id)
                                                       .ThenByDescending(card => card.GetOrderIndex(currentClass))
-                                                      .Pipe(WPF.CardGroup.Create)
+                                                      .Pipe(Dialog.CardGroup.Create)
                                                       .ToArray();
 
             this.ShowLegacy = startupCard.Maybe(e => e.IsLegacy);
 
             {
-                this.CardGroup = startupCard.Maybe(card => this._baseGroups.SingleOrDefault(cardGroup => cardGroup.GetAvailableCards().Contains(card)));
+                this.CardGroup = startupCard.Maybe(card => this.baseGroups.SingleOrDefault(cardGroup => cardGroup.GetAvailableCards().Contains(card)));
 
                 if (this.CardGroup is MultiCardGroup multiCardGroup)
                 {
@@ -82,7 +77,7 @@ namespace Anon.RQ_Calc.WPF
             set { this.SetValue(v => v.ShowLegacy, value); }
         }
 
-        public bool HasLegacy => this._baseGroups.Any(g => g.IsLegacy);
+        public bool HasLegacy => this.baseGroups.Any(g => g.IsLegacy);
 
         public bool CloseDialog { get; } = true;
 
@@ -95,7 +90,7 @@ namespace Anon.RQ_Calc.WPF
 
         private void RefreshSource()
         {
-            this.CardGroups = this._baseGroups.Where(card => !card.IsLegacy || this.ShowLegacy).ToObservableCollection();
+            this.CardGroups = this.baseGroups.Where(card => !card.IsLegacy || this.ShowLegacy).ToObservableCollection();
 
             this.CardGroups.OfTypeStrong<ICardGroup, MultiCardGroup>().Foreach(cardGroup => cardGroup.ShowLegacy = this.ShowLegacy);
 

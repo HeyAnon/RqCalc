@@ -1,8 +1,7 @@
-using System;
 using System.Windows.Controls;
-using System.Windows.Interactivity;
+using Microsoft.Xaml.Behaviors;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf._Extensions
 {
     public class ScrollIntoViewForListBox : Behavior<ListBox>
     {
@@ -12,7 +11,7 @@ namespace Anon.RQ_Calc.WPF
         protected override void OnAttached()
         {
             base.OnAttached();
-            this.AssociatedObject.SelectionChanged += AssociatedObject_SelectionChanged;
+            this.AssociatedObject.SelectionChanged += this.AssociatedObject_SelectionChanged;
         }
 
         /// <summary>
@@ -47,7 +46,7 @@ namespace Anon.RQ_Calc.WPF
         {
             base.OnDetaching();
             this.AssociatedObject.SelectionChanged -=
-                AssociatedObject_SelectionChanged;
+                this.AssociatedObject_SelectionChanged;
 
         }
     }

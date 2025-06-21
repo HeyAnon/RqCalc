@@ -1,21 +1,16 @@
-using System;
-using System.Collections.Generic;
+using RqCalc.Domain;
+using RqCalc.Domain.GuildTalent;
+using RqCalc.Model._Extensions;
+using RqCalc.Wpf.Models._Base;
 
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-using Framework.Reactive;
-using Framework.Reactive.ObservableRecurse;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models
 {
     public class GuildTalentModel : ActiveImageChangeModel<IGuildTalent>
     {
         public readonly GuildTalentBranchModel Branch;
 
 
-        public GuildTalentModel(IApplicationContext context, GuildTalentBranchModel branch, IGuildTalent talent)
+        public GuildTalentModel(IServiceProvider context, GuildTalentBranchModel branch, IGuildTalent talent)
             : base(context)
         {
             this.Branch = branch ?? throw new ArgumentNullException(nameof(branch));

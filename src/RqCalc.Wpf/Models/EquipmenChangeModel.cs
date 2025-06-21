@@ -1,19 +1,14 @@
-﻿using System;
-using System.Linq;
+﻿using Framework.Core;
+using RqCalc.Domain._Base;
+using RqCalc.Domain._Extensions;
+using RqCalc.Model;
+using RqCalc.Wpf.Models._Base;
 
-using Framework.Core;
-
-using Framework.Reactive;
-using Framework.Reactive.ObservableRecurse;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models
 {
     public class EquipmentChangeModel : ContextModel, IImageObject
     {
-        public EquipmentChangeModel(IApplicationContext context, CharacterEquipmentIdentity identity)
+        public EquipmentChangeModel(IServiceProvider context, CharacterEquipmentIdentity identity)
              : base(context)
         {
             if (identity == null) throw new ArgumentNullException(nameof(identity));

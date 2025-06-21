@@ -1,23 +1,27 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 using Framework.Core;
+using Framework.HierarchicalExpand;
 
-using Framework.Core.Serialization;
-using Framework.Persistent;
-using Framework.Reactive;
-using Framework.Reactive.ObservableRecurse;
+using RqCalc.Domain;
+using RqCalc.Domain._Base;
+using RqCalc.Domain._Extensions;
+using RqCalc.Domain.CollectedStatistic;
+using RqCalc.Domain.Equipment;
+using RqCalc.Domain.GuildTalent;
+using RqCalc.Domain.Talent;
+using RqCalc.Model;
+using RqCalc.Model._Extensions;
+using RqCalc.Model.Impl;
+using RqCalc.Wpf._Extensions;
+using RqCalc.Wpf.Exception;
+using RqCalc.Wpf.Models._Base;
 
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models
 {
     public class CharacterChangeModel : UpdateModel, ICharacterSource
     {
-        public CharacterChangeModel(IApplicationContext context, ICharacterSource character)
+        public CharacterChangeModel(IServiceProvider context, ICharacterSource character)
             : base(context)
         {
             if (character == null) throw new ArgumentNullException(nameof(character));
@@ -157,7 +161,7 @@ namespace Anon.RQ_Calc.WPF
                 {
                     this.SetData(this.Context.Serializer.Deserialize(this.Code));
                 }
-                catch (Exception ex)
+                catch (System.Exception ex)
                 {
                     this.SetValue(v => v.Code, prevValue);
 
@@ -514,7 +518,7 @@ namespace Anon.RQ_Calc.WPF
                 {
                     this.UpdateClassStats();
 
-                    foreach (var mergePair in this.EditStats.GetCombineItems(character.EditStats, pair => pair.Value.Stat, pair => pair.Key, _ => new Exception("Invaild merge logic (EditStats)")))
+                    foreach (var mergePair in this.EditStats.GetCombineItems(character.EditStats, pair => pair.Value.Stat, pair => pair.Key, _ => new System.Exception("Invaild merge logic (EditStats)")))
                     {
                         mergePair.Item1.Value.EditValue = mergePair.Item2.Value;
                     }
@@ -736,17 +740,15 @@ namespace Anon.RQ_Calc.WPF
             this.SetData(this.Context.Calc(this));
         }
 
-        private void SetData(ICharacterResult character)
+        private void SetData(CharacterCalculationResult calculationResult)
         {
-            if (character == null) throw new ArgumentNullException(nameof(character));
-
             //this.Code = character.Code;
-            this.SetValue(v => v.Code, character.Code);
+            this.SetValue(v => v.Code, calculationResult.Code);
             
-            foreach (var mergePair in this.DisplayStats.Values.GetCombineItems(character.Stats, model => model.Stat, pair => pair.Key, _ => new Exception("Invaild merge logic (DisplayStats)")))
+            foreach (var mergePair in this.DisplayStats.Values.GetCombineItems(calculationResult.Stats, model => model.Stat, pair => pair.Key, _ => new System.Exception("Invaild merge logic (DisplayStats)")))
             {
                 mergePair.Item1.Value = mergePair.Item2.Value;
-                mergePair.Item1.DescriptionValue = character.StatDescriptions.GetMaybeValue(mergePair.Item1.Stat).ToNullable();
+                mergePair.Item1.DescriptionValue = calculationResult.StatDescriptions.GetMaybeValue(mergePair.Item1.Stat).ToNullable();
             }
 
             foreach (var editStatModel in this.EditStats)
@@ -756,7 +758,7 @@ namespace Anon.RQ_Calc.WPF
 
             foreach (var equipmentModel in this.Equipments)
             {
-                var resultInfo = character.Equipments.GetValueOrDefault(equipmentModel.Identity);
+                var resultInfo = calculationResult.Equipments.GetValueOrDefault(equipmentModel.Identity);
 
                 if (resultInfo == null)
                 {

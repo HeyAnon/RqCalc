@@ -1,9 +1,6 @@
-using System;
 using System.Windows;
 
-
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Windows.Dialog._Base
 {
     public interface IModelContainer<T>
     {

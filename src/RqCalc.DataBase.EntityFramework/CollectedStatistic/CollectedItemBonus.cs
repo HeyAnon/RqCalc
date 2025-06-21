@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using RqCalc.DataBase.EntityFramework._Base;
@@ -12,8 +11,7 @@ public partial class CollectedItemBonus : Bonus
     public virtual CollectedItem CollectedItem { get; set; } = null!;
         
 
-    [Key]
-    [Column("CollectedItem_Id", Order = 0)]
+    [Column("CollectedItem_Id")]
     public int CollectedItemId { get; set; }
 }
 

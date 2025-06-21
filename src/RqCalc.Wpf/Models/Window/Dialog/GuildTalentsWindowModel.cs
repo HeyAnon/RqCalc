@@ -1,27 +1,21 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
+using RqCalc.Domain.GuildTalent;
+using RqCalc.Model;
+using RqCalc.Wpf.Exception;
+using RqCalc.Wpf.Models._Base;
+using RqCalc.Wpf.Models.Window.Dialog._Base;
 
-using Framework.Core;
-
-using Framework.Reactive;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-using Framework.Core.Serialization;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models.Window.Dialog
 {
     public class GuildTalentsWindowModel : UpdateModel, IClearModel, IGuildTalentBuildSource
     {
-        private readonly IGuildTalentBuildSource _talentBuildSource;
+        private readonly IGuildTalentBuildSource talentBuildSource;
 
 
-        public GuildTalentsWindowModel(IApplicationContext context, IGuildTalentBuildSource talentBuildSource)
+        public GuildTalentsWindowModel(IServiceProvider context, IGuildTalentBuildSource talentBuildSource)
             : base(context)
         {
-            this._talentBuildSource = talentBuildSource ?? throw new ArgumentNullException(nameof(talentBuildSource));
+            this.talentBuildSource = talentBuildSource ?? throw new ArgumentNullException(nameof(talentBuildSource));
 
             this.Branches = this.Context.DataSource.GetFullList<IGuildTalentBranch>().OrderById().ToObservableCollection(branch => new GuildTalentBranchModel(this.Context, this, branch));
 
@@ -46,7 +40,7 @@ namespace Anon.RQ_Calc.WPF
                 {
                     this.SetData(this.Context.GuildTalentSerializer.Deserialize(this.Code));
                 }
-                catch (Exception ex)
+                catch (System.Exception ex)
                 {
                     this.SetValue(v => v.Code, prevValue);
 

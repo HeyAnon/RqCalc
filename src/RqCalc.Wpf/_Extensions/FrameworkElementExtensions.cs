@@ -1,11 +1,8 @@
-using System;
 using System.Windows;
 using System.Windows.Data;
-
 using Framework.Core;
 
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf._Extensions
 {
     public static class FrameworkElementExtensions
     {

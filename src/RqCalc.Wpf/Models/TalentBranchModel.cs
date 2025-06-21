@@ -1,23 +1,18 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-
 using Framework.Core;
+using RqCalc.Domain;
+using RqCalc.Domain.Talent;
+using RqCalc.Wpf.Models._Base;
+using RqCalc.Wpf.Models.Window.Dialog;
 
-using Framework.Reactive;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models
 {
     public class TalentBranchModel : ContextModel
     {
         public readonly TalentsWindowModel WindowModel;
 
 
-        public TalentBranchModel(IApplicationContext context, IReadOnlyDictionary<TextTemplateVariableType, decimal> evaluateStats, TalentsWindowModel windowModel, ITalentBranch talentBranch)
+        public TalentBranchModel(IServiceProvider context, IReadOnlyDictionary<TextTemplateVariableType, decimal> evaluateStats, TalentsWindowModel windowModel, ITalentBranch talentBranch)
             : base (context)
         {
             if (evaluateStats == null) throw new ArgumentNullException(nameof(evaluateStats));

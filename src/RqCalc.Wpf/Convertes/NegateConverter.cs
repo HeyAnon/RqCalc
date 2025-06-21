@@ -1,7 +1,6 @@
-using System;
 using System.Windows.Data;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Convertes
 {
     public class NegateConverter : IValueConverter
     {

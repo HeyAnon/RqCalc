@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using RqCalc.Domain;
@@ -16,14 +15,10 @@ public partial class TalentVariable
 
     public TextTemplateVariableType Type { get; set; }
 
-    [Key]
-    [Column(Order = 0)]
     public int Index { get; set; }
 
-
-    [Key]
-    [Column("Talent_Id", Order = 1)]
-    public int? TalentId { get; set; }
+    [Column("Talent_Id")]
+    public int TalentId { get; set; }
 }
 
 public partial class TalentVariable : ITalentVariable

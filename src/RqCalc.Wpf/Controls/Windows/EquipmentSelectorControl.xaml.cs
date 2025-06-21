@@ -1,9 +1,12 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using RqCalc.Wpf.Models;
+using RqCalc.Wpf.Models.Window.Dialog;
+using RqCalc.Wpf.Windows.Dialog;
+using RqCalc.Wpf.Windows.Dialog._Base;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Controls.Windows
 {
     public partial class EquipmentSelectorControl : UserControl
     {

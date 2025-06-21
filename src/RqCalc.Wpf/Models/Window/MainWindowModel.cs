@@ -1,18 +1,12 @@
-using System;
 using System.Collections.ObjectModel;
+using RqCalc.Domain;
+using RqCalc.Wpf.Models._Base;
 
-using Framework.Core;
-
-using Framework.Reactive;
-
-using Anon.RQ_Calc.Domain;
-using Anon.RQ_Calc.Logic;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Models.Window
 {
     public class MainWindowModel : ContextModel
     {
-        public MainWindowModel(IApplicationContext context, Version version)
+        public MainWindowModel(IServiceProvider context, Version version)
             : base(context)
         {
             this.Version = version ?? throw new ArgumentNullException(nameof(version));

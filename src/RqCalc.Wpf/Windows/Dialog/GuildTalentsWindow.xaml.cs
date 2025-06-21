@@ -1,6 +1,8 @@
-﻿using System;
+﻿using RqCalc.Wpf.Models.Window.Dialog;
+using RqCalc.Wpf.Windows.Dialog._Base;
+using RqCalc.Wpf.Windows.Route;
 
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Windows.Dialog
 {
     public partial class GuildTalentsWindow : IModelContainer<GuildTalentsWindowModel>
     {

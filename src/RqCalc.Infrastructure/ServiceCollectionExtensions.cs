@@ -15,7 +15,6 @@ using RqCalc.Application.Settings;
 using RqCalc.DataBase.EntityFramework._DBContext;
 using RqCalc.Domain._Base;
 using RqCalc.Model;
-using System.Xml.Serialization;
 
 namespace RqCalc.Infrastructure;
 
@@ -31,6 +30,7 @@ public static class ServiceCollectionExtensions
             .AddSingleton<ILastVersionService, LastVersionService>()
             .AddSingletonFrom((ILastVersionService lastVersionService) => lastVersionService.LastVersion)
 
+            .AddSingleton<IDefaultCharacterSource, DefaultCharacterSource>()
             .AddSingleton<ICharacterCalculator, CharacterCalculator>()
             .AddSingleton<ITalentCalculator, TalentCalculator>()
             .AddSingleton<IGuildTalentCalculator, GuildTalentCalculator>()

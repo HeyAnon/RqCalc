@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using RqCalc.Domain.Equipment;
@@ -12,14 +11,11 @@ public partial class EquipmentElixirSlot
 
     public virtual EquipmentSlot EquipmentSlot { get; set; } = null!;
 
+    [Column("EquipmentElixir_Id")]
+    public int EquipmentElixirId { get; set; }
 
-    [Key]
-    [Column("EquipmentElixir_Id", Order = 0)]
-    public int? EquipmentElixirId { get; set; }
-
-    [Key]
-    [Column("EquipmentSlot_Id", Order = 1)]
-    public int? EquipmentSlotId { get; set; }
+    [Column("EquipmentSlot_Id")]
+    public int EquipmentSlotId { get; set; }
 }
 
 public partial class EquipmentElixirSlot : IEquipmentElixirSlot

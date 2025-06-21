@@ -1,12 +1,9 @@
-using System;
 using System.Globalization;
 using System.Windows.Data;
-
 using Framework.Core;
+using RqCalc.Domain.Equipment;
 
-using Anon.RQ_Calc.Domain;
-
-namespace Anon.RQ_Calc.WPF
+namespace RqCalc.Wpf.Convertes
 {
     public class EquipmentGenderConditionsConverter : IValueConverter
     {
