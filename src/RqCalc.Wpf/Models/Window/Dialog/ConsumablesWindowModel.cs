@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
 using Framework.Core;
+using Framework.Reactive;
+using Framework.Reactive.ObservableRecurse;
 using RqCalc.Domain;
 using RqCalc.Wpf.Models._Base;
 using RqCalc.Wpf.Models.Window.Dialog._Base;

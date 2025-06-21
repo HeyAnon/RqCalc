@@ -7,6 +7,7 @@
   </Folder>
   <Project Path="Framework.DataBase.Abstraction/Framework.DataBase.Abstraction.csproj" />
   <Project Path="Framework.DataBase/Framework.DataBase.csproj" />
+  <Project Path="Framework.Reactive/Framework.Reactive.csproj" />
   <Project Path="RqCalc.Application.Abstraction/RqCalc.Application.Abstraction.csproj" />
   <Project Path="RqCalc.Application/RqCalc.Application.csproj" />
   <Project Path="RqCalc.DataBase.EntityFramework/RqCalc.DataBase.EntityFramework.csproj" />

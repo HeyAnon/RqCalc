@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using Framework.Reactive;
 using RqCalc.Domain.GuildTalent;
 using RqCalc.Model;
 using RqCalc.Wpf.Exception;

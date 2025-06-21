@@ -1,3 +1,5 @@
+using Framework.Reactive;
+
 namespace RqCalc.Wpf.Models._Base
 {
     public abstract class UpdateModel : ContextModel

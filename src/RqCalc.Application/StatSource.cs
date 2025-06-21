@@ -48,7 +48,7 @@ public class StatService : IStatService
         return new[] { @class.PrimaryStat }.Concat(this.NotPrimaryEditStats);
     }
 
-    private IReadOnlyList<IReadOnlyList<IStat>> GetDependencyStatLayers([NotNull] IReadOnlyCollection<IStat> stats)
+    private IReadOnlyList<IReadOnlyList<IStat>> GetDependencyStatLayers(IReadOnlyCollection<IStat> stats)
     {
         if (stats == null) throw new ArgumentNullException(nameof(stats));
 

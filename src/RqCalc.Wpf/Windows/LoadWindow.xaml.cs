@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Framework.Reactive;
 
 namespace RqCalc.Wpf.Windows
 {

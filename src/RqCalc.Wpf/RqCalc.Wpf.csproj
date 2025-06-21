@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Framework.Reactive\Framework.Reactive.csproj" />
     <ProjectReference Include="..\RqCalc.Application.Abstraction\RqCalc.Application.Abstraction.csproj" />
   </ItemGroup>
 

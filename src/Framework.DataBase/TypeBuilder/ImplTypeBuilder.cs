@@ -5,20 +5,9 @@ using Framework.DataBase._Extensions;
 
 namespace Framework.DataBase.TypeBuilder;
 
-internal class ImplTypeBuilder<TPersistentDomainObjectBase> : AnonymousTypeByPropertyBuilder<InterfaceTypeMap, TypeMapMember>
+internal class ImplTypeBuilder<TPersistentDomainObjectBase>(IAnonymousTypeBuilderStorage storage, ITypeSource typeSource)
+    : AnonymousTypeByPropertyBuilder<InterfaceTypeMap, TypeMapMember>(storage)
 {
-    private readonly ITypeSource typeSource;
-
-
-    public ImplTypeBuilder(IAnonymousTypeBuilderStorage storage, ITypeSource typeSource)
-        : base(storage)
-    {
-        if (typeSource == null) throw new ArgumentNullException(nameof(typeSource));
-
-        this.typeSource = typeSource;
-    }
-
-
     protected override System.Reflection.Emit.TypeBuilder DefineType(InterfaceTypeMap typeMap)
     {
         var typeBuilder = base.DefineType(typeMap);
@@ -43,7 +32,7 @@ internal class ImplTypeBuilder<TPersistentDomainObjectBase> : AnonymousTypeByPro
         {
             if (actualType.IsAssignableToInterface(typeof(TPersistentDomainObjectBase)))
             {
-                if (!this.typeSource.GetTypes().Contains(actualType))
+                if (!typeSource.GetTypes().Contains(actualType))
                 {
                     throw new Exception($"Missed Impl Type for {actualType}");
                 }

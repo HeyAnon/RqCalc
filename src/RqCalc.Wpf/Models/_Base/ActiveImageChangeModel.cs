@@ -1,4 +1,6 @@
 ﻿using Framework.Core;
+using Framework.Reactive;
+using Framework.Reactive.ObservableRecurse;
 using RqCalc.Domain._Base;
 
 namespace RqCalc.Wpf.Models._Base

@@ -13,10 +13,6 @@ public static class DataSourceExtensions
     public static IDataSource<TPersistentDomainObjectBase> LoadToMemory<TPersistentDomainObjectBase>(this IDataSource<TPersistentDomainObjectBase> dataSource, MemoryTypeCache<TPersistentDomainObjectBase> memoryTypeCache)
         where TPersistentDomainObjectBase : class
     {
-        if (dataSource == null) throw new ArgumentNullException(nameof(dataSource));
-        if (memoryTypeCache == null) throw new ArgumentNullException(nameof(memoryTypeCache));
-            
-
         var createDictMethod = typeof(DataSourceExtensions).GetMethod(nameof(CreateDict), BindingFlags.Static | BindingFlags.NonPublic)!;
 
 
@@ -52,8 +48,6 @@ public static class DataSourceExtensions
         where TImplemented : class, TDomainObject, new()
         where TPersistentDomainObjectBase : class
     {
-        if (dataSource == null) throw new ArgumentNullException(nameof(dataSource));
-
         return dataSource.GetFullList<TDomainObject>().ToDictionary(domainObject => domainObject, _ => (TPersistentDomainObjectBase)new TImplemented(), ReferenceComparer<TPersistentDomainObjectBase>.Value);
     }
 
@@ -80,8 +74,6 @@ public static class DataSourceExtensions
 
         private static Action<TDomainObject, TImplemented, RootState<TPersistentDomainObjectBase>> GetInitPropertyAction<TProperty>(PropertyInfo property)
         {
-            if (property == null) throw new ArgumentNullException(nameof(property));
-
             var sourceObjParameter = Expression.Parameter(typeof(TDomainObject), "sourceObject");
 
             var implObjParameter = Expression.Parameter(typeof(TImplemented), "implObject");
@@ -131,8 +123,6 @@ public static class DataSourceExtensions
         private static Func<TDomainObject, RootState<TPersistentDomainObjectBase>, TProperty> GetSubRefPropertyValueFunc<TProperty>(Func<TDomainObject, TProperty> getPrimitivePropertyValueFunc)
             where TProperty : class, TPersistentDomainObjectBase
         {
-            if (getPrimitivePropertyValueFunc == null) throw new ArgumentNullException(nameof(getPrimitivePropertyValueFunc));
-
             return (sourceObj, rootState) => getPrimitivePropertyValueFunc(sourceObj).Maybe(propValue => rootState[typeof(TProperty)].Pipe(valueDict => (TProperty)valueDict[propValue]));
         }
 
@@ -140,8 +130,6 @@ public static class DataSourceExtensions
             where TProperty : class, IEnumerable<TElement>
             where TElement : class, TPersistentDomainObjectBase
         {
-            if (getPrimitivePropertyValueFunc == null) throw new ArgumentNullException(nameof(getPrimitivePropertyValueFunc));
-
             return (sourceObj, rootState) => getPrimitivePropertyValueFunc(sourceObj).Maybe(propValue => rootState[typeof(TElement)].Pipe(valueDict => (TProperty)(object)propValue.ToList(elementValue => (TElement)valueDict[elementValue])));
         }
 
@@ -149,8 +137,6 @@ public static class DataSourceExtensions
             where TProperty : class, IReadOnlyDictionary<TKey, TValue>
             where TValue : class, TPersistentDomainObjectBase
         {
-            if (getPrimitivePropertyValueFunc == null) throw new ArgumentNullException(nameof(getPrimitivePropertyValueFunc));
-
             return (sourceObj, rootState) => getPrimitivePropertyValueFunc(sourceObj).Maybe(propValue => rootState[typeof(TValue)].Pipe(valueDict => (TProperty)(object)propValue.ChangeValue(elementValue => (TValue)valueDict[elementValue])));
         }
 
@@ -159,8 +145,6 @@ public static class DataSourceExtensions
 
         public static void Initialize(RootState<TPersistentDomainObjectBase> rootDict)
         {
-            if (rootDict == null) throw new ArgumentNullException(nameof(rootDict));
-
             foreach (var pair in rootDict.GetValueOrDefault(typeof(TDomainObject)).EmptyIfNull())
             {
                 var sourceObj = (TDomainObject)pair.Key;

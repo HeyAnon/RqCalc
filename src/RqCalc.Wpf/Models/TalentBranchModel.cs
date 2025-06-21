@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Framework.Core;
+using Framework.Reactive;
 using RqCalc.Domain;
 using RqCalc.Domain.Talent;
 using RqCalc.Wpf.Models._Base;

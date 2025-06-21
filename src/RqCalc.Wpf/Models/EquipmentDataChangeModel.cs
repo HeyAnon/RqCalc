@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
 using Framework.Core;
+using Framework.Reactive;
+using Framework.Reactive.ObservableRecurse;
 using RqCalc.Domain;
 using RqCalc.Domain._Base;
 using RqCalc.Domain._Extensions;
@@ -65,7 +67,7 @@ namespace RqCalc.Wpf.Models
         public IReadOnlyList<ICard> Cards
         {
             get { return this.CardList.ToArray(b => b.Card); }
-            private set { this.CardList = value.ToObservableCollection((card, i) => new EquipmentCardModel(this.Context, i) { Card = card }); }
+            private set { this.CardList = value.Select((card, i) => new EquipmentCardModel(this.Context, i) { Card = card }).ToObservableCollection(); }
         }
 
 
@@ -156,8 +158,8 @@ namespace RqCalc.Wpf.Models
 
         public decimal Dps
         {
-            get { return this.GetValue(v => v.DPS); }
-            private set { this.SetValue(v => v.DPS, value); }
+            get { return this.GetValue(v => v.Dps); }
+            private set { this.SetValue(v => v.Dps, value); }
         }
 
         public bool HasHpBonus
@@ -200,10 +202,8 @@ namespace RqCalc.Wpf.Models
                 }
                 else
                 {
-                    this.EquipmentBonuses = new VirtualBonusBaseContainer
-                    {
-                        Bonuses = this.Equipment.GetOrderedBonuses().ToList(bonus => this.ResultInfo.DynamicBonuses.Bonuses.SingleOrDefault(b => b.Type == bonus.Type) ?? bonus)
-                    };
+                    this.EquipmentBonuses = new VirtualBonusBaseContainer(this.Equipment.GetOrderedBonuses()
+                        .ToList(bonus => this.ResultInfo.DynamicBonuses.Bonuses.SingleOrDefault(b => b.Type == bonus.Type) ?? bonus));
                 }
             }
 

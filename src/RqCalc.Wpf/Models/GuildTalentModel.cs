@@ -1,3 +1,5 @@
+using Framework.Reactive;
+using Framework.Reactive.ObservableRecurse;
 using RqCalc.Domain;
 using RqCalc.Domain.GuildTalent;
 using RqCalc.Model._Extensions;

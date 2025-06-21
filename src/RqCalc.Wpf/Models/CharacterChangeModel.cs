@@ -2,7 +2,8 @@ using System.Collections.ObjectModel;
 
 using Framework.Core;
 using Framework.HierarchicalExpand;
-
+using Framework.Reactive;
+using Framework.Reactive.ObservableRecurse;
 using RqCalc.Domain;
 using RqCalc.Domain._Base;
 using RqCalc.Domain._Extensions;

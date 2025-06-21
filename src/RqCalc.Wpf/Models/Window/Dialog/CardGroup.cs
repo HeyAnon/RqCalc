@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
 using Framework.Core;
+using Framework.Reactive;
+using Framework.Reactive.ObservableRecurse;
 using RqCalc.Domain.Card;
 
 namespace RqCalc.Wpf.Models.Window.Dialog

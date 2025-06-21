@@ -7,16 +7,12 @@ internal class InterfaceTypeMap : TypeMap, IEquatable<InterfaceTypeMap>, ISwitch
     public InterfaceTypeMap(Type sourceType, string name, IEnumerable<KeyValuePair<string, Type>> members)
         : base(name, members)
     {
-        if (sourceType == null) throw new ArgumentNullException(nameof(sourceType));
-
         this.SourceType = sourceType;
     }
 
     public InterfaceTypeMap(Type sourceType, string name, IEnumerable<TypeMapMember> members)
         : base(name, members)
     {
-        if (sourceType == null) throw new ArgumentNullException(nameof(sourceType));
-
         this.SourceType = sourceType;
     }
 

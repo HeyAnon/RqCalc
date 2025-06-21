@@ -1,3 +1,4 @@
+using Framework.Reactive;
 using RqCalc.Domain._Base;
 
 namespace RqCalc.Wpf.Models._Base

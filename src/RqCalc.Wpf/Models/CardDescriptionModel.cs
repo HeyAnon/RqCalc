@@ -1,7 +1,7 @@
 using System.Collections.ObjectModel;
 
 using Framework.Core;
-
+using Framework.Reactive;
 using RqCalc.Domain;
 using RqCalc.Domain.Card;
 using RqCalc.Model._Extensions;

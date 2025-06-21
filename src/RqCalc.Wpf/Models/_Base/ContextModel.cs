@@ -1,4 +1,6 @@
-﻿namespace RqCalc.Wpf.Models._Base
+﻿using Framework.Reactive;
+
+namespace RqCalc.Wpf.Models._Base
 {
     public class ContextModel(IServiceProvider context) : NotifyModelBase, IClientContext
     {

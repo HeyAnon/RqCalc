@@ -1,6 +1,7 @@
 using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Framework.Core;
 using RqCalc.Domain._Base;
 
 namespace RqCalc.Wpf._Extensions

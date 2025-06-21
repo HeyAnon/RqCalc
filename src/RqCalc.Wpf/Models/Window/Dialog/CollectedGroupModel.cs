@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Framework.Core;
+using Framework.Reactive;
 using RqCalc.Domain._Extensions;
 using RqCalc.Domain.CollectedStatistic;
 using RqCalc.Model;
