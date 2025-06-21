@@ -4,26 +4,26 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:convertes="clr-namespace:RqCalc.Wpf.Convertes"
              xmlns:extensions="clr-namespace:RqCalc.Wpf._Extensions"
              xmlns:controls="clr-namespace:RqCalc.Wpf.Controls"
              xmlns:local="clr-namespace:RqCalc.Wpf.Controls.Windows"
+             xmlns:converts="clr-namespace:RqCalc.Wpf.Converts"
              mc:Ignorable="d"
              d:DesignHeight="500"
              d:DesignWidth="930">
     
     <UserControl.Resources>
         
-        <convertes:ImageDataObjectConverter x:Key="ImageDataObjectConverter" />
+        <converts:ImageDataObjectConverter x:Key="ImageDataObjectConverter" />
 
-        <convertes:CardDescriptionConverter x:Key="CardDescriptionConverter" />
+        <converts:CardDescriptionConverter x:Key="CardDescriptionConverter" />
 
-        <convertes:CompositeValueConverter x:Key="IsMultiCardGroupConverter">
+        <converts:CompositeValueConverter x:Key="IsMultiCardGroupConverter">
 
-            <convertes:IsTypeConverter Type="local:MultiCardGroup" />
+            <converts:IsTypeConverter Type="local:MultiCardGroup" />
             <BooleanToVisibilityConverter />
 
-        </convertes:CompositeValueConverter>
+        </converts:CompositeValueConverter>
 
     </UserControl.Resources>
 

@@ -21,7 +21,7 @@ namespace Framework.Reactive.ObservableRecurse
 
             var targetNode = new Node<TChild> (request);
 
-            return new LinkSelectNode<TSource, TChild> (selector, targetNode);
+            return new(selector, targetNode);
         }
 
 
@@ -34,13 +34,13 @@ namespace Framework.Reactive.ObservableRecurse
 
             var targetNode = new Node<TChild> (request);
 
-            return new LinkSelectManyNode<TSource, TChild> (selector, targetNode);
+            return new(selector, targetNode);
         }
 
         
         public LinkSubscribeNode<TSource, TProperty> Subscribe<TProperty> (Expression<Func<TSource, TProperty>> selectPropertyExpr, PropertyChangedEventHandler notifyPropertyChanged)
         {
-            return new LinkSubscribeNode<TSource, TProperty> (selectPropertyExpr, notifyPropertyChanged);
+            return new(selectPropertyExpr, notifyPropertyChanged);
         }
 
         public LinkSubscribeNode<TSource, TProperty> Subscribe<TProperty>(Expression<Func<TSource, TProperty>> selectPropertyExpr, Action<TSource> notifyPropertyChanged)
@@ -55,20 +55,20 @@ namespace Framework.Reactive.ObservableRecurse
 
         public LinkSubscribeSelfNode<TSource> SubscribeSelf (PropertyChangedEventHandler notifyPropertyChanged)
         {
-            return new LinkSubscribeSelfNode<TSource> (notifyPropertyChanged);
+            return new(notifyPropertyChanged);
         }
 
         public LinkSubscribeSelfNode<TSource> SubscribeSelf(Action<TSource> notifyPropertyChanged)
         {
-            return new LinkSubscribeSelfNode<TSource>((sender, e) => notifyPropertyChanged((TSource)sender));
+            return new((sender, e) => notifyPropertyChanged((TSource)sender));
         }
 
         public LinkSubscribeSelfNode<TSource> SubscribeSelf(Action notifyPropertyChanged)
         {
-            return new LinkSubscribeSelfNode<TSource>((sender, e) => notifyPropertyChanged());
+            return new((sender, e) => notifyPropertyChanged());
         }
 
-        public static readonly ObservableRule<TSource> Value = new ObservableRule<TSource> ();
+        public static readonly ObservableRule<TSource> Value = new();
     }
 
 

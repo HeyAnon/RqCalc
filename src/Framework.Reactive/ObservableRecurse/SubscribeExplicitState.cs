@@ -6,40 +6,40 @@ namespace Framework.Reactive.ObservableRecurse
     internal class SubscribeState<TSource> : IDisposable
         where TSource : class, INotifyPropertyChanged
     {
-        private readonly TSource _source;
-        private readonly Func<ObservableRule<TSource>, ILinkNode>[] _subRules;
+        private readonly TSource source;
+        private readonly Func<ObservableRule<TSource>, ILinkNode>[] subRules;
 
-        private readonly List<IDisposable> _items = new List<IDisposable> ();
+        private readonly List<IDisposable> items = new();
 
-        private readonly bool _lockEvents;
-        private bool _eventRaised;
+        private readonly bool lockEvents;
+        private bool eventRaised;
         
         public SubscribeState (TSource source, Func<ObservableRule<TSource>, ILinkNode>[] subRules, bool lockEvents)
         {
-            this._source = source;
-            this._subRules = subRules;
-            this._lockEvents = lockEvents;
+            this.source = source;
+            this.subRules = subRules;
+            this.lockEvents = lockEvents;
 
             this.Subscribe ();
         }
 
         private void Subscribe ()
         {
-            var rootNode = new Node<TSource> (from subRule in this._subRules
+            var rootNode = new Node<TSource> (from subRule in this.subRules
                                               select subRule (ObservableRule<TSource>.Value));
 
 
             var lastSubscribeActions = new List<Func<IDisposable>> ();
 
-            this.InnerSubscribe(this._source, rootNode, lastSubscribeActions);
+            this.InnerSubscribe(this.source, rootNode, lastSubscribeActions);
 
-            lastSubscribeActions.ForEach (v => this._items.Add (v ()));
+            lastSubscribeActions.ForEach (v => this.items.Add (v ()));
         }
 
         private void UnSubscribe ()
         {
-            this._items.ForEach (v => v.Dispose ());
-            this._items.Clear ();
+            this.items.ForEach (v => v.Dispose ());
+            this.items.Clear ();
         }
 
         private void RefreshSubscribe ()
@@ -52,14 +52,14 @@ namespace Framework.Reactive.ObservableRecurse
         {
             if (action == null) throw new ArgumentNullException("action");
 
-            if (this._lockEvents)
+            if (this.lockEvents)
             {
-                if (this._eventRaised)
+                if (this.eventRaised)
                 {
                     return;
                 }
 
-                this._eventRaised = true;
+                this.eventRaised = true;
 
                 try
                 {
@@ -67,7 +67,7 @@ namespace Framework.Reactive.ObservableRecurse
                 }
                 finally
                 {
-                    this._eventRaised = false;
+                    this.eventRaised = false;
                 }
             }
             else
@@ -102,7 +102,7 @@ namespace Framework.Reactive.ObservableRecurse
                                                            where e.EventArgs.PropertyName == linkNode.Property.Name
                                                            select e;
 
-                            this._items.Add (subscribePropertyRequest.Subscribe (e => this.ProxyEvent(() => linkNode.PropertyChanged(source, e.EventArgs))));
+                            this.items.Add (subscribePropertyRequest.Subscribe (e => this.ProxyEvent(() => linkNode.PropertyChanged(source, e.EventArgs))));
                         }
                         break;
 
@@ -110,7 +110,7 @@ namespace Framework.Reactive.ObservableRecurse
                         {
                             var linkNode = (ILinkNotifyNode)link;
 
-                            this._items.Add(source.GetPropertyChangedEvents().Subscribe(e => this.ProxyEvent(() => linkNode.PropertyChanged(source, e.EventArgs))));
+                            this.items.Add(source.GetPropertyChangedEvents().Subscribe(e => this.ProxyEvent(() => linkNode.PropertyChanged(source, e.EventArgs))));
                         }
                         break;
 

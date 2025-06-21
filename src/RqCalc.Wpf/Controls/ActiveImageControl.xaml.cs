@@ -3,84 +3,83 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Media;
-using RqCalc.Wpf.Convertes;
+using RqCalc.Wpf.Converts;
 
-namespace RqCalc.Wpf.Controls
+namespace RqCalc.Wpf.Controls;
+
+public partial class ActiveImageControl : UserControl
 {
-    public partial class ActiveImageControl : UserControl
-    {
-        private string imageSourceBindingPath;
+    private string imageSourceBindingPath;
 
-        private string checkBoxIsCheckedBindingPath;
+    private string checkBoxIsCheckedBindingPath;
 
-        private string checkBoxVisibilityBindingPath;
+    private string checkBoxVisibilityBindingPath;
         
 
-        public static readonly DependencyProperty IsGrayProperty = DependencyProperty.Register("IsGray", typeof(bool), typeof(ActiveImageControl));
+    public static readonly DependencyProperty IsGrayProperty = DependencyProperty.Register("IsGray", typeof(bool), typeof(ActiveImageControl));
 
 
-        public ActiveImageControl()
+    public ActiveImageControl()
+    {
+        this.InitializeComponent();
+
+        this.ImageSourceBindingPath = "Image";
+        this.CheckBoxIsCheckedBindingPath = "Active";
+        this.CheckBoxVisibilityBindingPath = "Activate";
+    }
+
+
+    public bool IsGray
+    {
+        get { return (bool)this.GetValue(IsGrayProperty); }
+        set { this.SetValue(IsGrayProperty, value); }
+    }
+
+    public string ImageSourceBindingPath
+    {
+        get { return this.imageSourceBindingPath; }
+        set
         {
-            this.InitializeComponent();
+            this.imageSourceBindingPath = value;
 
-            this.ImageSourceBindingPath = "Image";
-            this.CheckBoxIsCheckedBindingPath = "Active";
-            this.CheckBoxVisibilityBindingPath = "Activate";
+            this.RefreshImageBinding();
         }
+    }
 
-
-        public bool IsGray
+    public string CheckBoxIsCheckedBindingPath
+    {
+        get { return this.checkBoxIsCheckedBindingPath; }
+        set
         {
-            get { return (bool)this.GetValue(IsGrayProperty); }
-            set { this.SetValue(IsGrayProperty, value); }
+            this.checkBoxIsCheckedBindingPath = value;
+
+            this.CheckBox_Main.SetBinding(ToggleButton.IsCheckedProperty, new Binding(value));
         }
+    }
 
-        public string ImageSourceBindingPath
+    public string CheckBoxVisibilityBindingPath
+    {
+        get { return this.checkBoxVisibilityBindingPath; }
+        set
         {
-            get { return this.imageSourceBindingPath; }
-            set
-            {
-                this.imageSourceBindingPath = value;
-
-                this.RefreshImageBinding();
-            }
-        }
-
-        public string CheckBoxIsCheckedBindingPath
-        {
-            get { return this.checkBoxIsCheckedBindingPath; }
-            set
-            {
-                this.checkBoxIsCheckedBindingPath = value;
-
-                this.CheckBox_Main.SetBinding(ToggleButton.IsCheckedProperty, new Binding(value));
-            }
-        }
-
-        public string CheckBoxVisibilityBindingPath
-        {
-            get { return this.checkBoxVisibilityBindingPath; }
-            set
-            {
-                this.checkBoxVisibilityBindingPath = value;
+            this.checkBoxVisibilityBindingPath = value;
                 
-                this.CheckBox_Main.SetBinding(UIElement.VisibilityProperty, new Binding(value) { Converter = new BooleanToVisibilityConverter(), FallbackValue = "Collapsed" });
-            }
+            this.CheckBox_Main.SetBinding(UIElement.VisibilityProperty, new Binding(value) { Converter = new BooleanToVisibilityConverter(), FallbackValue = "Collapsed" });
         }
+    }
 
-        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+    protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+    {
+        if (e.Property == IsGrayProperty)
         {
-            if (e.Property == IsGrayProperty)
-            {
-                this.RefreshImageBinding();
-            }
-
-            base.OnPropertyChanged(e);
+            this.RefreshImageBinding();
         }
 
-        private void RefreshImageBinding()
-        {
-            BindingOperations.SetBinding(this.ImageBrush_Background, ImageBrush.ImageSourceProperty, new Binding(this.ImageSourceBindingPath) { Converter = new ImageDataObjectConverter(this.IsGray) });
-        }
+        base.OnPropertyChanged(e);
+    }
+
+    private void RefreshImageBinding()
+    {
+        BindingOperations.SetBinding(this.ImageBrush_Background, ImageBrush.ImageSourceProperty, new Binding(this.ImageSourceBindingPath) { Converter = new ImageDataObjectConverter(this.IsGray) });
     }
 }

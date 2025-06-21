@@ -1,12 +1,11 @@
 ﻿using System.Windows.Controls;
 
-namespace RqCalc.Wpf.Controls.Windows
+namespace RqCalc.Wpf.Controls.Windows;
+
+public partial class ElixirsControl : UserControl
 {
-    public partial class ElixirsControl : UserControl
+    public ElixirsControl()
     {
-        public ElixirsControl()
-        {
-            this.InitializeComponent();
-        }
+        this.InitializeComponent();
     }
 }

@@ -4,20 +4,20 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:convertes="clr-namespace:RqCalc.Wpf.Convertes"
              xmlns:extensions="clr-namespace:RqCalc.Wpf._Extensions"
              xmlns:controls="clr-namespace:RqCalc.Wpf.Controls"
+             xmlns:converts="clr-namespace:RqCalc.Wpf.Converts"
              mc:Ignorable="d" d:DesignHeight="716" Width="1280">
 
     <UserControl.Resources>
-        <convertes:ImageDataObjectConverter x:Key="ImageDataObjectConverter" />
-        <convertes:EquipmentRoleNameConverter x:Key="EquipmentRoleNameConverter" />
+        <converts:ImageDataObjectConverter x:Key="ImageDataObjectConverter" />
+        <converts:EquipmentRoleNameConverter x:Key="EquipmentRoleNameConverter" />
 
-        <convertes:EquipmentRoleStatHeaderConverter x:Key="EquipmentRoleStatHeaderConverter" />
+        <converts:EquipmentRoleStatHeaderConverter x:Key="EquipmentRoleStatHeaderConverter" />
 
-        <convertes:EquipmentRoleStatValueConverter x:Key="EquipmentRoleStatValueConverter" />
+        <converts:EquipmentRoleStatValueConverter x:Key="EquipmentRoleStatValueConverter" />
 
-        <convertes:EnumerableConverter x:Key="EnumerableConverter" />
+        <converts:EnumerableConverter x:Key="EnumerableConverter" />
 
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 

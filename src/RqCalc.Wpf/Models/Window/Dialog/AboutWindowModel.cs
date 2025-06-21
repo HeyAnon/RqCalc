@@ -1,18 +1,12 @@
-using RqCalc.Wpf.Models._Base;
+using Framework.Reactive;
 
-namespace RqCalc.Wpf.Models.Window.Dialog
+using RqCalc.Domain;
+
+namespace RqCalc.Wpf.Models.Window.Dialog;
+
+public class AboutWindowModel(Version version, IVersion serializerVersion) : NotifyModelBase
 {
-    public class AboutWindowModel : ContextModel
-    {
-        public AboutWindowModel(IServiceProvider context, Version version)
-            : base(context)
-        {
-            this.Version = version;
-        }
+    public Version Version { get; } = version;
 
-
-        public Version Version { get; }
-
-        public int SerializerVersion => this.Context.LastVersion.Id;
-    }
+    public int SerializerVersion => serializerVersion.Id;
 }

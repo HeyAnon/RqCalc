@@ -1,26 +1,25 @@
 using Framework.Reactive;
 using RqCalc.Domain;
 
-namespace RqCalc.Wpf.Models
+namespace RqCalc.Wpf.Models;
+
+public class DisplayStatModel : NotifyModelBase
 {
-    public class DisplayStatModel : NotifyModelBase
+    public IStat Stat
     {
-        public IStat Stat
-        {
-            get { return this.GetValue(v => v.Stat); }
-            set { this.SetValue(v => v.Stat, value); }
-        }
+        get { return this.GetValue(v => v.Stat); }
+        set { this.SetValue(v => v.Stat, value); }
+    }
 
-        public decimal Value
-        {
-            get { return this.GetValue(v => v.Value); }
-            set { this.SetValue(v => v.Value, value); }
-        }
+    public decimal Value
+    {
+        get { return this.GetValue(v => v.Value); }
+        set { this.SetValue(v => v.Value, value); }
+    }
 
-        public decimal? DescriptionValue
-        {
-            get { return this.GetValue(v => v.DescriptionValue); }
-            set { this.SetValue(v => v.DescriptionValue, value); }
-        }
+    public decimal? DescriptionValue
+    {
+        get { return this.GetValue(v => v.DescriptionValue); }
+        set { this.SetValue(v => v.DescriptionValue, value); }
     }
 }

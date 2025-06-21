@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:convertes="clr-namespace:RqCalc.Wpf.Convertes"
              xmlns:controls="clr-namespace:RqCalc.Wpf.Controls"
+             xmlns:converts="clr-namespace:RqCalc.Wpf.Converts"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="330" Background="#F520201C" Padding="10" FontFamily="Cambria" FontSize="13">
 
@@ -12,13 +12,13 @@
         
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
-        <convertes:CompositeValueConverter x:Key="NegateBooleanToVisibilityConverter">
+        <converts:CompositeValueConverter x:Key="NegateBooleanToVisibilityConverter">
 
-            <convertes:NegateConverter />
+            <converts:NegateConverter />
             
             <BooleanToVisibilityConverter />
             
-        </convertes:CompositeValueConverter>
+        </converts:CompositeValueConverter>
         
     </UserControl.Resources>
     

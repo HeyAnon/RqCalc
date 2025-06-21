@@ -5,55 +5,54 @@ using RqCalc.Domain.GuildTalent;
 using RqCalc.Model._Extensions;
 using RqCalc.Wpf.Models._Base;
 
-namespace RqCalc.Wpf.Models
+namespace RqCalc.Wpf.Models;
+
+public class GuildTalentModel : ActiveImageChangeModel<IGuildTalent>
 {
-    public class GuildTalentModel : ActiveImageChangeModel<IGuildTalent>
+    public readonly GuildTalentBranchModel Branch;
+
+
+    public GuildTalentModel(GuildTalentBranchModel branch, IGuildTalent talent)
+
     {
-        public readonly GuildTalentBranchModel Branch;
-
-
-        public GuildTalentModel(IServiceProvider context, GuildTalentBranchModel branch, IGuildTalent talent)
-            : base(context)
-        {
-            this.Branch = branch ?? throw new ArgumentNullException(nameof(branch));
-            this.SelectedObject = talent ?? throw new ArgumentNullException(nameof(talent));
+        this.Branch = branch ?? throw new ArgumentNullException(nameof(branch));
+        this.SelectedObject = talent ?? throw new ArgumentNullException(nameof(talent));
             
-            this.SubscribeExplicit(rootRule => rootRule.Subscribe(model => model.Points, this.PointsChanged));
-            this.UpdateDescription();
-        }
+        this.SubscribeExplicit(rootRule => rootRule.Subscribe(model => model.Points, this.PointsChanged));
+        this.UpdateDescription();
+    }
 
 
-        public TalentDescriptionModel MainDescription
-        {
-            get { return this.GetValue(v => v.MainDescription); }
-            private set { this.SetValue(v => v.MainDescription, value); }
-        }
+    public TalentDescriptionModel MainDescription
+    {
+        get { return this.GetValue(v => v.MainDescription); }
+        private set { this.SetValue(v => v.MainDescription, value); }
+    }
 
-        public bool HasPassive { get; } = false;
+    public bool HasPassive { get; } = false;
 
-        public bool HasEquipmentCondition { get; } = false;
+    public bool HasEquipmentCondition { get; } = false;
 
-        public int Points
-        {
-            get { return this.GetValue(v => v.Points); }
-            set { this.SetValue(v => v.Points, value); }
-        }
+    public int Points
+    {
+        get { return this.GetValue(v => v.Points); }
+        set { this.SetValue(v => v.Points, value); }
+    }
 
-        private void PointsChanged()
-        {
-            this.Active = this.Points > 0;
+    private void PointsChanged()
+    {
+        this.Active = this.Points > 0;
 
-            this.UpdateDescription();
-        }
+        this.UpdateDescription();
+    }
 
-        private void UpdateDescription()
-        {
-            this.MainDescription = new TalentDescriptionModel(this.Context, new Dictionary<TextTemplateVariableType, decimal> { { TextTemplateVariableType.Const, 1 } }, this.SelectedObject.GetDescription(Math.Max(1, this.Points)));
-        }
+    private void UpdateDescription()
+    {
+        this.MainDescription = new TalentDescriptionModel(this.Context, new Dictionary<TextTemplateVariableType, decimal> { { TextTemplateVariableType.Const, 1 } }, this.SelectedObject.GetDescription(Math.Max(1, this.Points)));
+    }
 
-        public void Change(bool increase)
-        {
-            this.Branch.WindowModel.Change(this, increase);
-        }
+    public void Change(bool increase)
+    {
+        this.Branch.WindowModel.Change(this, increase);
     }
 }

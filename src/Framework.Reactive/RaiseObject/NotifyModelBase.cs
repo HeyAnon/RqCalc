@@ -8,7 +8,7 @@ namespace Framework.Reactive
     [DataContract(Namespace = "")]
     public abstract class NotifyModelBase : BaseRaiseObject, INotifyPropertyChanging
     {
-        private Dictionary<string, object> _properties;
+        private Dictionary<string, object?> properties;
         
 
         protected NotifyModelBase()
@@ -17,7 +17,7 @@ namespace Framework.Reactive
         }
 
 
-        protected Dictionary<string, object> Properties => this._properties ?? (this._properties = new Dictionary<string, object>());
+        protected Dictionary<string, object?> Properties => this.properties ??= new();
 
         //protected void ClearProperty(string propertyName)
         //{
@@ -27,19 +27,17 @@ namespace Framework.Reactive
 
         protected void RaisePropertyChanging(string propertyName)
         {
-            this.PropertyChanging.Maybe(v => v(this, new PropertyChangingEventArgs(propertyName)));
+            this.PropertyChanging.Maybe(v => v(this, new(propertyName)));
         }
 
 
-        protected virtual internal TProperty GetGenericValue<TProperty>(string propertyName)
+        protected internal virtual TProperty? GetGenericValue<TProperty>(string propertyName)
         {
-            return this.Properties.GetMaybeValue(propertyName).Select(v => (TProperty)v).GetValueOrDefault();
+            return this.Properties.GetMaybeValue(propertyName).Select(v => (TProperty?)v).GetValueOrDefault();
         }
 
-        protected virtual internal bool SetGenericValue<TProperty>(string propertyName, TProperty value)
+        protected internal virtual bool SetGenericValue<TProperty>(string propertyName, TProperty value)
         {
-            if (propertyName == null) throw new ArgumentNullException("propertyName");
-            
             var prevValue = this.GetGenericValue<TProperty>(propertyName);
 
             if (EqualityComparer<TProperty>.Default.Equals(prevValue, value))
@@ -54,9 +52,6 @@ namespace Framework.Reactive
 
         protected void RaiseAction(string propertyName, Action action)
         {
-            if (propertyName == null) throw new ArgumentNullException("propertyName");
-            if (action == null) throw new ArgumentNullException("action");
-
             this.RaisePropertyChanging(propertyName);
 
             action();
@@ -65,6 +60,6 @@ namespace Framework.Reactive
         }
 
 
-        public event PropertyChangingEventHandler PropertyChanging;
+        public event PropertyChangingEventHandler? PropertyChanging;
     }
 }

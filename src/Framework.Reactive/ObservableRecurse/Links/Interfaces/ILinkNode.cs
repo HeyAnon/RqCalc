@@ -15,10 +15,10 @@ namespace Framework.Reactive.ObservableRecurse
         PropertyInfo Property { get; }
     }
 
-    public interface ILinkNode<out SelectorType> : ILinkNodeProperty
-        where SelectorType : LambdaExpression
+    public interface ILinkNode<out TSelectorType> : ILinkNodeProperty
+        where TSelectorType : LambdaExpression
     {
-        SelectorType Selector { get; }
+        TSelectorType Selector { get; }
     }
 
     public interface ILinkNodeToNode : ILinkNodeProperty

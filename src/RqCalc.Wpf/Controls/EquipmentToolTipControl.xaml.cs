@@ -1,12 +1,11 @@
 ﻿using System.Windows.Controls;
 
-namespace RqCalc.Wpf.Controls
+namespace RqCalc.Wpf.Controls;
+
+public partial class EquipmentToolTipControl : UserControl
 {
-    public partial class EquipmentToolTipControl : UserControl
+    public EquipmentToolTipControl()
     {
-        public EquipmentToolTipControl()
-        {
-            this.InitializeComponent();
-        }
+        this.InitializeComponent();
     }
 }

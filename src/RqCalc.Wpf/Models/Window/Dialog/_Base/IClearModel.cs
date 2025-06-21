@@ -1,9 +1,8 @@
-namespace RqCalc.Wpf.Models.Window.Dialog._Base
-{
-    public interface IClearModel
-    {
-        void Clear();
+namespace RqCalc.Wpf.Models.Window.Dialog._Base;
 
-        bool CloseDialog { get; }
-    }
+public interface IClearModel
+{
+    void Clear();
+
+    bool CloseDialog { get; }
 }

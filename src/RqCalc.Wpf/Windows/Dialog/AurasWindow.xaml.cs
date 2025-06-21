@@ -1,26 +1,25 @@
 ﻿using RqCalc.Wpf.Models.Window.Dialog;
 using RqCalc.Wpf.Windows.Dialog._Base;
 
-namespace RqCalc.Wpf.Windows.Dialog
+namespace RqCalc.Wpf.Windows.Dialog;
+
+public partial class AurasWindow : IModelContainer<AurasWindowModel>
 {
-    public partial class AurasWindow : IModelContainer<AurasWindowModel>
+    public AurasWindow()
     {
-        public AurasWindow()
-        {
-            this.InitializeComponent();
-        }
+        this.InitializeComponent();
+    }
 
 
-        public AurasWindowModel Model
-        {
-            get { return (AurasWindowModel)this.DataContext; }
-            set { this.DataContext = value; }
-        }
+    public AurasWindowModel Model
+    {
+        get { return (AurasWindowModel)this.DataContext; }
+        set { this.DataContext = value; }
+    }
 
 
-        private void DialogControl_OnClosed(object sender, EventArgs<bool> e)
-        {
-            this.DialogResult = e.Data;
-        }
+    private void DialogControl_OnClosed(object sender, EventArgs<bool> e)
+    {
+        this.DialogResult = e.Data;
     }
 }

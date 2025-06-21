@@ -6,17 +6,17 @@ using Framework.Core;
 namespace Framework.Reactive
 {
     [DataContract(Namespace = "")]
-    public partial class BaseRaiseObject : IBaseRaiseObject
+    public class BaseRaiseObject : IBaseRaiseObject
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
 
         protected void RaisePropertyChanged(string propertyName)
         {
-            (this as IBaseRaiseObject).PropertyChanged.Maybe(v => v(this, new PropertyChangedEventArgs(propertyName)));
+            (this as IBaseRaiseObject).PropertyChanged.Maybe(v => v(this, new(propertyName)));
         }
 
 
-        PropertyChangedEventHandler IBaseRaiseObject.PropertyChanged => this.PropertyChanged;
+        PropertyChangedEventHandler? IBaseRaiseObject.PropertyChanged => this.PropertyChanged;
     }
 }

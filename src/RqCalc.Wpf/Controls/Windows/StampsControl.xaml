@@ -4,16 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:convertes="clr-namespace:RqCalc.Wpf.Convertes"
              xmlns:extensions="clr-namespace:RqCalc.Wpf._Extensions"
              xmlns:controls="clr-namespace:RqCalc.Wpf.Controls"
+             xmlns:converts="clr-namespace:RqCalc.Wpf.Converts"
              mc:Ignorable="d"
              d:DesignHeight="500"
              d:DesignWidth="630">
 
     <UserControl.Resources>
 
-        <convertes:StampColorConverter x:Key="StampColorConverter" />
+        <converts:StampColorConverter x:Key="StampColorConverter" />
 
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 

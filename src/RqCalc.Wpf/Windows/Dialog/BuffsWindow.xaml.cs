@@ -1,26 +1,25 @@
 ﻿using RqCalc.Wpf.Models.Window.Dialog;
 using RqCalc.Wpf.Windows.Dialog._Base;
 
-namespace RqCalc.Wpf.Windows.Dialog
+namespace RqCalc.Wpf.Windows.Dialog;
+
+public partial class BuffsWindow : IModelContainer<BuffsWindowModel>
 {
-    public partial class BuffsWindow : IModelContainer<BuffsWindowModel>
+    public BuffsWindow()
     {
-        public BuffsWindow()
-        {
-            this.InitializeComponent();
-        }
+        this.InitializeComponent();
+    }
 
 
-        public BuffsWindowModel Model
-        {
-            get { return (BuffsWindowModel)this.DataContext; }
-            set { this.DataContext = value; }
-        }
+    public BuffsWindowModel Model
+    {
+        get { return (BuffsWindowModel)this.DataContext; }
+        set { this.DataContext = value; }
+    }
 
 
-        private void DialogControl_OnClosed(object sender, EventArgs<bool> e)
-        {
-            this.DialogResult = e.Data;
-        }
+    private void DialogControl_OnClosed(object sender, EventArgs<bool> e)
+    {
+        this.DialogResult = e.Data;
     }
 }

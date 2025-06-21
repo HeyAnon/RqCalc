@@ -2,7 +2,7 @@ using RqCalc.Domain;
 
 namespace RqCalc.Model;
 
-public class CharacterCalculationResult(
+public record CharacterCalculationResult(
     string Code,
     IReadOnlyDictionary<IStat, decimal> Stats,
     IReadOnlyDictionary<CharacterEquipmentIdentity, IEquipmentResultInfo> Equipments,

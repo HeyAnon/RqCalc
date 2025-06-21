@@ -1,12 +1,11 @@
 ﻿using System.Windows.Controls;
 
-namespace RqCalc.Wpf.Controls
+namespace RqCalc.Wpf.Controls;
+
+public partial class BonusCollectionControl : UserControl
 {
-    public partial class BonusCollectionControl : UserControl
+    public BonusCollectionControl()
     {
-        public BonusCollectionControl()
-        {
-            this.InitializeComponent();
-        }
+        this.InitializeComponent();
     }
 }

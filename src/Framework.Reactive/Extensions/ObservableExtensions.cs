@@ -116,7 +116,7 @@ namespace Framework.Reactive
             var propName = property.ToPath();
             return Observable
                 .FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
-                h => new PropertyChangedEventHandler(h),
+                h => new(h),
                 z => subject.PropertyChanged += z, z => subject.PropertyChanged -= z)
                 .Where(arg => arg.EventArgs.PropertyName == propName)
                 .Select(e => e.EventArgs);

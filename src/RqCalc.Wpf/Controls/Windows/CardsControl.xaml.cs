@@ -1,12 +1,11 @@
 ﻿using System.Windows.Controls;
 
-namespace RqCalc.Wpf.Controls.Windows
+namespace RqCalc.Wpf.Controls.Windows;
+
+public partial class CardsControl : UserControl
 {
-    public partial class CardsControl : UserControl
+    public CardsControl()
     {
-        public CardsControl()
-        {
-            this.InitializeComponent();
-        }
+        this.InitializeComponent();
     }
 }

@@ -7,10 +7,10 @@ namespace Framework.Reactive.ObservableRecurse
 {
     internal class SubscribeTotalState : IDisposable
     {
-        private readonly INotifyPropertyChanged Source;
-        private readonly PropertyChangedEventHandler Handler;
+        private readonly INotifyPropertyChanged source;
+        private readonly PropertyChangedEventHandler handler;
 
-        private readonly List<IDisposable> Items = new List<IDisposable> ();
+        private readonly List<IDisposable> items = new();
 
 
         public SubscribeTotalState (INotifyPropertyChanged source, PropertyChangedEventHandler handler)
@@ -26,21 +26,21 @@ namespace Framework.Reactive.ObservableRecurse
             }
 
 
-            this.Source = source;
-            this.Handler = handler;
+            this.source = source;
+            this.handler = handler;
 
             Subscribe ();
         }
 
         private void Subscribe ()
         {
-            InnerSubscribe (this.Source, new HashSet<RefWrapper<INotifyPropertyChanged>> ());
+            InnerSubscribe (this.source, new HashSet<RefWrapper<INotifyPropertyChanged>> ());
         }
 
         private void UnSubscribe ()
         {
-            this.Items.ForEach (v => v.Dispose ());
-            this.Items.Clear ();
+            this.items.ForEach (v => v.Dispose ());
+            this.items.Clear ();
         }
 
         private void RefreshSubscribe ()
@@ -68,8 +68,8 @@ namespace Framework.Reactive.ObservableRecurse
             var sourceType = source.GetType ();
 
 
-            this.Items.Add (source.GetPropertyChangedEvents ().Subscribe (e => { RefreshSubscribe ();
-                                                                                 this.Handler (source, e.EventArgs);
+            this.items.Add (source.GetPropertyChangedEvents ().Subscribe (e => { RefreshSubscribe ();
+                                                                                 this.handler (source, e.EventArgs);
                                                                                }));
 
             

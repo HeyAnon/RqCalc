@@ -3,33 +3,33 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:convertes="clr-namespace:RqCalc.Wpf.Convertes"
+             xmlns:converts="clr-namespace:RqCalc.Wpf.Converts"
              mc:Ignorable="d"
              d:DesignHeight="300"
              d:DesignWidth="330">
 
     <UserControl.Resources>
 
-        <convertes:CompositeValueConverter x:Key="IsClearConverter">
+        <converts:CompositeValueConverter x:Key="IsClearConverter">
 
-            <convertes:IsTypeConverter Type="local:IClearModel" />
+            <converts:IsTypeConverter Type="local:IClearModel" />
             <BooleanToVisibilityConverter />
             
-        </convertes:CompositeValueConverter>
+        </converts:CompositeValueConverter>
 
-        <convertes:CompositeValueConverter x:Key="IsLegacyConverter">
+        <converts:CompositeValueConverter x:Key="IsLegacyConverter">
 
-            <convertes:LegacyModelConverter />
+            <converts:LegacyModelConverter />
             <BooleanToVisibilityConverter />
 
-        </convertes:CompositeValueConverter>
+        </converts:CompositeValueConverter>
 
-        <convertes:CompositeValueConverter x:Key="IsMultiSelectConverter">
+        <converts:CompositeValueConverter x:Key="IsMultiSelectConverter">
 
-            <convertes:IsTypeConverter Type="local:IMultiSelectModel" />
+            <converts:IsTypeConverter Type="local:IMultiSelectModel" />
             <BooleanToVisibilityConverter />
 
-        </convertes:CompositeValueConverter>
+        </converts:CompositeValueConverter>
 
     </UserControl.Resources>
 

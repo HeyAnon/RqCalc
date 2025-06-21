@@ -1,7 +1,6 @@
-namespace RqCalc.Wpf.Models.Window.Dialog._Base
+namespace RqCalc.Wpf.Models.Window.Dialog._Base;
+
+public interface IMultiSelectModel
 {
-    public interface IMultiSelectModel
-    {
-        bool? TotalSelected { get; }
-    }
+    bool? TotalSelected { get; }
 }

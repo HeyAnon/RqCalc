@@ -2,27 +2,27 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:convertes="clr-namespace:RqCalc.Wpf.Convertes"
         xmlns:controls="clr-namespace:RqCalc.Wpf.Controls"
+        xmlns:converts="clr-namespace:RqCalc.Wpf.Converts"
         Title="{Binding TitleInfo, StringFormat='RQ Calc ({0})'}"
         
         Height="669" Width="661" Background="#30302C" ResizeMode="CanMinimize" FontFamily="Cambria" FontSize="14" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
 
-        <convertes:ClassOffsetConverter x:Key="ClassOffsetConverter" />
+        <converts:ClassOffsetConverter x:Key="ClassOffsetConverter" />
 
-        <convertes:CompositeValueConverter x:Key="NullTupleCollectionConverter" >
+        <converts:CompositeValueConverter x:Key="NullTupleCollectionConverter" >
 
-            <convertes:AddNullElementConverter />
+            <converts:AddNullElementConverter />
 
-            <convertes:ToTupleElementsConverter />
+            <converts:ToTupleElementsConverter />
 
-        </convertes:CompositeValueConverter>
+        </converts:CompositeValueConverter>
 
-        <convertes:TupleWrapConverter x:Key="TupleWrapConverter" />
+        <converts:TupleWrapConverter x:Key="TupleWrapConverter" />
 
-        <convertes:DisplayTupleConverter x:Key="DisplayTupleConverter" />
+        <converts:DisplayTupleConverter x:Key="DisplayTupleConverter" />
 
     </Window.Resources>
 

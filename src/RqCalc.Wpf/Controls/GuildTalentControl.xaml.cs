@@ -1,23 +1,22 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace RqCalc.Wpf.Controls
+namespace RqCalc.Wpf.Controls;
+
+public partial class GuildTalentControl : UserControl
 {
-    public partial class GuildTalentControl : UserControl
+    public GuildTalentControl()
     {
-        public GuildTalentControl()
-        {
-            this.InitializeComponent();
-        }
+        this.InitializeComponent();
+    }
 
-        private async void MainGrid_OnMouseButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            //if ((sender as Grid)?.ToolTip is ToolTip toolTip)
-            //{
-            //    await Task.Run(() => Thread.Sleep(100));
+    private async void MainGrid_OnMouseButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        //if ((sender as Grid)?.ToolTip is ToolTip toolTip)
+        //{
+        //    await Task.Run(() => Thread.Sleep(100));
 
-            //    toolTip.IsOpen = true;
-            //}
-        }
+        //    toolTip.IsOpen = true;
+        //}
     }
 }

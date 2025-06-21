@@ -2,36 +2,35 @@
 using RqCalc.Wpf.Windows.Dialog._Base;
 using RqCalc.Wpf.Windows.Route;
 
-namespace RqCalc.Wpf.Windows.Dialog
+namespace RqCalc.Wpf.Windows.Dialog;
+
+public partial class GuildTalentsWindow : IModelContainer<GuildTalentsWindowModel>
 {
-    public partial class GuildTalentsWindow : IModelContainer<GuildTalentsWindowModel>
+    public readonly ICodeRouter Router;
+
+
+    public GuildTalentsWindow(ICodeRouter router)
+        : this()
     {
-        public readonly ICodeRouter Router;
+        this.Router = router ?? throw new ArgumentNullException(nameof(router));
+    }
 
 
-        public GuildTalentsWindow(ICodeRouter router)
-            : this()
-        {
-            this.Router = router ?? throw new ArgumentNullException(nameof(router));
-        }
+    public GuildTalentsWindow()
+    {
+        this.InitializeComponent();
+    }
 
 
-        public GuildTalentsWindow()
-        {
-            this.InitializeComponent();
-        }
+    public GuildTalentsWindowModel Model
+    {
+        get { return (GuildTalentsWindowModel)this.DataContext; }
+        set { this.DataContext = value; }
+    }
 
 
-        public GuildTalentsWindowModel Model
-        {
-            get { return (GuildTalentsWindowModel)this.DataContext; }
-            set { this.DataContext = value; }
-        }
-
-
-        private void DialogControl_OnClosed(object sender, EventArgs<bool> e)
-        {
-            this.DialogResult = e.Data;
-        }
+    private void DialogControl_OnClosed(object sender, EventArgs<bool> e)
+    {
+        this.DialogResult = e.Data;
     }
 }

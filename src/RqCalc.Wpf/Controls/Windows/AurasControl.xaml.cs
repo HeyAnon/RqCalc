@@ -1,12 +1,11 @@
 ﻿using System.Windows.Controls;
 
-namespace RqCalc.Wpf.Controls.Windows
+namespace RqCalc.Wpf.Controls.Windows;
+
+public partial class AurasControl : UserControl
 {
-    public partial class AurasControl : UserControl
+    public AurasControl()
     {
-        public AurasControl()
-        {
-            this.InitializeComponent();
-        }
+        this.InitializeComponent();
     }
 }

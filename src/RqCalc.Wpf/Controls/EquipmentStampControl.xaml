@@ -3,24 +3,24 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:convertes="clr-namespace:RqCalc.Wpf.Convertes"
              xmlns:controls="clr-namespace:RqCalc.Wpf.Controls"
+             xmlns:converts="clr-namespace:RqCalc.Wpf.Converts"
              mc:Ignorable="d" BorderThickness="1" BorderBrush="Silver">
 
     <UserControl.Resources>
 
-        <convertes:StampColorConverter x:Key="StampColorConverter" />
+        <converts:StampColorConverter x:Key="StampColorConverter" />
 
-        <convertes:ImageDataObjectConverter x:Key="ImageDataObjectConverter" />
+        <converts:ImageDataObjectConverter x:Key="ImageDataObjectConverter" />
 
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
-        <convertes:CompositeValueConverter x:Key="NegateVisibilityConverter">
+        <converts:CompositeValueConverter x:Key="NegateVisibilityConverter">
 
-            <convertes:NegateConverter />
+            <converts:NegateConverter />
             <BooleanToVisibilityConverter />
 
-        </convertes:CompositeValueConverter>
+        </converts:CompositeValueConverter>
 
     </UserControl.Resources>
     

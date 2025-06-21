@@ -11,7 +11,7 @@ namespace Framework.Reactive
 
     public static class NotifyPropertyChangeReactiveExtensions
     {
-        private static readonly LambdaCompileCache LambdaCompileCache = new LambdaCompileCache();
+        private static readonly LambdaCompileCache LambdaCompileCache = new();
 
         // Returns the values of property (an Expression) as they change,
         // starting with the current value

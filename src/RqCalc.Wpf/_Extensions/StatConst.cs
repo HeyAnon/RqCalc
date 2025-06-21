@@ -1,18 +1,17 @@
-namespace RqCalc.Wpf._Extensions
+namespace RqCalc.Wpf._Extensions;
+
+internal static class StatConst
 {
-    internal static class StatConst
-    {
-        public const string PrimaryStatName = "%primaryStat%";
+    public const string PrimaryStatName = "%primaryStat%";
 
-        public const string EnergyStatName = "%energyStat%";
+    public const string EnergyStatName = "%energyStat%";
 
-        public const string RestoreEnergyStatName = "%restoreEnergyStat%";
+    public const string RestoreEnergyStatName = "%restoreEnergyStat%";
 
-        public const string RestoreEnergyPerHitStatName = "%restoreEnergyPerHitStat%";
+    public const string RestoreEnergyPerHitStatName = "%restoreEnergyPerHitStat%";
 
-        public const string RestoreEnergyPerKillStatName = "%restoreEnergyPerKillStat%";
+    public const string RestoreEnergyPerKillStatName = "%restoreEnergyPerKillStat%";
 
 
-        public static readonly IReadOnlyList<string> SpecialStats = new[] {PrimaryStatName, EnergyStatName, RestoreEnergyStatName, RestoreEnergyPerHitStatName, RestoreEnergyPerKillStatName};
-    }
+    public static readonly IReadOnlyList<string> SpecialStats = new[] {PrimaryStatName, EnergyStatName, RestoreEnergyStatName, RestoreEnergyPerHitStatName, RestoreEnergyPerKillStatName};
 }

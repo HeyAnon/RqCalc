@@ -1,26 +1,25 @@
 ﻿using RqCalc.Wpf.Models.Window.Dialog;
 using RqCalc.Wpf.Windows.Dialog._Base;
 
-namespace RqCalc.Wpf.Windows.Dialog
+namespace RqCalc.Wpf.Windows.Dialog;
+
+public partial class StampWindow : IModelContainer<StampWindowModel>
 {
-    public partial class StampWindow : IModelContainer<StampWindowModel>
+    public StampWindow()
     {
-        public StampWindow()
-        {
-            this.InitializeComponent();
-        }
+        this.InitializeComponent();
+    }
 
 
-        public StampWindowModel Model
-        {
-            get { return (StampWindowModel)this.DataContext; }
-            set { this.DataContext = value; }
-        }
+    public StampWindowModel Model
+    {
+        get { return (StampWindowModel)this.DataContext; }
+        set { this.DataContext = value; }
+    }
 
 
-        private void DialogControl_OnClosed(object sender, EventArgs<bool> e)
-        {
-            this.DialogResult = e.Data;
-        }
+    private void DialogControl_OnClosed(object sender, EventArgs<bool> e)
+    {
+        this.DialogResult = e.Data;
     }
 }

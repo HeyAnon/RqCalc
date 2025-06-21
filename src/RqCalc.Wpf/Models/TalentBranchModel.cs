@@ -3,88 +3,86 @@ using Framework.Core;
 using Framework.Reactive;
 using RqCalc.Domain;
 using RqCalc.Domain.Talent;
-using RqCalc.Wpf.Models._Base;
 using RqCalc.Wpf.Models.Window.Dialog;
 
-namespace RqCalc.Wpf.Models
+namespace RqCalc.Wpf.Models;
+
+public class TalentBranchModel : NotifyModelBase
 {
-    public class TalentBranchModel : ContextModel
+    public readonly TalentsWindowModel WindowModel;
+
+
+    public TalentBranchModel(IReadOnlyDictionary<TextTemplateVariableType, decimal> evaluateStats, TalentsWindowModel windowModel, ITalentBranch talentBranch)
+        : base (context)
     {
-        public readonly TalentsWindowModel WindowModel;
+        if (evaluateStats == null) throw new ArgumentNullException(nameof(evaluateStats));
+        if (windowModel == null) throw new ArgumentNullException(nameof(windowModel));
+        if (talentBranch == null) throw new ArgumentNullException(nameof(talentBranch));
 
 
-        public TalentBranchModel(IServiceProvider context, IReadOnlyDictionary<TextTemplateVariableType, decimal> evaluateStats, TalentsWindowModel windowModel, ITalentBranch talentBranch)
-            : base (context)
-        {
-            if (evaluateStats == null) throw new ArgumentNullException(nameof(evaluateStats));
-            if (windowModel == null) throw new ArgumentNullException(nameof(windowModel));
-            if (talentBranch == null) throw new ArgumentNullException(nameof(talentBranch));
+        this.WindowModel = windowModel;
+        this.TalentBranch = talentBranch;
 
 
-            this.WindowModel = windowModel;
-            this.TalentBranch = talentBranch;
+        var talentRequest = from tal in talentBranch.Talents
 
+            group tal by tal.HIndex into hGroup
 
-            var talentRequest = from tal in talentBranch.Talents
+            orderby hGroup.Key
 
-                                group tal by tal.HIndex into hGroup
-
-                                orderby hGroup.Key
-
-                                select hGroup;
+            select hGroup;
             
 
-            this.TalentMatrix = talentRequest.Reverse()
-                                             .Select((g, index) => g.OrderBy(tal => tal.VIndex).ToObservableCollection(tal => new TalentModel(this.Context, evaluateStats, this, index == 0, tal)))
-                                             .Reverse()
-                                             .ToObservableCollection();
+        this.TalentMatrix = talentRequest.Reverse()
+            .Select((g, index) => g.OrderBy(tal => tal.VIndex).ToObservableCollection(tal => new TalentModel(this.Context, evaluateStats, this, index == 0, tal)))
+            .Reverse()
+            .ToObservableCollection();
 
-            this.TalentList = this.TalentMatrix.SelectMany().ToObservableCollection();
-        }
+        this.TalentList = this.TalentMatrix.SelectMany().ToObservableCollection();
+    }
 
 
-        public IEnumerable<ITalent> ActiveTalents
+    public IEnumerable<ITalent> ActiveTalents
+    {
+        get
         {
-            get
+            return from collection in this.TalentMatrix
+
+                from model in collection
+
+                where model.Active
+
+                select model.SelectedObject;
+        }
+        set
+        {
+            var cache = value.Pipe(System.Linq.Enumerable.ToHashSet);
+
+            foreach (var collection in this.TalentMatrix)
             {
-                return from collection in this.TalentMatrix
-
-                       from model in collection
-
-                       where model.Active
-
-                       select model.SelectedObject;
-            }
-            set
-            {
-                var cache = value.Pipe(System.Linq.Enumerable.ToHashSet);
-
-                foreach (var collection in this.TalentMatrix)
+                foreach (var model in collection)
                 {
-                    foreach (var model in collection)
-                    {
-                        model.Active = cache.Contains(model.SelectedObject);
-                    }
+                    model.Active = cache.Contains(model.SelectedObject);
                 }
             }
         }
+    }
 
-        public ObservableCollection<TalentModel> TalentList
-        {
-            get { return this.GetValue(v => v.TalentList); }
-            private set { this.SetValue(v => v.TalentList, value); }
-        }
+    public ObservableCollection<TalentModel> TalentList
+    {
+        get { return this.GetValue(v => v.TalentList); }
+        private set { this.SetValue(v => v.TalentList, value); }
+    }
 
-        public ObservableCollection<ObservableCollection<TalentModel>> TalentMatrix
-        {
-            get { return this.GetValue(v => v.TalentMatrix); }
-            private set { this.SetValue(v => v.TalentMatrix, value); }
-        }
+    public ObservableCollection<ObservableCollection<TalentModel>> TalentMatrix
+    {
+        get { return this.GetValue(v => v.TalentMatrix); }
+        private set { this.SetValue(v => v.TalentMatrix, value); }
+    }
 
-        public ITalentBranch TalentBranch
-        {
-            get { return this.GetValue(v => v.TalentBranch); }
-            private set { this.SetValue(v => v.TalentBranch, value); }
-        }
+    public ITalentBranch TalentBranch
+    {
+        get { return this.GetValue(v => v.TalentBranch); }
+        private set { this.SetValue(v => v.TalentBranch, value); }
     }
 }

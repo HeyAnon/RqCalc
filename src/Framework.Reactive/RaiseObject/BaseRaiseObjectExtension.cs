@@ -22,7 +22,7 @@ namespace Framework.Reactive
 
 
             source.PropertyChanged.Maybe (
-                propertyChanged => propertyChanged (source, new PropertyChangedEventArgs (propertyExpression.ToPath ())));
+                propertyChanged => propertyChanged (source, new(propertyExpression.ToPath ())));
         }
 
         public static void RaisePropertyChanged<TSource>(this TSource source, string propertyName)
@@ -40,7 +40,7 @@ namespace Framework.Reactive
 
 
             source.PropertyChanged.Maybe(
-                propertyChanged => propertyChanged(source, new PropertyChangedEventArgs(propertyName)));
+                propertyChanged => propertyChanged(source, new(propertyName)));
         }
 
 

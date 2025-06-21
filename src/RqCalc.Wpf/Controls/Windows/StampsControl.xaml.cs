@@ -1,12 +1,11 @@
 ﻿using System.Windows.Controls;
 
-namespace RqCalc.Wpf.Controls.Windows
+namespace RqCalc.Wpf.Controls.Windows;
+
+public partial class StampsControl : UserControl
 {
-    public partial class StampsControl : UserControl
+    public StampsControl()
     {
-        public StampsControl()
-        {
-            this.InitializeComponent();
-        }
+        this.InitializeComponent();
     }
 }

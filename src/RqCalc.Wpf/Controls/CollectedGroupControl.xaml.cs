@@ -1,12 +1,11 @@
 ﻿using System.Windows.Controls;
 
-namespace RqCalc.Wpf.Controls
+namespace RqCalc.Wpf.Controls;
+
+public partial class CollectedGroupControl : UserControl
 {
-    public partial class CollectedGroupControl : UserControl
+    public CollectedGroupControl()
     {
-        public CollectedGroupControl()
-        {
-            this.InitializeComponent();
-        }
+        this.InitializeComponent();
     }
 }

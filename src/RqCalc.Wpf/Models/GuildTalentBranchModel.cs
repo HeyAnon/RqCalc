@@ -2,66 +2,64 @@ using System.Collections.ObjectModel;
 using Framework.Core;
 using Framework.Reactive;
 using RqCalc.Domain.GuildTalent;
-using RqCalc.Wpf.Models._Base;
 using RqCalc.Wpf.Models.Window.Dialog;
 
-namespace RqCalc.Wpf.Models
+namespace RqCalc.Wpf.Models;
+
+public class GuildTalentBranchModel : NotifyModelBase
 {
-    public class GuildTalentBranchModel : ContextModel
+    public readonly GuildTalentsWindowModel WindowModel;
+
+
+    public GuildTalentBranchModel(GuildTalentsWindowModel windowModel, IGuildTalentBranch talentBranch)
+        : base (context)
     {
-        public readonly GuildTalentsWindowModel WindowModel;
+        this.WindowModel = windowModel ?? throw new ArgumentNullException(nameof(windowModel));
+        this.GuildTalentBranch = talentBranch ?? throw new ArgumentNullException(nameof(talentBranch));
 
+        this.Talents = talentBranch.Talents.ToObservableCollection(tal => new GuildTalentModel(this.Context, this, tal));
+    }
 
-        public GuildTalentBranchModel(IServiceProvider context, GuildTalentsWindowModel windowModel, IGuildTalentBranch talentBranch)
-            : base (context)
+    public GuildTalentBranchModel PrevBranch => this.WindowModel.Branches.TakeWhile(b => b != this).LastOrDefault();
+
+    public GuildTalentBranchModel NextBranch => this.WindowModel.Branches.SkipWhile(b => b != this).Skip(1).FirstOrDefault();
+
+    public bool Maximized => this.Talents.Sum(t => t.Points) == this.GuildTalentBranch.MaxPoints;
+
+    public bool Editable => (this.PrevBranch?.Maximized ?? true) && !(this.NextBranch?.HasActiveTalents ?? false);
+
+    public bool HasActiveTalents => this.Talents.Any(t => t.Active);
+
+    public IReadOnlyDictionary<IGuildTalent, int> ActiveTalents
+    {
+        get
         {
-            this.WindowModel = windowModel ?? throw new ArgumentNullException(nameof(windowModel));
-            this.GuildTalentBranch = talentBranch ?? throw new ArgumentNullException(nameof(talentBranch));
+            var request = from model in this.Talents
 
-            this.Talents = talentBranch.Talents.ToObservableCollection(tal => new GuildTalentModel(this.Context, this, tal));
+                where model.Points > 0
+
+                select model.SelectedObject.ToKeyValuePair(model.Points);
+
+            return request.ToDictionary();
         }
-
-        public GuildTalentBranchModel PrevBranch => this.WindowModel.Branches.TakeWhile(b => b != this).LastOrDefault();
-
-        public GuildTalentBranchModel NextBranch => this.WindowModel.Branches.SkipWhile(b => b != this).Skip(1).FirstOrDefault();
-
-        public bool Maximized => this.Talents.Sum(t => t.Points) == this.GuildTalentBranch.MaxPoints;
-
-        public bool Editable => (this.PrevBranch?.Maximized ?? true) && !(this.NextBranch?.HasActiveTalents ?? false);
-
-        public bool HasActiveTalents => this.Talents.Any(t => t.Active);
-
-        public IReadOnlyDictionary<IGuildTalent, int> ActiveTalents
+        set
         {
-            get
+            foreach (var model in this.Talents)
             {
-                var request = from model in this.Talents
-
-                              where model.Points > 0
-
-                              select model.SelectedObject.ToKeyValuePair(model.Points);
-
-                return request.ToDictionary();
-            }
-            set
-            {
-                foreach (var model in this.Talents)
-                {
-                    model.Points = value.GetValueOrDefault(model.SelectedObject);
-                }
+                model.Points = value.GetValueOrDefault(model.SelectedObject);
             }
         }
+    }
         
-        public ObservableCollection<GuildTalentModel> Talents
-        {
-            get { return this.GetValue(v => v.Talents); }
-            private set { this.SetValue(v => v.Talents, value); }
-        }
+    public ObservableCollection<GuildTalentModel> Talents
+    {
+        get { return this.GetValue(v => v.Talents); }
+        private set { this.SetValue(v => v.Talents, value); }
+    }
 
-        public IGuildTalentBranch GuildTalentBranch
-        {
-            get { return this.GetValue(v => v.GuildTalentBranch); }
-            private set { this.SetValue(v => v.GuildTalentBranch, value); }
-        }
+    public IGuildTalentBranch GuildTalentBranch
+    {
+        get { return this.GetValue(v => v.GuildTalentBranch); }
+        private set { this.SetValue(v => v.GuildTalentBranch, value); }
     }
 }

@@ -18,782 +18,781 @@ using RqCalc.Wpf._Extensions;
 using RqCalc.Wpf.Exception;
 using RqCalc.Wpf.Models._Base;
 
-namespace RqCalc.Wpf.Models
+namespace RqCalc.Wpf.Models;
+
+public class CharacterChangeModel : UpdateModel, ICharacterSource
 {
-    public class CharacterChangeModel : UpdateModel, ICharacterSource
+    public CharacterChangeModel(ICharacterSource character)
+
     {
-        public CharacterChangeModel(IServiceProvider context, ICharacterSource character)
-            : base(context)
+        if (character == null) throw new ArgumentNullException(nameof(character));
+            
         {
-            if (character == null) throw new ArgumentNullException(nameof(character));
-            
+            var equipmentsRequest = from slot in this.Context.DataSource.GetFullList<IEquipmentSlot>()
+
+                from index in Enumerable.Range(0, slot.Count)
+
+                select new EquipmentChangeModel(this.Context, new CharacterEquipmentIdentity(slot, index));
+
+            this.Equipments = equipmentsRequest.ToObservableCollection();
+
             {
-                var equipmentsRequest = from slot in this.Context.DataSource.GetFullList<IEquipmentSlot>()
+                var dict = this.Equipments.ToDictionary(model => model.Identity);
 
-                                        from index in Enumerable.Range(0, slot.Count)
-
-                                        select new EquipmentChangeModel(this.Context, new CharacterEquipmentIdentity(slot, index));
-
-                this.Equipments = equipmentsRequest.ToObservableCollection();
-
+                foreach (var equipmentModel in this.Equipments)
                 {
-                    var dict = this.Equipments.ToDictionary(model => model.Identity);
-
-                    foreach (var equipmentModel in this.Equipments)
-                    {
-                        equipmentModel.ReverseModel = equipmentModel.Identity.GetReverse().Maybe(ri => dict[ri]);
-                    }
+                    equipmentModel.ReverseModel = equipmentModel.Identity.GetReverse().Maybe(ri => dict[ri]);
                 }
-
-
-                this.EquipmentDict = this.Equipments.ToDictionary(model => model.Identity.Slot.Id + (model.Identity.Index == 0 ? "" : "|" + model.Identity.Index));
             }
 
 
+            this.EquipmentDict = this.Equipments.ToDictionary(model => model.Identity.Slot.Id + (model.Identity.Index == 0 ? "" : "|" + model.Identity.Index));
+        }
+
+
+        {
+            var classDisplayStats = StatConst.SpecialStats.ToDictionary(v => v, _ => new DisplayStatModel());
+
+            var staticDisplayStats = this.Context.DataSource
+                .GetFullList<IStat>()
+                .Except(this.Context.DataSource.GetFullList<IClass>().SelectMany(c => c.GetStats()))
+                .ToDictionary(stat => stat.GetBindName(), stat => new DisplayStatModel { Stat = stat });
+
+            this.DisplayStats = classDisplayStats.Concat(staticDisplayStats);
+        }
+
+        {
+            this.EditStats = new Dictionary<string, CharacterStatEditModel>
             {
-                var classDisplayStats = StatConst.SpecialStats.ToDictionary(v => v, _ => new DisplayStatModel());
+                { StatConst.PrimaryStatName, new CharacterStatEditModel(this.Context, this) }
+            }.Concat(this.Context.NotPrimaryEditStats.ToDictionary(stat => stat.Name, stat => new CharacterStatEditModel(this.Context, this) { Stat = stat }));
 
-                var staticDisplayStats = this.Context.DataSource
-                                                     .GetFullList<IStat>()
-                                                     .Except(this.Context.DataSource.GetFullList<IClass>().SelectMany(c => c.GetStats()))
-                                                     .ToDictionary(stat => stat.GetBindName(), stat => new DisplayStatModel { Stat = stat });
+            this.EditStatList = this.EditStats.Values.ToObservableCollection();
+        }
 
-                this.DisplayStats = classDisplayStats.Concat(staticDisplayStats);
-            }
+        this.ElixirModel = new ActiveImageChangeModel<IElixir>(this.Context, this.Context.ImageSourceService.GetStaticImage(StaticImageType.Elixir)) { Activate = true };
 
-            {
-                this.EditStats = new Dictionary<string, CharacterStatEditModel>
-                {
-                    { StatConst.PrimaryStatName, new CharacterStatEditModel(this.Context, this) }
-                }.Concat(this.Context.NotPrimaryEditStats.ToDictionary(stat => stat.Name, stat => new CharacterStatEditModel(this.Context, this) { Stat = stat }));
+        this.ConsumableList = new ActiveImageChangeModelCollection<IImageDirectoryBase, IConsumable>(this.Context, this.Context.ImageSourceService.GetStaticImage(StaticImageType.Consumable)) { Activate = true };
 
-                this.EditStatList = this.EditStats.Values.ToObservableCollection();
-            }
+        this.GuildTalentDict = new ActiveImageChangeModelDictionary<IImageDirectoryBase, IGuildTalent, int>(this.Context, this.Context.ImageSourceService.GetStaticImage(StaticImageType.Guild)) { Activate = true };
 
-            this.ElixirModel = new ActiveImageChangeModel<IElixir>(this.Context, this.Context.ImageSourceService.GetStaticImage(StaticImageType.Elixir)) { Activate = true };
+        this.TalentList = new ActiveImageChangeModelCollection<IImageDirectoryBase, ITalent>(this.Context, this.Context.ImageSourceService.GetStaticImage(StaticImageType.Talent)) { Activate = true };
 
-            this.ConsumableList = new ActiveImageChangeModelCollection<IImageDirectoryBase, IConsumable>(this.Context, this.Context.ImageSourceService.GetStaticImage(StaticImageType.Consumable)) { Activate = true };
+        this.AuraModel = new ActiveImageChangeModel<IAura>(this.Context, this.Context.ImageSourceService.GetStaticImage(StaticImageType.Aura)) { Activate = true };
 
-            this.GuildTalentDict = new ActiveImageChangeModelDictionary<IImageDirectoryBase, IGuildTalent, int>(this.Context, this.Context.ImageSourceService.GetStaticImage(StaticImageType.Guild)) { Activate = true };
+        this.SharedAurasDict = new ActiveImageChangeModelDictionary<IImageDirectoryBase, IAura, bool>(this.Context);
 
-            this.TalentList = new ActiveImageChangeModelCollection<IImageDirectoryBase, ITalent>(this.Context, this.Context.ImageSourceService.GetStaticImage(StaticImageType.Talent)) { Activate = true };
+        this.BuffDict = new ActiveImageChangeModelDictionary<IImageDirectoryBase, IBuff, int>(this.Context, this.Context.ImageSourceService.GetStaticImage(StaticImageType.Buff)) { Activate = true };
 
-            this.AuraModel = new ActiveImageChangeModel<IAura>(this.Context, this.Context.ImageSourceService.GetStaticImage(StaticImageType.Aura)) { Activate = true };
-
-            this.SharedAurasDict = new ActiveImageChangeModelDictionary<IImageDirectoryBase, IAura, bool>(this.Context);
-
-            this.BuffDict = new ActiveImageChangeModelDictionary<IImageDirectoryBase, IBuff, int>(this.Context, this.Context.ImageSourceService.GetStaticImage(StaticImageType.Buff)) { Activate = true };
-
-            this.CollectedEquipmentList = new ActiveImageChangeModelCollection<IImageDirectoryBase, ICollectedItem>(this.Context, this.Context.ImageSourceService.GetStaticImage(StaticImageType.Collections)) { Activate = true };
+        this.CollectedEquipmentList = new ActiveImageChangeModelCollection<IImageDirectoryBase, ICollectedItem>(this.Context, this.Context.ImageSourceService.GetStaticImage(StaticImageType.Collections)) { Activate = true };
 
 
-            this.SetData(character);
+        this.SetData(character);
             
 
-            this.EditStats.Join(this.DisplayStats, pair => pair.Key, pair => pair.Key, (editModelPair, displayModelPair) => new { DisplayModel = displayModelPair.Value, EditModel = editModelPair.Value }).Foreach(pair =>
+        this.EditStats.Join(this.DisplayStats, pair => pair.Key, pair => pair.Key, (editModelPair, displayModelPair) => new { DisplayModel = displayModelPair.Value, EditModel = editModelPair.Value }).Foreach(pair =>
 
-                pair.DisplayModel.SubscribeExplicit(rule => rule.Subscribe(model => model.Value, value => pair.EditModel.DisplayValue = (int)value.Value)));
+            pair.DisplayModel.SubscribeExplicit(rule => rule.Subscribe(model => model.Value, value => pair.EditModel.DisplayValue = (int)value.Value)));
 
-            this.SubscribeExplicit(
+        this.SubscribeExplicit(
 
-                rule => rule.Subscribe(model => model.EnableAura, this.Recalculate),
-                rule => rule.Subscribe(model => model.EnableBuffs, this.Recalculate),
-                rule => rule.Subscribe(model => model.EnableGuildTalents, this.Recalculate),
-                rule => rule.Subscribe(model => model.EnableTalents, this.Recalculate),
-                rule => rule.Subscribe(model => model.EnableCollecting, this.Recalculate),
+            rule => rule.Subscribe(model => model.EnableAura, this.Recalculate),
+            rule => rule.Subscribe(model => model.EnableBuffs, this.Recalculate),
+            rule => rule.Subscribe(model => model.EnableGuildTalents, this.Recalculate),
+            rule => rule.Subscribe(model => model.EnableTalents, this.Recalculate),
+            rule => rule.Subscribe(model => model.EnableCollecting, this.Recalculate),
 
-                rule => rule.Subscribe(model => model.LostControl, this.Recalculate),
+            rule => rule.Subscribe(model => model.LostControl, this.Recalculate),
 
-                rule => rule.SelectMany(model => model.EditStatList, editStatModel => editStatModel.Subscribe(model => model.EditValue, this.Recalculate)),
+            rule => rule.SelectMany(model => model.EditStatList, editStatModel => editStatModel.Subscribe(model => model.EditValue, this.Recalculate)),
 
-                rule => rule.Subscribe(model => model.Gender, this.GenderChanged),
+            rule => rule.Subscribe(model => model.Gender, this.GenderChanged),
 
-                rule => rule.Subscribe(model => model.Class, this.ClassChanged),
+            rule => rule.Subscribe(model => model.Class, this.ClassChanged),
 
-                rule => rule.Subscribe(model => model.Level, this.LevelChanged),
+            rule => rule.Subscribe(model => model.Level, this.LevelChanged),
 
-                rule => rule.Subscribe(model => model.Event, this.Recalculate),
+            rule => rule.Subscribe(model => model.Event, this.Recalculate),
 
-                rule => rule.Subscribe(model => model.State, this.Recalculate),
+            rule => rule.Subscribe(model => model.State, this.Recalculate),
 
-                rule => rule.SelectMany(model => model.Equipments, equipmentModelRule => equipmentModelRule.Subscribe(model => model.DataModel, this.DataModelChanged),
-                                                                   equipmentModelRule => equipmentModelRule.Select(model => model.DataModel, dataModelRule => dataModelRule.Subscribe(dataModel => dataModel.Active, this.Recalculate))),
+            rule => rule.SelectMany(model => model.Equipments, equipmentModelRule => equipmentModelRule.Subscribe(model => model.DataModel, this.DataModelChanged),
+                equipmentModelRule => equipmentModelRule.Select(model => model.DataModel, dataModelRule => dataModelRule.Subscribe(dataModel => dataModel.Active, this.Recalculate))),
 
-                rule => rule.Select(model => model.ElixirModel, extRule => extRule.Subscribe(obj => obj.Active, this.Recalculate),
-                                                                extRule => extRule.Subscribe(obj => obj.SelectedObject, this.Recalculate)),
+            rule => rule.Select(model => model.ElixirModel, extRule => extRule.Subscribe(obj => obj.Active, this.Recalculate),
+                extRule => extRule.Subscribe(obj => obj.SelectedObject, this.Recalculate)),
 
-                rule => rule.Select(model => model.ConsumableList, extRule => extRule.Subscribe(obj => obj.Active, this.Recalculate),
-                                                                   extRule => extRule.Subscribe(obj => obj.Value, this.Recalculate)),
+            rule => rule.Select(model => model.ConsumableList, extRule => extRule.Subscribe(obj => obj.Active, this.Recalculate),
+                extRule => extRule.Subscribe(obj => obj.Value, this.Recalculate)),
 
-                rule => rule.Select(model => model.GuildTalentDict, extRule => extRule.Subscribe(obj => obj.Active, this.Recalculate),
-                                                                   extRule => extRule.Subscribe(obj => obj.Value, this.Recalculate)),
+            rule => rule.Select(model => model.GuildTalentDict, extRule => extRule.Subscribe(obj => obj.Active, this.Recalculate),
+                extRule => extRule.Subscribe(obj => obj.Value, this.Recalculate)),
 
-                rule => rule.Select(model => model.TalentList, extRule => extRule.Subscribe(obj => obj.Active, this.TalentsChanged),
-                                                               extRule => extRule.Subscribe(obj => obj.Value, this.TalentsChanged)),
+            rule => rule.Select(model => model.TalentList, extRule => extRule.Subscribe(obj => obj.Active, this.TalentsChanged),
+                extRule => extRule.Subscribe(obj => obj.Value, this.TalentsChanged)),
 
-                rule => rule.Select(model => model.AuraModel, extRule => extRule.Subscribe(obj => obj.Active, this.Recalculate),
-                                                              extRule => extRule.Subscribe(obj => obj.SelectedObject, this.Recalculate)),
+            rule => rule.Select(model => model.AuraModel, extRule => extRule.Subscribe(obj => obj.Active, this.Recalculate),
+                extRule => extRule.Subscribe(obj => obj.SelectedObject, this.Recalculate)),
 
-                rule => rule.Select(model => model.SharedAurasDict, extRule => extRule.Subscribe(obj => obj.Value, this.Recalculate)),
+            rule => rule.Select(model => model.SharedAurasDict, extRule => extRule.Subscribe(obj => obj.Value, this.Recalculate)),
                 
-                rule => rule.Select(model => model.BuffDict, extRule => extRule.Subscribe(obj => obj.Active, this.Recalculate),
-                                                             extRule => extRule.Subscribe(obj => obj.Value, this.Recalculate)),
+            rule => rule.Select(model => model.BuffDict, extRule => extRule.Subscribe(obj => obj.Active, this.Recalculate),
+                extRule => extRule.Subscribe(obj => obj.Value, this.Recalculate)),
 
-                rule => rule.Select(model => model.CollectedEquipmentList, extRule => extRule.Subscribe(obj => obj.Active, this.Recalculate),
-                                                                           extRule => extRule.Subscribe(obj => obj.Value, this.Recalculate)));
-        }
+            rule => rule.Select(model => model.CollectedEquipmentList, extRule => extRule.Subscribe(obj => obj.Active, this.Recalculate),
+                extRule => extRule.Subscribe(obj => obj.Value, this.Recalculate)));
+    }
 
 
-        public string Code
+    public string Code
+    {
+        get { return this.GetValue(v => v.Code); }
+        set
         {
-            get { return this.GetValue(v => v.Code); }
-            set
+            if (this.Code == value)
             {
-                if (this.Code == value)
-                {
-                    return;
-                }
+                return;
+            }
 
-                var prevValue = this.Code;
+            var prevValue = this.Code;
 
-                this.SetValue(v => v.Code, value);
+            this.SetValue(v => v.Code, value);
 
-                try
-                {
-                    this.SetData(this.Context.Serializer.Deserialize(this.Code));
-                }
-                catch (System.Exception ex)
-                {
-                    this.SetValue(v => v.Code, prevValue);
+            try
+            {
+                this.SetData(this.Context.Serializer.Deserialize(this.Code));
+            }
+            catch (System.Exception ex)
+            {
+                this.SetValue(v => v.Code, prevValue);
 
-                    throw new ClientException("Invalid code", ex);
-                }
+                throw new ClientException("Invalid code", ex);
             }
         }
+    }
 
-        public byte[] BinaryData
-        {
-            get { return this.Context.BinarySerializer.Serialize(this); }
-            set { this.SetData(this.Context.BinarySerializer.Deserialize(value)); }
-        }
-
-
-        private CharacterStatEditModel PrimaryEditStat => this.EditStats[StatConst.PrimaryStatName];
+    public byte[] BinaryData
+    {
+        get { return this.Context.BinarySerializer.Serialize(this); }
+        set { this.SetData(this.Context.BinarySerializer.Deserialize(value)); }
+    }
 
 
-        private DisplayStatModel PrimaryDisplayStat => this.DisplayStats[StatConst.PrimaryStatName];
-
-        private DisplayStatModel EnergyDisplayStat => this.DisplayStats[StatConst.EnergyStatName];
-
-        private DisplayStatModel ResoreEnergyDisplayStat => this.DisplayStats[StatConst.RestoreEnergyStatName];
-
-        private DisplayStatModel RestoreEnergyPerHitStat => this.DisplayStats[StatConst.RestoreEnergyPerHitStatName];
-
-        private DisplayStatModel RestoreEnergyPerKillStat => this.DisplayStats[StatConst.RestoreEnergyPerKillStatName];
+    private CharacterStatEditModel PrimaryEditStat => this.EditStats[StatConst.PrimaryStatName];
 
 
-        public IReadOnlyDictionary<string, DisplayStatModel> DisplayStats
-        {
-            get { return this.GetValue(v => v.DisplayStats); }
-            private set { this.SetValue(v => v.DisplayStats, value); }
-        }
+    private DisplayStatModel PrimaryDisplayStat => this.DisplayStats[StatConst.PrimaryStatName];
+
+    private DisplayStatModel EnergyDisplayStat => this.DisplayStats[StatConst.EnergyStatName];
+
+    private DisplayStatModel ResoreEnergyDisplayStat => this.DisplayStats[StatConst.RestoreEnergyStatName];
+
+    private DisplayStatModel RestoreEnergyPerHitStat => this.DisplayStats[StatConst.RestoreEnergyPerHitStatName];
+
+    private DisplayStatModel RestoreEnergyPerKillStat => this.DisplayStats[StatConst.RestoreEnergyPerKillStatName];
 
 
-        private ObservableCollection<CharacterStatEditModel> EditStatList
-        {
-            get { return this.GetValue(v => v.EditStatList); }
-            set { this.SetValue(v => v.EditStatList, value); }
-        }
-
-        public IReadOnlyDictionary<string, CharacterStatEditModel> EditStats
-        {
-            get { return this.GetValue(v => v.EditStats); }
-            private set { this.SetValue(v => v.EditStats, value); }
-        }
-
-        public IReadOnlyDictionary<string, EquipmentChangeModel> EquipmentDict
-        {
-            get { return this.GetValue(v => v.EquipmentDict); }
-            private set { this.SetValue(v => v.EquipmentDict, value); }
-        }
+    public IReadOnlyDictionary<string, DisplayStatModel> DisplayStats
+    {
+        get { return this.GetValue(v => v.DisplayStats); }
+        private set { this.SetValue(v => v.DisplayStats, value); }
+    }
 
 
-        private ObservableCollection<EquipmentChangeModel> Equipments
-        {
-            get { return this.GetValue(v => v.Equipments); }
-            set { this.SetValue(v => v.Equipments, value); }
-        }
+    private ObservableCollection<CharacterStatEditModel> EditStatList
+    {
+        get { return this.GetValue(v => v.EditStatList); }
+        set { this.SetValue(v => v.EditStatList, value); }
+    }
+
+    public IReadOnlyDictionary<string, CharacterStatEditModel> EditStats
+    {
+        get { return this.GetValue(v => v.EditStats); }
+        private set { this.SetValue(v => v.EditStats, value); }
+    }
+
+    public IReadOnlyDictionary<string, EquipmentChangeModel> EquipmentDict
+    {
+        get { return this.GetValue(v => v.EquipmentDict); }
+        private set { this.SetValue(v => v.EquipmentDict, value); }
+    }
+
+
+    private ObservableCollection<EquipmentChangeModel> Equipments
+    {
+        get { return this.GetValue(v => v.Equipments); }
+        set { this.SetValue(v => v.Equipments, value); }
+    }
 
 
 
 
 
-        public int MinLevel
-        {
-            get { return this.GetValue(v => v.MinLevel); }
-            private set { this.SetValue(v => v.MinLevel, value); }
-        }
+    public int MinLevel
+    {
+        get { return this.GetValue(v => v.MinLevel); }
+        private set { this.SetValue(v => v.MinLevel, value); }
+    }
 
-        public int MaxLevel
-        {
-            get { return this.GetValue(v => v.MaxLevel); }
-            private set { this.SetValue(v => v.MaxLevel, value); }
-        }
+    public int MaxLevel
+    {
+        get { return this.GetValue(v => v.MaxLevel); }
+        private set { this.SetValue(v => v.MaxLevel, value); }
+    }
 
-        public int Level
-        {
-            get { return this.GetValue(v => v.Level); }
-            set { this.SetValue(v => v.Level, value); }
-        }
+    public int Level
+    {
+        get { return this.GetValue(v => v.Level); }
+        set { this.SetValue(v => v.Level, value); }
+    }
 
 
-        public IStat PrimaryStat
-        {
-            get { return this.GetValue(v => v.PrimaryStat); }
-            private set { this.SetValue(v => v.PrimaryStat, value); }
-        }
+    public IStat PrimaryStat
+    {
+        get { return this.GetValue(v => v.PrimaryStat); }
+        private set { this.SetValue(v => v.PrimaryStat, value); }
+    }
 
-        public IStat EnergyStat
-        {
-            get { return this.GetValue(v => v.EnergyStat); }
-            private set { this.SetValue(v => v.EnergyStat, value); }
-        }
+    public IStat EnergyStat
+    {
+        get { return this.GetValue(v => v.EnergyStat); }
+        private set { this.SetValue(v => v.EnergyStat, value); }
+    }
         
-        public IGender Gender
-        {
-            get { return this.GetValue(v => v.Gender); }
-            set { this.SetValue(v => v.Gender, value); }
-        }
+    public IGender Gender
+    {
+        get { return this.GetValue(v => v.Gender); }
+        set { this.SetValue(v => v.Gender, value); }
+    }
 
-        public IClass Class
-        {
-            get { return this.GetValue(v => v.Class); }
-            set { this.SetValue(v => v.Class, value); }
-        }
+    public IClass Class
+    {
+        get { return this.GetValue(v => v.Class); }
+        set { this.SetValue(v => v.Class, value); }
+    }
 
-        public IState State
-        {
-            get { return this.GetValue(v => v.State); }
-            set { this.SetValue(v => v.State, value); }
-        }
+    public IState State
+    {
+        get { return this.GetValue(v => v.State); }
+        set { this.SetValue(v => v.State, value); }
+    }
 
-        public IEvent Event
-        {
-            get { return this.GetValue(v => v.Event); }
-            set { this.SetValue(v => v.Event, value); }
-        }
-
-
-        public IImage CharacterImage
-        {
-            get { return this.GetValue(v => v.CharacterImage); }
-            private set { this.SetValue(v => v.CharacterImage, value); }
-        }
+    public IEvent Event
+    {
+        get { return this.GetValue(v => v.Event); }
+        set { this.SetValue(v => v.Event, value); }
+    }
 
 
-
-        public IElixir Elixir
-        {
-            get { return this.ElixirModel.SelectedObject; }
-            set { this.ElixirModel.SelectedObject = value; }
-        }
-
-        public ActiveImageChangeModel<IElixir> ElixirModel
-        {
-            get { return this.GetValue(v => v.ElixirModel); }
-            set { this.SetValue(v => v.ElixirModel, value); }
-        }
-
-
-        public IReadOnlyList<IConsumable> Consumables
-        {
-            get { return this.ConsumableList.Value; }
-            set { this.ConsumableList.Value = value; }
-        }
-
-        public ActiveImageChangeModelCollection<IImageDirectoryBase, IConsumable> ConsumableList
-        {
-            get { return this.GetValue(v => v.ConsumableList); }
-            private set { this.SetValue(v => v.ConsumableList, value); }
-        }
-
-
-        public IReadOnlyDictionary<IGuildTalent, int> GuildTalents
-        {
-            get { return this.GuildTalentDict.Value; }
-            set { this.GuildTalentDict.Value = value.Where(buff => buff.Value != 0).ToDictionary(); }
-        }
-
-        public ActiveImageChangeModelDictionary<IImageDirectoryBase, IGuildTalent, int> GuildTalentDict
-        {
-            get { return this.GetValue(v => v.GuildTalentDict); }
-            private set { this.SetValue(v => v.GuildTalentDict, value); }
-        }
+    public IImage CharacterImage
+    {
+        get { return this.GetValue(v => v.CharacterImage); }
+        private set { this.SetValue(v => v.CharacterImage, value); }
+    }
 
 
 
-        public IReadOnlyDictionary<IAura, bool> SharedAuras
-        {
-            get { return this.SharedAurasDict.Value; }
-            set { this.SharedAurasDict.Value = value; }
-        }
+    public IElixir Elixir
+    {
+        get { return this.ElixirModel.SelectedObject; }
+        set { this.ElixirModel.SelectedObject = value; }
+    }
 
-        public ActiveImageChangeModelDictionary<IImageDirectoryBase, IAura, bool> SharedAurasDict
-        {
-            get { return this.GetValue(v => v.SharedAurasDict); }
-            private set { this.SetValue(v => v.SharedAurasDict, value); }
-        }
-
-        public IReadOnlyList<ITalent> Talents
-        {
-            get { return this.TalentList.Value; }
-            set { this.TalentList.Value = value; }
-        }
-
-        public ActiveImageChangeModelCollection<IImageDirectoryBase, ITalent> TalentList
-        {
-            get { return this.GetValue(v => v.TalentList); }
-            private set { this.SetValue(v => v.TalentList, value); }
-        }
+    public ActiveImageChangeModel<IElixir> ElixirModel
+    {
+        get { return this.GetValue(v => v.ElixirModel); }
+        set { this.SetValue(v => v.ElixirModel, value); }
+    }
 
 
-        public IAura Aura
-        {
-            get { return this.AuraModel.SelectedObject; }
-            set { this.AuraModel.SelectedObject = value; }
-        }
+    public IReadOnlyList<IConsumable> Consumables
+    {
+        get { return this.ConsumableList.Value; }
+        set { this.ConsumableList.Value = value; }
+    }
 
-        public ActiveImageChangeModel<IAura> AuraModel
-        {
-            get { return this.GetValue(v => v.AuraModel); }
-            set { this.SetValue(v => v.AuraModel, value); }
-        }
+    public ActiveImageChangeModelCollection<IImageDirectoryBase, IConsumable> ConsumableList
+    {
+        get { return this.GetValue(v => v.ConsumableList); }
+        private set { this.SetValue(v => v.ConsumableList, value); }
+    }
 
-        public IReadOnlyDictionary<IBuff, int> Buffs
-        {
-            get { return this.BuffDict.Value; }
-            set { this.BuffDict.Value = value.Where(buff => buff.Value != 0).ToDictionary(); }
-        }
 
-        public IReadOnlyList<ICollectedItem> CollectedItems
-        {
-            get { return this.CollectedEquipmentList.Value; }
-            set { this.CollectedEquipmentList.Value = value; }
-        }
+    public IReadOnlyDictionary<IGuildTalent, int> GuildTalents
+    {
+        get { return this.GuildTalentDict.Value; }
+        set { this.GuildTalentDict.Value = value.Where(buff => buff.Value != 0).ToDictionary(); }
+    }
 
-        public ActiveImageChangeModelCollection<IImageDirectoryBase, ICollectedItem> CollectedEquipmentList
-        {
-            get { return this.GetValue(v => v.CollectedEquipmentList); }
-            private set { this.SetValue(v => v.CollectedEquipmentList, value); }
-        }
-
-        public ActiveImageChangeModelDictionary<IImageDirectoryBase, IBuff, int> BuffDict
-        {
-            get { return this.GetValue(v => v.BuffDict); }
-            private set { this.SetValue(v => v.BuffDict, value); }
-        }
+    public ActiveImageChangeModelDictionary<IImageDirectoryBase, IGuildTalent, int> GuildTalentDict
+    {
+        get { return this.GetValue(v => v.GuildTalentDict); }
+        private set { this.SetValue(v => v.GuildTalentDict, value); }
+    }
 
 
 
-        public bool EnableElixir
-        {
-            get { return this.ElixirModel.Active; }
-            private set { this.ElixirModel.Active = value; }
-        }
+    public IReadOnlyDictionary<IAura, bool> SharedAuras
+    {
+        get { return this.SharedAurasDict.Value; }
+        set { this.SharedAurasDict.Value = value; }
+    }
 
-        public bool EnableConsumables
-        {
-            get { return this.ConsumableList.Active; }
-            private set { this.ConsumableList.Active = value; }
-        }
+    public ActiveImageChangeModelDictionary<IImageDirectoryBase, IAura, bool> SharedAurasDict
+    {
+        get { return this.GetValue(v => v.SharedAurasDict); }
+        private set { this.SetValue(v => v.SharedAurasDict, value); }
+    }
 
-        public bool EnableGuildTalents
-        {
-            get { return this.GuildTalentDict.Active; }
-            private set { this.GuildTalentDict.Active = value; }
-        }
+    public IReadOnlyList<ITalent> Talents
+    {
+        get { return this.TalentList.Value; }
+        set { this.TalentList.Value = value; }
+    }
 
-        public bool EnableTalents
-        {
-            get { return this.TalentList.Active; }
-            private set { this.TalentList.Active = value; }
-        }
-
-        public bool LostControl
-        {
-            get { return this.GetValue(v => v.LostControl); }
-            set { this.SetValue(v => v.LostControl, value); }
-        }
-
-        public bool EnableCollecting
-        {
-            get { return this.CollectedEquipmentList.Active; }
-            set { this.CollectedEquipmentList.Active = value; }
-        }
-
-        public bool EnableAura
-        {
-            get { return this.AuraModel.Active; }
-            private set { this.AuraModel.Active = value; }
-        }
-
-        public bool EnableBuffs
-        {
-            get { return this.BuffDict.Active; }
-            private set { this.BuffDict.Active = value; }
-        }
+    public ActiveImageChangeModelCollection<IImageDirectoryBase, ITalent> TalentList
+    {
+        get { return this.GetValue(v => v.TalentList); }
+        private set { this.SetValue(v => v.TalentList, value); }
+    }
 
 
+    public IAura Aura
+    {
+        get { return this.AuraModel.SelectedObject; }
+        set { this.AuraModel.SelectedObject = value; }
+    }
 
-        public int FreeStats
-        {
-            get { return this.GetValue(v => v.FreeStats); }
-            private set { this.SetValue(v => v.FreeStats, value); }
-        }
+    public ActiveImageChangeModel<IAura> AuraModel
+    {
+        get { return this.GetValue(v => v.AuraModel); }
+        set { this.SetValue(v => v.AuraModel, value); }
+    }
+
+    public IReadOnlyDictionary<IBuff, int> Buffs
+    {
+        get { return this.BuffDict.Value; }
+        set { this.BuffDict.Value = value.Where(buff => buff.Value != 0).ToDictionary(); }
+    }
+
+    public IReadOnlyList<ICollectedItem> CollectedItems
+    {
+        get { return this.CollectedEquipmentList.Value; }
+        set { this.CollectedEquipmentList.Value = value; }
+    }
+
+    public ActiveImageChangeModelCollection<IImageDirectoryBase, ICollectedItem> CollectedEquipmentList
+    {
+        get { return this.GetValue(v => v.CollectedEquipmentList); }
+        private set { this.SetValue(v => v.CollectedEquipmentList, value); }
+    }
+
+    public ActiveImageChangeModelDictionary<IImageDirectoryBase, IBuff, int> BuffDict
+    {
+        get { return this.GetValue(v => v.BuffDict); }
+        private set { this.SetValue(v => v.BuffDict, value); }
+    }
+
+
+
+    public bool EnableElixir
+    {
+        get { return this.ElixirModel.Active; }
+        private set { this.ElixirModel.Active = value; }
+    }
+
+    public bool EnableConsumables
+    {
+        get { return this.ConsumableList.Active; }
+        private set { this.ConsumableList.Active = value; }
+    }
+
+    public bool EnableGuildTalents
+    {
+        get { return this.GuildTalentDict.Active; }
+        private set { this.GuildTalentDict.Active = value; }
+    }
+
+    public bool EnableTalents
+    {
+        get { return this.TalentList.Active; }
+        private set { this.TalentList.Active = value; }
+    }
+
+    public bool LostControl
+    {
+        get { return this.GetValue(v => v.LostControl); }
+        set { this.SetValue(v => v.LostControl, value); }
+    }
+
+    public bool EnableCollecting
+    {
+        get { return this.CollectedEquipmentList.Active; }
+        set { this.CollectedEquipmentList.Active = value; }
+    }
+
+    public bool EnableAura
+    {
+        get { return this.AuraModel.Active; }
+        private set { this.AuraModel.Active = value; }
+    }
+
+    public bool EnableBuffs
+    {
+        get { return this.BuffDict.Active; }
+        private set { this.BuffDict.Active = value; }
+    }
+
+
+
+    public int FreeStats
+    {
+        get { return this.GetValue(v => v.FreeStats); }
+        private set { this.SetValue(v => v.FreeStats, value); }
+    }
         
         
 
-        public void UpdateAura(IAura aura, IReadOnlyDictionary<IAura, bool> sharedAuras)
+    public void UpdateAura(IAura aura, IReadOnlyDictionary<IAura, bool> sharedAuras)
+    {
+        this.UpdateOperation(() =>
         {
-            this.UpdateOperation(() =>
-            {
-                this.Aura = aura;
-                this.SharedAuras = sharedAuras;
-            });
-        }
+            this.Aura = aura;
+            this.SharedAuras = sharedAuras;
+        });
+    }
 
-        public EquipmentChangeModel GetEquipmentEditModel(EquipmentChangeModel model)
-        {
-            if (model == null) throw new ArgumentNullException(nameof(model));
+    public EquipmentChangeModel GetEquipmentEditModel(EquipmentChangeModel model)
+    {
+        if (model == null) throw new ArgumentNullException(nameof(model));
             
-            if (model.Identity.Slot.IsExtraSlot())
+        if (model.Identity.Slot.IsExtraSlot())
+        {
+            if (model.ReverseModel.IsDoubleHand)
             {
-                if (model.ReverseModel.IsDoubleHand)
-                {
-                    return model.ReverseModel;
-                }
-
-                if (!model.ReverseModel.Identity.Slot.AllowSingleHand(this.Class))
-                {
-                    return model.ReverseModel;
-                }
+                return model.ReverseModel;
             }
 
-            return model;
-        }
-
-
-        private void SetData(ICharacterSource character)
-        {
-            if (character == null) throw new ArgumentNullException(nameof(character));
-
-            this.UpdateOperation(() =>
+            if (!model.ReverseModel.Identity.Slot.AllowSingleHand(this.Class))
             {
-                this.Gender = character.Gender;
-                this.Class = character.Class;
-                this.Level = character.Level;
-                this.State = character.State;
-                this.Event = character.Event;
-
-                this.Elixir = character.Elixir;
-                this.Consumables = character.Consumables;
-                this.GuildTalents = character.GuildTalents;
-                this.Aura = character.Aura;
-                this.Buffs = character.Buffs;
-                this.Talents = character.Talents;
-                this.CollectedItems = character.CollectedItems;
-
-                this.SharedAuras = character.SharedAuras;
-
-                this.EnableElixir = character.EnableElixir;
-                this.EnableConsumables = character.EnableConsumables;
-                this.EnableGuildTalents = character.EnableGuildTalents;
-                this.EnableAura = character.EnableAura;
-                this.EnableBuffs = character.EnableBuffs;
-                this.EnableTalents = character.EnableTalents;
-                this.EnableCollecting = character.EnableCollecting;
-
-
-                this.Equipments.Foreach(equipmentModel => equipmentModel.Data = character.Equipments.GetValueOrDefault(equipmentModel.Identity));
-
-                {
-                    this.UpdateClassStats();
-
-                    foreach (var mergePair in this.EditStats.GetCombineItems(character.EditStats, pair => pair.Value.Stat, pair => pair.Key, _ => new System.Exception("Invaild merge logic (EditStats)")))
-                    {
-                        mergePair.Item1.Value.EditValue = mergePair.Item2.Value;
-                    }
-                }
-            }, false);
-        }
-
-
-        private void GenderChanged()
-        {
-            this.UpdateOperation(() =>
-            {
-                this.UpdateEquipment();
-                this.UpdateCollectedItems();
-            });
-        }
-
-        private void ClassChanged()
-        {
-            this.UpdateOperation(() =>
-            {
-                this.UpdateCharacterClass();
-
-                this.UpdateEquipment();
-                this.UpdateFreeStats();
-                this.UpdateTalents();
-                this.UpdateAura();
-                this.UpdateBuffs();
-            });
-        }
-
-        private void LevelChanged()
-        {
-            this.UpdateOperation(() =>
-            {
-                this.UpdateEquipment();
-                this.UpdateFreeStats();
-                this.UpdateTalents();
-                this.UpdateAura();
-                this.UpdateBuffs();
-            });
-        }
-
-        private void TalentsChanged()
-        {
-            this.UpdateOperation(() =>
-            {
-                this.UpdateBuffs();
-            });
-        }
-
-
-
-        private void UpdateFreeStats()
-        {
-            var freeStats = this.Context.GetFreeStats(this);
-
-            while (freeStats < 0)
-            {
-                var lastNotEmptyStat = this.EditStatList.Reverse().First(stat => stat.EditValue > 1);
-
-                var delta = lastNotEmptyStat.EditValue > -freeStats ? -freeStats : lastNotEmptyStat.EditValue - 1;
-
-                lastNotEmptyStat.EditValue -= delta;
-                freeStats += delta;
+                return model.ReverseModel;
             }
         }
 
-        private void UpdateTalents()
-        {
-            this.Talents = this.Talents.Where(tal => this.Class.IsSubsetOf(tal.Branch)).ToList();
+        return model;
+    }
 
-            if (this.Context.GetFreeTalents(this) < 0)
-            {
-                this.Talents = this.Context.GetLimitedTalents(this).ToList();
-            }
-        }
 
-        private void UpdateEquipment()
+    private void SetData(ICharacterSource character)
+    {
+        if (character == null) throw new ArgumentNullException(nameof(character));
+
+        this.UpdateOperation(() =>
         {
-            this.Equipments.Foreach(equipmentModel =>
+            this.Gender = character.Gender;
+            this.Class = character.Class;
+            this.Level = character.Level;
+            this.State = character.State;
+            this.Event = character.Event;
+
+            this.Elixir = character.Elixir;
+            this.Consumables = character.Consumables;
+            this.GuildTalents = character.GuildTalents;
+            this.Aura = character.Aura;
+            this.Buffs = character.Buffs;
+            this.Talents = character.Talents;
+            this.CollectedItems = character.CollectedItems;
+
+            this.SharedAuras = character.SharedAuras;
+
+            this.EnableElixir = character.EnableElixir;
+            this.EnableConsumables = character.EnableConsumables;
+            this.EnableGuildTalents = character.EnableGuildTalents;
+            this.EnableAura = character.EnableAura;
+            this.EnableBuffs = character.EnableBuffs;
+            this.EnableTalents = character.EnableTalents;
+            this.EnableCollecting = character.EnableCollecting;
+
+
+            this.Equipments.Foreach(equipmentModel => equipmentModel.Data = character.Equipments.GetValueOrDefault(equipmentModel.Identity));
+
             {
-                if (equipmentModel.Data != null)
+                this.UpdateClassStats();
+
+                foreach (var mergePair in this.EditStats.GetCombineItems(character.EditStats, pair => pair.Value.Stat, pair => pair.Key, _ => new System.Exception("Invaild merge logic (EditStats)")))
                 {
-                    var data = equipmentModel.Data;
-
-                    if (!data.Equipment.IsAllowed(this, equipmentModel.Identity.Slot))
-                    {
-                        equipmentModel.Data = null; 
-                    }
-                    else if (data.StampVariant.Maybe(s => this.Context.IsAllowedStamp(s.Stamp, data.Equipment, this.Class) == false))
-                    {
-                        equipmentModel.Data = new CharacterEquipmentData
-                        {
-                            Active = data.Active,
-                            Cards = data.Cards.ToList(),
-                            Equipment = data.Equipment,
-                            Upgrade = data.Upgrade,
-                            StampVariant = null
-                        };
-                    }
+                    mergePair.Item1.Value.EditValue = mergePair.Item2.Value;
                 }
-            });
-
-            this.UpdateCharacterImage();
-        }
-
-        private void UpdateAura()
-        {
-            var avalAuras = this.Class.GetAuras(this.Level, this.Context.LastVersion).ToList();
-
-            if (this.Aura == null || !avalAuras.Contains(this.Aura))
-            {
-                this.Aura = avalAuras.FirstOrDefault();
             }
-        }
+        }, false);
+    }
 
-        private void UpdateBuffs()
+
+    private void GenderChanged()
+    {
+        this.UpdateOperation(() =>
         {
-            this.Buffs = this.GetUpdatedClassBuffs().Concat(this.GetUpdatedSharedBuffs()).Concat(this.GetUpdatedCardBuffs()).Concat(this.GetUpdatedStampBuffs());
-        }
+            this.UpdateEquipment();
+            this.UpdateCollectedItems();
+        });
+    }
 
-        private void UpdateCollectedItems()
+    private void ClassChanged()
+    {
+        this.UpdateOperation(() =>
         {
-            this.CollectedItems = this.CollectedItems.Where(item => item.IsAllowed(this.Gender, this.Context.LastVersion)).ToList();
-        }
-
-        private Dictionary<IBuff, int> GetUpdatedClassBuffs()
-        {
-            var newBuffs = this.Buffs.Where(buffPair => buffPair.Key.Class != null && this.Class.IsSubsetOf(buffPair.Key.Class) && buffPair.Key.IsAllowed(this.Level, this.Talents)).ToDictionary();
-
-            var autoEnabledBuffs = this.Class.GetAllParents().SelectMany(c => c.Buffs.Where(buff => !newBuffs.ContainsKey(buff) && buff.AutoEnabled && buff.IsAllowed(this.Level, this.Talents))).ToDictionary(buff => buff, buff => buff.MaxStackCount);
-
-            return newBuffs.Concat(autoEnabledBuffs);
-        }
-
-        private Dictionary<IBuff, int> GetUpdatedSharedBuffs()
-        {
-            return this.Buffs.Where(buffPair => buffPair.Key.IsShared()).ToDictionary();
-        }
-
-        private Dictionary<IBuff, int> GetUpdatedCardBuffs()
-        {
-            var cardBuffs = this.GetCardBuffs().Pipe(System.Linq.Enumerable.ToHashSet);
-
-            return this.Buffs.Where(buffPair => buffPair.Key.Card != null && cardBuffs.Contains(buffPair.Key)).ToDictionary();
-        }
-
-        private Dictionary<IBuff, int> GetUpdatedStampBuffs()
-        {
-            var stampBuffs = this.GetStampBuffs().Pipe(System.Linq.Enumerable.ToHashSet);
-
-            return this.Buffs.Where(buffPair => buffPair.Key.Stamp != null && stampBuffs.Contains(buffPair.Key)).ToDictionary();
-        }
-
-        private void UpdateCharacterImage()
-        {
-            var costumeRequest = from model in this.Equipments
-                                 
-                                 where model.Data != null && model.Data.Equipment.IsCostume
-
-                                 select model.Data.Equipment.CostumeImage;
-
-                                 
-            this.CharacterImage = costumeRequest.SingleOrDefault() ?? this.Gender.Image;
-        }
-
-        private void UpdateClassStats()
-        {
-            this.PrimaryStat = this.Class.PrimaryStat;
-            this.EnergyStat = this.Class.EnergyStat;
-
-            this.PrimaryEditStat.Stat = this.Class.PrimaryStat;
-
-            this.PrimaryDisplayStat.Stat = this.Class.PrimaryStat;
-            this.EnergyDisplayStat.Stat = this.Class.EnergyStat;
-            this.ResoreEnergyDisplayStat.Stat = this.Class.EnergyStat.RestoreStats.GetValueOrDefault(RestoreStatType.Passive);
-            this.RestoreEnergyPerHitStat.Stat = this.Class.EnergyStat.RestoreStats.GetValueOrDefault(RestoreStatType.PerHit);
-            this.RestoreEnergyPerKillStat.Stat = this.Class.EnergyStat.RestoreStats.GetValueOrDefault(RestoreStatType.PerKill);
-        }
-
-        private void UpdateCharacterClass()
-        {
-            foreach (var equipmentModel in this.Equipments)
-            {
-                equipmentModel.IsAllowed = this.Class.IsAllowed(equipmentModel.Identity.Slot) || equipmentModel.Identity.Slot.IsExtraSlot();
-            }
-
-            this.UpdateClassStats();
-
-            this.MinLevel = this.Class.GetMinLevel();
-            this.MaxLevel = this.Class.Specialization.MaxLevel ?? this.Context.LastVersion.MaxLevel;
-
-            this.Level = this.Level.MinMax(this.MinLevel, this.MaxLevel);
-        }
-
-        private void DataModelChanged(EquipmentChangeModel changeModel)
-        {
-            this.UpdateOperation(() =>
-            {
-                if (changeModel.Identity.Slot.IsPrimarySlot() && changeModel.IsDoubleHand)
-                {
-                    changeModel.ReverseModel.Data = null;
-                }
-
-                this.UpdateCharacterImage();
-                this.UpdateBuffs();
-            });
-        }
-
-
-        protected override void InternalRecalculate()
-        {
-            this.FreeStats = this.Context.GetFreeStats(this);
-
-            this.UpdateCharacterImage();
             this.UpdateCharacterClass();
 
-            this.SetData(this.Context.Calc(this));
-        }
-
-        private void SetData(CharacterCalculationResult calculationResult)
-        {
-            //this.Code = character.Code;
-            this.SetValue(v => v.Code, calculationResult.Code);
-            
-            foreach (var mergePair in this.DisplayStats.Values.GetCombineItems(calculationResult.Stats, model => model.Stat, pair => pair.Key, _ => new System.Exception("Invaild merge logic (DisplayStats)")))
-            {
-                mergePair.Item1.Value = mergePair.Item2.Value;
-                mergePair.Item1.DescriptionValue = calculationResult.StatDescriptions.GetMaybeValue(mergePair.Item1.Stat).ToNullable();
-            }
-
-            foreach (var editStatModel in this.EditStats)
-            {
-                editStatModel.Value.DisplayValue = (int)this.DisplayStats[editStatModel.Key].Value;
-            }
-
-            foreach (var equipmentModel in this.Equipments)
-            {
-                var resultInfo = calculationResult.Equipments.GetValueOrDefault(equipmentModel.Identity);
-
-                if (resultInfo == null)
-                {
-                    if (equipmentModel.DataModel != null)
-                    {
-                        equipmentModel.DataModel.ResultInfo = null;
-                    }
-                }
-                else
-                {
-                    equipmentModel.DataModel.ResultInfo = resultInfo;
-                }
-            }
-        }
-
-
-
-        public void ResetStats()
-        {
-            this.UpdateOperation(() => this.EditStatList.Foreach(model => model.EditValue = 1), false);
-        }
-
-        public Dictionary<TextTemplateVariableType, decimal> GetTemplateEvaluateStats ()
-        {
-            return new Dictionary<TextTemplateVariableType, decimal>
-            {
-                { TextTemplateVariableType.Const, 1 },
-                { TextTemplateVariableType.Attack, this.DisplayStats.Values.SingleOrDefault(v => v.Stat == this.Context.Settings.AttackStat).Maybe(ds => ds.Value) },
-                { TextTemplateVariableType.Defense, this.DisplayStats.Values.SingleOrDefault(v => v.Stat == this.Context.Settings.DefenseStat).Maybe(ds => ds.Value) },
-            };
-        }
-        
-        IReadOnlyDictionary<CharacterEquipmentIdentity, ICharacterEquipmentData> ICharacterSource.Equipments => this.Equipments.Where(pair => pair.Data != null).ToDictionary(pair => pair.Identity, pair => pair.Data);
-
-        IReadOnlyDictionary<IStat, int> ICharacterSource.EditStats => this.EditStats.Values.ToDictionary(model => model.Stat, model => model.EditValue);
+            this.UpdateEquipment();
+            this.UpdateFreeStats();
+            this.UpdateTalents();
+            this.UpdateAura();
+            this.UpdateBuffs();
+        });
     }
+
+    private void LevelChanged()
+    {
+        this.UpdateOperation(() =>
+        {
+            this.UpdateEquipment();
+            this.UpdateFreeStats();
+            this.UpdateTalents();
+            this.UpdateAura();
+            this.UpdateBuffs();
+        });
+    }
+
+    private void TalentsChanged()
+    {
+        this.UpdateOperation(() =>
+        {
+            this.UpdateBuffs();
+        });
+    }
+
+
+
+    private void UpdateFreeStats()
+    {
+        var freeStats = this.Context.GetFreeStats(this);
+
+        while (freeStats < 0)
+        {
+            var lastNotEmptyStat = this.EditStatList.Reverse().First(stat => stat.EditValue > 1);
+
+            var delta = lastNotEmptyStat.EditValue > -freeStats ? -freeStats : lastNotEmptyStat.EditValue - 1;
+
+            lastNotEmptyStat.EditValue -= delta;
+            freeStats += delta;
+        }
+    }
+
+    private void UpdateTalents()
+    {
+        this.Talents = this.Talents.Where(tal => this.Class.IsSubsetOf(tal.Branch)).ToList();
+
+        if (this.Context.GetFreeTalents(this) < 0)
+        {
+            this.Talents = this.Context.GetLimitedTalents(this).ToList();
+        }
+    }
+
+    private void UpdateEquipment()
+    {
+        this.Equipments.Foreach(equipmentModel =>
+        {
+            if (equipmentModel.Data != null)
+            {
+                var data = equipmentModel.Data;
+
+                if (!data.Equipment.IsAllowed(this, equipmentModel.Identity.Slot))
+                {
+                    equipmentModel.Data = null; 
+                }
+                else if (data.StampVariant.Maybe(s => this.Context.IsAllowedStamp(s.Stamp, data.Equipment, this.Class) == false))
+                {
+                    equipmentModel.Data = new CharacterEquipmentData
+                    {
+                        Active = data.Active,
+                        Cards = data.Cards.ToList(),
+                        Equipment = data.Equipment,
+                        Upgrade = data.Upgrade,
+                        StampVariant = null
+                    };
+                }
+            }
+        });
+
+        this.UpdateCharacterImage();
+    }
+
+    private void UpdateAura()
+    {
+        var avalAuras = this.Class.GetAuras(this.Level, this.Context.LastVersion).ToList();
+
+        if (this.Aura == null || !avalAuras.Contains(this.Aura))
+        {
+            this.Aura = avalAuras.FirstOrDefault();
+        }
+    }
+
+    private void UpdateBuffs()
+    {
+        this.Buffs = this.GetUpdatedClassBuffs().Concat(this.GetUpdatedSharedBuffs()).Concat(this.GetUpdatedCardBuffs()).Concat(this.GetUpdatedStampBuffs());
+    }
+
+    private void UpdateCollectedItems()
+    {
+        this.CollectedItems = this.CollectedItems.Where(item => item.IsAllowed(this.Gender, this.Context.LastVersion)).ToList();
+    }
+
+    private Dictionary<IBuff, int> GetUpdatedClassBuffs()
+    {
+        var newBuffs = this.Buffs.Where(buffPair => buffPair.Key.Class != null && this.Class.IsSubsetOf(buffPair.Key.Class) && buffPair.Key.IsAllowed(this.Level, this.Talents)).ToDictionary();
+
+        var autoEnabledBuffs = this.Class.GetAllParents().SelectMany(c => c.Buffs.Where(buff => !newBuffs.ContainsKey(buff) && buff.AutoEnabled && buff.IsAllowed(this.Level, this.Talents))).ToDictionary(buff => buff, buff => buff.MaxStackCount);
+
+        return newBuffs.Concat(autoEnabledBuffs);
+    }
+
+    private Dictionary<IBuff, int> GetUpdatedSharedBuffs()
+    {
+        return this.Buffs.Where(buffPair => buffPair.Key.IsShared()).ToDictionary();
+    }
+
+    private Dictionary<IBuff, int> GetUpdatedCardBuffs()
+    {
+        var cardBuffs = this.GetCardBuffs().Pipe(System.Linq.Enumerable.ToHashSet);
+
+        return this.Buffs.Where(buffPair => buffPair.Key.Card != null && cardBuffs.Contains(buffPair.Key)).ToDictionary();
+    }
+
+    private Dictionary<IBuff, int> GetUpdatedStampBuffs()
+    {
+        var stampBuffs = this.GetStampBuffs().Pipe(System.Linq.Enumerable.ToHashSet);
+
+        return this.Buffs.Where(buffPair => buffPair.Key.Stamp != null && stampBuffs.Contains(buffPair.Key)).ToDictionary();
+    }
+
+    private void UpdateCharacterImage()
+    {
+        var costumeRequest = from model in this.Equipments
+                                 
+            where model.Data != null && model.Data.Equipment.IsCostume
+
+            select model.Data.Equipment.CostumeImage;
+
+                                 
+        this.CharacterImage = costumeRequest.SingleOrDefault() ?? this.Gender.Image;
+    }
+
+    private void UpdateClassStats()
+    {
+        this.PrimaryStat = this.Class.PrimaryStat;
+        this.EnergyStat = this.Class.EnergyStat;
+
+        this.PrimaryEditStat.Stat = this.Class.PrimaryStat;
+
+        this.PrimaryDisplayStat.Stat = this.Class.PrimaryStat;
+        this.EnergyDisplayStat.Stat = this.Class.EnergyStat;
+        this.ResoreEnergyDisplayStat.Stat = this.Class.EnergyStat.RestoreStats.GetValueOrDefault(RestoreStatType.Passive);
+        this.RestoreEnergyPerHitStat.Stat = this.Class.EnergyStat.RestoreStats.GetValueOrDefault(RestoreStatType.PerHit);
+        this.RestoreEnergyPerKillStat.Stat = this.Class.EnergyStat.RestoreStats.GetValueOrDefault(RestoreStatType.PerKill);
+    }
+
+    private void UpdateCharacterClass()
+    {
+        foreach (var equipmentModel in this.Equipments)
+        {
+            equipmentModel.IsAllowed = this.Class.IsAllowed(equipmentModel.Identity.Slot) || equipmentModel.Identity.Slot.IsExtraSlot();
+        }
+
+        this.UpdateClassStats();
+
+        this.MinLevel = this.Class.GetMinLevel();
+        this.MaxLevel = this.Class.Specialization.MaxLevel ?? this.Context.LastVersion.MaxLevel;
+
+        this.Level = this.Level.MinMax(this.MinLevel, this.MaxLevel);
+    }
+
+    private void DataModelChanged(EquipmentChangeModel changeModel)
+    {
+        this.UpdateOperation(() =>
+        {
+            if (changeModel.Identity.Slot.IsPrimarySlot() && changeModel.IsDoubleHand)
+            {
+                changeModel.ReverseModel.Data = null;
+            }
+
+            this.UpdateCharacterImage();
+            this.UpdateBuffs();
+        });
+    }
+
+
+    protected override void InternalRecalculate()
+    {
+        this.FreeStats = this.Context.GetFreeStats(this);
+
+        this.UpdateCharacterImage();
+        this.UpdateCharacterClass();
+
+        this.SetData(this.Context.Calc(this));
+    }
+
+    private void SetData(CharacterCalculationResult calculationResult)
+    {
+        //this.Code = character.Code;
+        this.SetValue(v => v.Code, calculationResult.Code);
+            
+        foreach (var mergePair in this.DisplayStats.Values.GetCombineItems(calculationResult.Stats, model => model.Stat, pair => pair.Key, _ => new System.Exception("Invaild merge logic (DisplayStats)")))
+        {
+            mergePair.Item1.Value = mergePair.Item2.Value;
+            mergePair.Item1.DescriptionValue = calculationResult.StatDescriptions.GetMaybeValue(mergePair.Item1.Stat).ToNullable();
+        }
+
+        foreach (var editStatModel in this.EditStats)
+        {
+            editStatModel.Value.DisplayValue = (int)this.DisplayStats[editStatModel.Key].Value;
+        }
+
+        foreach (var equipmentModel in this.Equipments)
+        {
+            var resultInfo = calculationResult.Equipments.GetValueOrDefault(equipmentModel.Identity);
+
+            if (resultInfo == null)
+            {
+                if (equipmentModel.DataModel != null)
+                {
+                    equipmentModel.DataModel.ResultInfo = null;
+                }
+            }
+            else
+            {
+                equipmentModel.DataModel.ResultInfo = resultInfo;
+            }
+        }
+    }
+
+
+
+    public void ResetStats()
+    {
+        this.UpdateOperation(() => this.EditStatList.Foreach(model => model.EditValue = 1), false);
+    }
+
+    public Dictionary<TextTemplateVariableType, decimal> GetTemplateEvaluateStats ()
+    {
+        return new Dictionary<TextTemplateVariableType, decimal>
+        {
+            { TextTemplateVariableType.Const, 1 },
+            { TextTemplateVariableType.Attack, this.DisplayStats.Values.SingleOrDefault(v => v.Stat == this.Context.Settings.AttackStat).Maybe(ds => ds.Value) },
+            { TextTemplateVariableType.Defense, this.DisplayStats.Values.SingleOrDefault(v => v.Stat == this.Context.Settings.DefenseStat).Maybe(ds => ds.Value) },
+        };
+    }
+        
+    IReadOnlyDictionary<CharacterEquipmentIdentity, ICharacterEquipmentData> ICharacterSource.Equipments => this.Equipments.Where(pair => pair.Data != null).ToDictionary(pair => pair.Identity, pair => pair.Data);
+
+    IReadOnlyDictionary<IStat, int> ICharacterSource.EditStats => this.EditStats.Values.ToDictionary(model => model.Stat, model => model.EditValue);
 }

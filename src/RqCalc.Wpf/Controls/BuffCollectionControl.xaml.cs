@@ -1,12 +1,11 @@
 ﻿using System.Windows.Controls;
 
-namespace RqCalc.Wpf.Controls
+namespace RqCalc.Wpf.Controls;
+
+public partial class BuffCollectionControl : UserControl
 {
-    public partial class BuffCollectionControl : UserControl
+    public BuffCollectionControl()
     {
-        public BuffCollectionControl()
-        {
-            this.InitializeComponent();
-        }
+        this.InitializeComponent();
     }
 }

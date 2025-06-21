@@ -3,24 +3,23 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using RqCalc.Wpf.Models;
 
-namespace RqCalc.Wpf.Controls
+namespace RqCalc.Wpf.Controls;
+
+public partial class TalentBranchControl : UserControl
 {
-    public partial class TalentBranchControl : UserControl
+    public TalentBranchControl()
     {
-        public TalentBranchControl()
-        {
-            this.InitializeComponent();
-        }
+        this.InitializeComponent();
+    }
 
 
 
-        private void Talent_OnMouseButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            var control = (FrameworkElement)sender;
+    private void Talent_OnMouseButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        var control = (FrameworkElement)sender;
 
-            var talentModel = (TalentModel)control.DataContext;
+        var talentModel = (TalentModel)control.DataContext;
 
-            talentModel.SwitchActive();
-        }
+        talentModel.SwitchActive();
     }
 }

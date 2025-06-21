@@ -1,9 +1,8 @@
-namespace RqCalc.Wpf.Models.Window.Dialog._Base
-{
-    public interface ILegacyModel
-    {
-        bool ShowLegacy { get; set; }
+namespace RqCalc.Wpf.Models.Window.Dialog._Base;
 
-        bool HasLegacy { get; }
-    }
+public interface ILegacyModel
+{
+    bool ShowLegacy { get; set; }
+
+    bool HasLegacy { get; }
 }

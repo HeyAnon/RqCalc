@@ -1,13 +1,12 @@
 using RqCalc.Domain;
 using RqCalc.Wpf.Models._Base;
 
-namespace RqCalc.Wpf.Models
+namespace RqCalc.Wpf.Models;
+
+public class ConsumableModel : ActiveImageChangeModel<IConsumable>
 {
-    public class ConsumableModel : ActiveImageChangeModel<IConsumable>
+    public ConsumableModel(IServiceProvider context)
+
     {
-        public ConsumableModel(IServiceProvider context)
-            : base(context)
-        {
-        }
     }
 }

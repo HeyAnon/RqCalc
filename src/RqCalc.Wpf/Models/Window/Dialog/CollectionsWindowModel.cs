@@ -4,84 +4,82 @@ using Framework.Reactive;
 using Framework.Reactive.ObservableRecurse;
 using RqCalc.Domain.CollectedStatistic;
 using RqCalc.Model;
-using RqCalc.Wpf.Models._Base;
 using RqCalc.Wpf.Models.Window.Dialog._Base;
 
-namespace RqCalc.Wpf.Models.Window.Dialog
+namespace RqCalc.Wpf.Models.Window.Dialog;
+
+public class CollectionsWindowModel : NotifyModelBase, IMultiSelectModel
 {
-    public class CollectionsWindowModel : ContextModel, IMultiSelectModel
+    public CollectionsWindowModel(ICharacterSource characterSource)
+
     {
-        public CollectionsWindowModel(IServiceProvider context, ICharacterSource characterSource)
-            : base(context)
-        {
-            if (characterSource == null) throw new ArgumentNullException(nameof(characterSource));
+        if (characterSource == null) throw new ArgumentNullException(nameof(characterSource));
 
-            this.Groups = this.Context.DataSource.GetFullList<ICollectedGroup>().OrderBy(g => g.OrderIndex)
-                                                 .ToObservableCollection(g => new CollectedGroupModel(this.Context, g, characterSource));
+        this.Groups = this.Context.DataSource.GetFullList<ICollectedGroup>().OrderBy(g => g.OrderIndex)
+            .ToObservableCollection(g => new CollectedGroupModel(this.Context, g, characterSource));
 
-            this.SubscribeExplicit(rootRule => rootRule.SelectMany(rootModel => rootModel.Groups,
+        this.SubscribeExplicit(rootRule => rootRule.SelectMany(rootModel => rootModel.Groups,
             
-                groupRule => groupRule.SelectMany(group => group.ItemList, item => item.Subscribe(itemRule => itemRule.Active, this.RecalcTotalSelected))));
+            groupRule => groupRule.SelectMany(group => group.ItemList, item => item.Subscribe(itemRule => itemRule.Active, this.RecalcTotalSelected))));
 
-            this.RecalcTotalSelected();
-        }
+        this.RecalcTotalSelected();
+    }
 
 
-        public IReadOnlyList<ICollectedItem> Items
+    public IReadOnlyList<ICollectedItem> Items
+    {
+        get { return this.Groups.SelectMany(g => g.Items).ToList(); }
+        set
         {
-            get { return this.Groups.SelectMany(g => g.Items).ToList(); }
-            set
-            {
-                var request = from groupModel in this.Groups
+            var request = from groupModel in this.Groups
 
-                              join item in value on groupModel.Group equals item.Group into items
+                join item in value on groupModel.Group equals item.Group into items
 
-                              select new
-                              {
-                                  GroupModel = groupModel,
-
-                                  Items = items.ToList()
-                              };
-
-                foreach (var pair in request)
+                select new
                 {
-                    pair.GroupModel.Items = pair.Items;
-                }
-            }
-        }
+                    GroupModel = groupModel,
 
-        public ObservableCollection<CollectedGroupModel> Groups
-        {
-            get { return this.GetValue(v => v.Groups); }
-            private set { this.SetValue(v => v.Groups, value); }
-        }
+                    Items = items.ToList()
+                };
 
-        public bool? TotalSelected
-        {
-            get
+            foreach (var pair in request)
             {
-                return this.GetValue(v => v.TotalSelected);
+                pair.GroupModel.Items = pair.Items;
             }
-            set
+        }
+    }
+
+    public ObservableCollection<CollectedGroupModel> Groups
+    {
+        get { return this.GetValue(v => v.Groups); }
+        private set { this.SetValue(v => v.Groups, value); }
+    }
+
+    public bool? TotalSelected
+    {
+        get
+        {
+            return this.GetValue(v => v.TotalSelected);
+        }
+        set
+        {
+            if (value != null)
             {
-                if (value != null)
-                {
-                    this.Groups.SelectMany(g => g.ItemList).Foreach(item => item.Active = value.Value);
+                this.Groups.SelectMany(g => g.ItemList).Foreach(item => item.Active = value.Value);
 
-                    this.RecalcTotalSelected();
-                }
+                this.RecalcTotalSelected();
             }
         }
+    }
 
-        private void RecalcTotalSelected()
-        {
-            this.SetValue(v => v.TotalSelected, this.GetTotalSelectedState());
-        }
+    private void RecalcTotalSelected()
+    {
+        this.SetValue(v => v.TotalSelected, this.GetTotalSelectedState());
+    }
 
-        private bool? GetTotalSelectedState()
-        {
-            return this.Groups.SelectMany(g => g.ItemList).All(item => item.Active)  ? (bool?)true
-                 : this.Groups.SelectMany(g => g.ItemList).All(item => !item.Active) ? (bool?)false : null;
-        }
+    private bool? GetTotalSelectedState()
+    {
+        return this.Groups.SelectMany(g => g.ItemList).All(item => item.Active)  ? (bool?)true
+            : this.Groups.SelectMany(g => g.ItemList).All(item => !item.Active) ? (bool?)false : null;
     }
 }

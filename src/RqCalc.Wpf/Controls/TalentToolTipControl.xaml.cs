@@ -1,12 +1,11 @@
 ﻿using System.Windows.Controls;
 
-namespace RqCalc.Wpf.Controls
+namespace RqCalc.Wpf.Controls;
+
+public partial class TalentToolTipControl : UserControl
 {
-    public partial class TalentToolTipControl : UserControl
+    public TalentToolTipControl()
     {
-        public TalentToolTipControl()
-        {
-            this.InitializeComponent();
-        }
+        this.InitializeComponent();
     }
 }

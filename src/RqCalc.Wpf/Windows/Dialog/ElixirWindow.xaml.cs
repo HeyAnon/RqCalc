@@ -1,26 +1,25 @@
 ﻿using RqCalc.Wpf.Models.Window.Dialog;
 using RqCalc.Wpf.Windows.Dialog._Base;
 
-namespace RqCalc.Wpf.Windows.Dialog
+namespace RqCalc.Wpf.Windows.Dialog;
+
+public partial class ElixirWindow : IModelContainer<ElixirWindowModel>
 {
-    public partial class ElixirWindow : IModelContainer<ElixirWindowModel>
+    public ElixirWindow()
     {
-        public ElixirWindow()
-        {
-            this.InitializeComponent();
-        }
+        this.InitializeComponent();
+    }
 
 
-        public ElixirWindowModel Model
-        {
-            get { return (ElixirWindowModel)this.DataContext; }
-            set { this.DataContext = value; }
-        }
+    public ElixirWindowModel Model
+    {
+        get { return (ElixirWindowModel)this.DataContext; }
+        set { this.DataContext = value; }
+    }
 
 
-        private void DialogControl_OnClosed(object sender, EventArgs<bool> e)
-        {
-            this.DialogResult = e.Data;
-        }
+    private void DialogControl_OnClosed(object sender, EventArgs<bool> e)
+    {
+        this.DialogResult = e.Data;
     }
 }

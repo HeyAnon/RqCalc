@@ -1,12 +1,11 @@
 ﻿using System.Windows.Controls;
 
-namespace RqCalc.Wpf.Controls
+namespace RqCalc.Wpf.Controls;
+
+public partial class StackObjectControl : UserControl
 {
-    public partial class StackObjectControl : UserControl
+    public StackObjectControl()
     {
-        public StackObjectControl()
-        {
-            this.InitializeComponent();
-        }
+        this.InitializeComponent();
     }
 }
