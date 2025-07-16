@@ -35,7 +35,10 @@ jobs:
           $ErrorActionPreference = 'Stop'
           $patterns = '*.dll','*.exe','*.json','rqdata.sqlite'
           $files = foreach ($pattern in $patterns) { Get-ChildItem -Path . -Filter $pattern -File }
-          Compress-Archive -Path $files.FullName -Destination RqCalc.zip
+          
+          $nativeRuntime = Get-ChildItem -Path ./runtimes/win-x64/native -File
+          
+          Compress-Archive -Path ($files.FullName + $nativeRuntime.FullName) -Destination RqCalc.zip
 
       - name: Upload release asset
         uses: softprops/action-gh-release@v2
