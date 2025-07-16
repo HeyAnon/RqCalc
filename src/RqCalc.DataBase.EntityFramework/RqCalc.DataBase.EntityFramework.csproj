@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Framework.DataBase.Abstraction\Framework.DataBase.Abstraction.csproj" />
+    <ProjectReference Include="..\RqCalc.Domain\RqCalc.Domain.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,53 @@
+﻿<UserControl x:Class="RqCalc.Wpf.Controls.TalentToolTipControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:RqCalc.Wpf.Controls"
+             xmlns:converts="clr-namespace:RqCalc.Wpf.Converts"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="330" Background="#F520201C" Padding="10" FontFamily="Cambria" FontSize="13">
+
+    <UserControl.Resources>
+        
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+        <converts:CompositeValueConverter x:Key="NegateBooleanToVisibilityConverter">
+
+            <converts:NegateConverter />
+            
+            <BooleanToVisibilityConverter />
+            
+        </converts:CompositeValueConverter>
+        
+    </UserControl.Resources>
+    
+    <StackPanel>
+
+        <Label Content="{Binding SelectedObject.Name}" Foreground="#FFD711" FontSize="14" Padding="0" />
+
+        <Label Content="Пассивное умение" Foreground="White" Visibility="{Binding SelectedObject.Active, Converter={StaticResource NegateBooleanToVisibilityConverter}}" Padding="0" />
+
+        <Label Content="Активное умение" Foreground="LimeGreen" Visibility="{Binding SelectedObject.Active, Converter={StaticResource BooleanToVisibilityConverter}}" Padding="0" />
+
+        <controls:TalentDescriptionControl DataContext="{Binding MainDescription}" />
+
+        <StackPanel Visibility="{Binding HasEquipmentCondition, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0 10 0 0">
+            
+            <Separator />
+
+            <Label Content="{Binding SelectedObject.EquipmentCondition}" ContentStringFormat="Требуется: {0}" Foreground="Silver" Padding="0" />
+
+        </StackPanel>
+
+        <StackPanel Visibility="{Binding HasPassive, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0 10 0 0">
+            
+            <Label Content="Пассивный бонус" Foreground="LimeGreen" Padding="0" />
+
+            <controls:TalentDescriptionControl DataContext="{Binding PassiveDescription}" />
+            
+        </StackPanel>
+
+    </StackPanel>
+    
+</UserControl>

@@ -1,0 +1,47 @@
+﻿<div id="cardsModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content dialogModal_ContentCards">
+            <div class="modal-body">
+                <div data-bind="with: dialogManager.cardModel">
+                    <div class="dialogLayerTableCards">
+                        <table class="dialogTableCards">
+
+                            <thead class="dialogTableHeader">
+                                <tr>
+                                    <th class="dialogCenterHeader" colspan="2">Карта</th>
+                                    <th class="dialogCenterHeader">Бонусы</th>
+                                </tr>
+                            </thead>
+
+                            <tbody data-bind="foreach: mainGrid.items">
+                                <tr data-bind="click: selectRow, css: { selectedRow: isSelectedRow }">
+                                    <td>
+                                        <div class="dialogItemImage" data-bind="style: {'background-image': 'url('+ activeCard().type.image +')'}"></div>
+                                    </td>
+                                    <td class="dialogRow2 dialogNameCards">
+                                        <span data-bind="text: name"></span>
+                                        <select data-bind="visible: visible, options: cards, optionsText: 'groupValue', value: activeCard"></select>
+                                    </td>>
+                                    <td class="dialogRow2" data-bind="template: { name: 'CardDescriptionControl', data: { model: $parent.getDescription(activeCard()), alt: true } }"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+
+                    <div class="checkbox_showLegacy TextColor" data-bind="with: dialogManager.cardModel">
+                        <div data-bind="visible: hasLegacy">
+                            <input type="checkbox" data-bind="checked: showLegacy" /> Показать устаревшие <br />
+                        </div>
+                    </div>
+
+                    <button id="cardsBtnClear" class="btn btn-primary clearButton" data-dismiss="modal">Очистить</button>
+                    <button id="cardsBtnSuccess" class="btn btn-primary" data-dismiss="modal">Выбрать</button>
+                    <button id="cardsBtnCancel" class="btn btn-primary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

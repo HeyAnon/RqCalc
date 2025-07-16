@@ -1,0 +1,14 @@
+﻿<Window x:Class="RqCalc.Wpf.Windows.Dialog.EquipmentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dialog="clr-namespace:RqCalc.Wpf.Controls.Dialog"
+        xmlns:windows="clr-namespace:RqCalc.Wpf.Controls.Windows"
+        Title="Выбор экипировки" Background="#30302C" ResizeMode="CanMinimize" FontFamily="Cambria" FontSize="14" WindowStartupLocation="CenterOwner" Height="710" Width="1315">
+
+    <dialog:DialogControl Closed="DialogControl_OnClosed">
+
+        <windows:EquipmentSelectorControl />
+
+    </dialog:DialogControl>
+
+</Window>

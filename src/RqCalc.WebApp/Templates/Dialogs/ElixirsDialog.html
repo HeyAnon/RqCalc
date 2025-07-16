@@ -1,0 +1,44 @@
+﻿<div id="elixirsModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div data-bind="with: dialogManager.elixirsModel">
+                    <div class="layer2">
+                        <table class="dialogTable">
+
+                            <thead class="dialogTableHeader">
+                                <tr>
+                                    <th class="dialogCenterHeader" colspan="2">Эликсир</th>
+                                    <th class="dialogCenterHeader">Бонусы</th>
+                                </tr>
+                            </thead>
+
+                            <tbody data-bind="foreach: mainGrid.items">
+                                <tr data-bind="click: selectRow, css: { selectedRow: isSelectedRow }">
+                                    <td>
+                                        <div class="dialogItemImage" data-bind="style: {'background-image': 'url('+ image +')'}"></div>
+                                    </td>
+                                    <td data-bind="text: name"></td>
+                                    <td>
+                                        <div class="dialogRow2" data-bind="template: { name: 'BonusCollectionControl' }"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    
+                    <div class="checkbox_showLegacy TextColor" data-bind="with: dialogManager.elixirsModel">
+                        <input type="checkbox" data-bind="checked: showLegacy" /> Показать устаревшие <br />
+                    </div>
+
+                    <button id="elixirsBtnClear" class="btn btn-primary clearButton" data-dismiss="modal">Очистить</button>
+                    <button id="elixirsBtnSuccess" class="btn btn-primary" data-dismiss="modal">Выбрать</button>
+                    <button id="elixirsBtnCancel" class="btn btn-primary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

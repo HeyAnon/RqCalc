@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>RQ Calc</title>
+
+    <link rel="shortcut icon" href="_Images/favicon.png">
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <link href="_Styles/Default.css" rel="stylesheet" type="text/css" />
+    <link href="_Styles/Tooltip.css" rel="stylesheet" type="text/css" />
+    <link href="_Styles/Modal.css" rel="stylesheet" type="text/css" />
+
+    <script src="_Scripts/_Libs/analytics.js"></script>
+
+    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
+
+    <script src="_Scripts/_Libs/jquery.blockUI.js"></script>
+    <script src="_Scripts/_Libs/ObjHelper.js"></script>
+    <script src="_Scripts/_Libs/Enumerable.js"></script>
+    <script src="_Scripts/_Libs/AsyncMonad.js"></script>
+    <script src="_Scripts/_Libs/LoadTemplates.js"></script>
+    <script src="_Scripts/_Libs/Dialog.js"></script>
+    <script src="_Scripts/_Libs/GridModel.js"></script>
+    <script src="_Scripts/_Libs/indeterminate.js"></script>
+
+    <script src="_Scripts/Models/StatConst.js"></script>
+    <script src="_Scripts/Models/MainHelper.js"></script>
+    <script src="_Scripts/Models/StaticImageType.js"></script>
+    <script src="_Scripts/Models/TextTemplateVariableType.js"></script>
+
+    <script src="_Scripts/Models/Dialogs/ElixirsWindowModel.js"></script>
+    <script src="_Scripts/Models/Dialogs/ConsumablesWindowModel.js"></script>
+    <script src="_Scripts/Models/Dialogs/GuildTalentsWindowModel.js"></script>
+    <script src="_Scripts/Models/Dialogs/TalentsWindowModel.js"></script>
+    <script src="_Scripts/Models/Dialogs/AurasWindowModel.js"></script>
+    <script src="_Scripts/Models/Dialogs/BuffsWindowModel.js"></script>
+    <script src="_Scripts/Models/Dialogs/EquipmentsWindowModel.js"></script>
+    <script src="_Scripts/Models/Dialogs/CardsWindowModel.js"></script>
+    <script src="_Scripts/Models/Dialogs/StampsWindowModel.js"></script>
+    <script src="_Scripts/Models/Dialogs/CollectionsWindowModel.js"></script>
+
+    <script src="_Scripts/Models/UpdateModel.js"></script>
+    <script src="_Scripts/Models/CardDescriptionModel.js"></script>
+    <script src="_Scripts/Models/GuildTalentBranchModel.js"></script>
+    <script src="_Scripts/Models/GuildTalentModel.js"></script>
+    <script src="_Scripts/Models/TalentBranchModel.js"></script>
+    <script src="_Scripts/Models/TalentModel.js"></script>
+    <script src="_Scripts/Models/ActiveImageModel.js"></script>
+    <script src="_Scripts/Models/EquipmentCardModel.js"></script>
+    <script src="_Scripts/Models/EquipmentDataChangeModel.js"></script>
+    <script src="_Scripts/Models/DisplayStatModel.js"></script>
+    <script src="_Scripts/Models/CharacterStatEditModel.js"></script>
+    <script src="_Scripts/Models/EquipmentChangeModel.js"></script>
+    <script src="_Scripts/Models/CharacterChangeModel.js"></script>
+    <script src="_Scripts/Models/CharacterWindowModel.js"></script>
+    <script src="_Scripts/Models/CollectedTabModel.js"></script>
+    <script src="_Scripts/Models/CollectedStatisticModel.js"></script>
+    <script src="_Scripts/Models/CollectedGroupModel.js"></script>
+
+    <script src="_Scripts/Models/TalentDescriptionModel.js"></script>
+    <script src="_Scripts/Models/TextTemplateModel.js"></script>
+
+
+    <script src="_Scripts/DialogManager.js"></script>
+    <script src="_Scripts/TalentBuildApplicationContextBase.js"></script>
+    <script src="_Scripts/GuildTalentBuildApplicationContextBase.js"></script>
+    <script src="_Scripts/CharacterApplicationContext.js"></script>
+    <script src="_Scripts/Facade.js"></script>
+    <script src="_Scripts/Facade.Address.js"></script>
+    <script src="_Scripts/CharacterCalc.js"></script>
+
+</head>
+
+<body>
+
+    <div class="pure_table header-link">
+        <div class="pure_row">
+            <div class="pure_cell calk-link">
+                <a href="index.html">Калькулятор</a>
+            </div>
+            <div class="pure_cell calk-link">
+                <a href="talentBuild.html">Таланты</a>
+            </div>
+            <div class="pure_cell calk-link">
+                <a href="guildTalentBuild.html">Таланты гильдии</a>
+            </div>
+            <div class="pure_cell dow-link">
+              
+                    <a href="RqCalcWPF.zip">Скачать офлайн версию калькулятора</a>
+               
+            </div>
+        </div>
+    </div>
+
+
+<table class="general_Table">
+    <tr>
+        <td class="cell_code_label">Код:</td>
+        <td class="cell_code_value" colspan="3"><textarea data-bind="value: character().code" style="height: 50px; width: 555px;" rows="12"></textarea></td>
+    </tr>
+
+    <tr class="row_header">
+        <td class="cell_header_label">Пол:</td>
+        <td class="cell_header_value"><select data-bind="options: genders, optionsText: 'name', value: character().gender" class="block_class"></select></td>
+        <td rowspan="3">
+            <button class="button_NewChar pop-container" data-bind="click: trySetDefaultCharacter">
+                <div class="popover invisibleColumn">Создать нового персонажа</div>
+            </button>
+            <button class="button_About pop-container" data-bind="click: showAbout">
+                <div class="popover invisibleColumn">О калькуляторе...</div>
+            </button>
+        </td>
+        <td rowspan="4" data-bind="template: { name: 'StatsControl', data: character() }"></td>
+    </tr>
+
+    <tr class="row_header">
+        <td class="cell_header_label">Класс:</td>
+        <td class="cell_header_value"><select data-bind="options: classes, optionsText: 'offsetName', value: character().class" class="block_class"></select></td>
+    </tr>
+
+    <tr class="row_header">
+        <td class="cell_header_label">Уровень:</td>
+        <td class="cell_header_value" data-bind="with: character">
+            <input data-bind="value: level, attr: { min: minLevel, max: maxLevel }" type="number"/>
+            <button data-bind="click: maximizeLevel" class="button_number_max">^</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="3" data-bind="template: { name: 'EquipmentsControl', data: character() }"></td>
+    </tr>
+    <tr>
+        <td class="additionals_header" colspan="4">Дополнительные условия:</td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <div class="additionals_value" data-bind="with: character">
+                <div class="additionals_cell" data-bind="template: { name: 'ActiveImageControl', data: elixir }"></div>
+                <div class="additionals_cell" data-bind="template: { name: 'ActiveImageControl', data: consumables }"></div>
+                <div class="additionals_cell" data-bind="template: { name: 'ActiveImageControl', data: guildTalents }"></div>
+                <div class="additionals_cell" data-bind="template: { name: 'ActiveImageControl', data: talents }"></div>
+                <div class="additionals_cell" data-bind="template: { name: 'ActiveImageControl', data: aura }"></div>
+                <div class="additionals_cell" data-bind="template: { name: 'ActiveImageControl', data: buffs }"></div>
+                <div class="additionals_cell" data-bind="template: { name: 'ActiveImageControl', data: collectedItems }"></div>
+
+                <div class="additionals_cell">
+
+                    <table class="block_event">
+                        <tr>
+                            <td class="cell_header_label">Эвент:</td>
+                            <td class="cell_header_value">
+                                <select class="block_class" data-bind="options: $parent.events, optionsText: 'name', value: event, optionsCaption: 'Нет'"></select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="cell_header_label">Состояние:</td>
+                            <td class="cell_header_value">
+                                <select class="block_class" data-bind="options: $parent.states, optionsText: 'name', value: state"></select>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4" class="cell_code_label">
+            <input type="checkbox" data-bind="checked: character().lostControl"/>
+            Потеря контроля
+        </td>
+    </tr>
+</table>
+</body>
+</html>

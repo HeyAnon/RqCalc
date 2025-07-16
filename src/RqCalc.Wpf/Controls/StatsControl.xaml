@@ -1,0 +1,314 @@
+﻿<UserControl x:Class="RqCalc.Wpf.Controls.StatsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:RqCalc.Wpf.Controls"
+             mc:Ignorable="d">
+
+
+    <TabControl>
+
+        <TabControl.Resources>
+
+            <Style TargetType="Label" x:Key="Label_Default">
+                <Setter Property="Padding" Value="3" />
+                <Setter Property="Height" Value="22" />
+            </Style>
+
+            <Style TargetType="Label" BasedOn="{StaticResource Label_Default}" />
+
+            <Style TargetType="Label" x:Key="Label_Alt" BasedOn="{StaticResource Label_Default}">
+                <Setter Property="Foreground" Value="SaddleBrown" />
+            </Style>
+
+            <Style TargetType="Label" x:Key="Label_FreeStats" BasedOn="{StaticResource Label_Default}">
+                <Setter Property="Foreground" Value="Green" />
+            </Style>
+
+            <Style TargetType="Border" x:Key="Border_Alt_Background">
+                <Setter Property="Background" Value="BurlyWood" />
+                <Setter Property="Grid.ColumnSpan" Value="5" />
+            </Style>
+
+            <Style TargetType="Grid" x:Key="Grid_Tab">
+                <Setter Property="Background" Value="Wheat" />
+            </Style>
+
+        </TabControl.Resources>
+
+        <TabItem Header="Основные">
+
+            <Grid Name="Grid_Tab_1" Style="{StaticResource Grid_Tab}">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"  />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="01" Grid.Column="0" Style="{StaticResource Border_Alt_Background}" />
+                <Border Grid.Row="04" Grid.Column="0" Style="{StaticResource Border_Alt_Background}" />
+                <Border Grid.Row="06" Grid.Column="0" Style="{StaticResource Border_Alt_Background}" />
+                <Border Grid.Row="10" Grid.Column="0" Style="{StaticResource Border_Alt_Background}" />
+                <Border Grid.Row="12" Grid.Column="0" Style="{StaticResource Border_Alt_Background}" />
+                <Border Grid.Row="14" Grid.Column="0" Style="{StaticResource Border_Alt_Background}" />
+                <Border Grid.Row="16" Grid.Column="0" Style="{StaticResource Border_Alt_Background}" />
+
+                <Label Grid.Row="0" Grid.Column="0" Content="Здоровье" />
+                <Label Grid.Row="1" Grid.Column="0" Content="%energyStat%" />
+                <Label Grid.Row="2" Grid.Column="0" Content="Параметры:" Style="{StaticResource Label_Alt}" />
+                <Label Grid.Row="3" Grid.Column="0" Content="%primaryStat%" />
+                <Label Grid.Row="4" Grid.Column="0" Content="Ловкость" />
+                <Label Grid.Row="5" Grid.Column="0" Content="Выносливость" />
+                <Label Grid.Row="6" Grid.Column="0" Content="Удача" />
+                <Label Grid.Row="7" Grid.Column="0" Content="Нераспределено очков:" Style="{StaticResource Label_FreeStats}" />
+
+                <Label Grid.Row="7" Grid.Column="1" Content="{Binding FreeStats}" Style="{StaticResource Label_FreeStats}" />
+
+                <controls:EditStatControl Grid.Row="3" Grid.Column="2" DataContext="{Binding EditStats[%primaryStat%]}" Grid.ZIndex="1" />
+                <controls:EditStatControl Grid.Row="4" Grid.Column="2" DataContext="{Binding EditStats[Ловкость]}"  Grid.ZIndex="1" />
+                <controls:EditStatControl Grid.Row="5" Grid.Column="2" DataContext="{Binding EditStats[Выносливость]}"  Grid.ZIndex="1" />
+                <controls:EditStatControl Grid.Row="6" Grid.Column="2" DataContext="{Binding EditStats[Удача]}"  Grid.ZIndex="1" />
+
+                <Button Grid.Row="7" Grid.Column="2" Content="Сброс" Click="Button_ResetStats_Click" />
+
+                <Grid Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <controls:StatControl Grid.Row="0" Grid.Column="0" DataContext="{Binding EditStats[%primaryStat%]}" />
+                    <controls:StatControl Grid.Row="0" Grid.Column="1" DataContext="{Binding EditStats[Ловкость]}"  />
+                    <controls:StatControl Grid.Row="1" Grid.Column="0" DataContext="{Binding EditStats[Выносливость]}"  />
+                    <controls:StatControl Grid.Row="1" Grid.Column="1" DataContext="{Binding EditStats[Удача]}"  />
+
+                </Grid>
+
+                <Label Grid.Row="9" Grid.Column="0" Content="Характеристики:" Style="{StaticResource Label_Alt}" />
+                <Label Grid.Row="10" Grid.Column="0" Content="Атака" />
+                <Label Grid.Row="11" Grid.Column="0" Content="Скорость атаки" />
+                <Label Grid.Row="12" Grid.Column="0" Content="Защита" />
+                <Label Grid.Row="13" Grid.Column="0" Content="Попадание" />
+                <Label Grid.Row="14" Grid.Column="0" Content="Уворот" />
+                <Label Grid.Row="15" Grid.Column="0" Content="Рейтинг шанса крита" />
+                <Label Grid.Row="16" Grid.Column="0" Content="Сила крит. удара" />
+
+            </Grid>
+        </TabItem>
+
+        <TabItem Header="Дополнительно">
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+                <Grid Name="Grid_Tab_2" Style="{StaticResource Grid_Tab}">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"  />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="00" Grid.Column="0" Style="{StaticResource Border_Alt_Background}" />
+                    <Border Grid.Row="06" Grid.Column="0" Style="{StaticResource Border_Alt_Background}" />
+                    <Border Grid.Row="09" Grid.Column="0" Style="{StaticResource Border_Alt_Background}" />
+                    <Border Grid.Row="13" Grid.Column="0" Style="{StaticResource Border_Alt_Background}" />
+                    <Border Grid.Row="20" Grid.Column="0" Style="{StaticResource Border_Alt_Background}" />
+                    <Border Grid.Row="27" Grid.Column="0" Style="{StaticResource Border_Alt_Background}" />
+
+                    <Label Grid.Row="00" Grid.Column="0" Content="Общее" />
+                    <Label Grid.Row="01" Grid.Column="0" Content="Получаемый опыт" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="02" Grid.Column="0" Content="Получаемое золото" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="03" Grid.Column="0" Content="Шанс получения предметов" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="04" Grid.Column="0" Content="Скорость передвижения" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="05" Grid.Column="0" Content="Дистанция атаки" Style="{StaticResource Label_Alt}" />
+
+                    <Label Grid.Row="06" Grid.Column="0" Content="Выживание" />
+                    <Label Grid.Row="07" Grid.Column="0" Content="Восстановление ХП в бою" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="08" Grid.Column="0" Content="%restoreEnergyStat%" Style="{StaticResource Label_Alt}" />
+
+                    <Label Grid.Row="09" Grid.Column="0" Content="PvP (Игрок против игрока)" />
+                    <Label Grid.Row="10" Grid.Column="0" Content="3|Игрок/Урон" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="11" Grid.Column="0" Content="2|Игрок/Устойчивость к урону" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="12" Grid.Column="0" Content="Устойчивость к контролю" Style="{StaticResource Label_Alt}" />
+
+                    <Label Grid.Row="13" Grid.Column="0" Content="Элементальный урон" />
+                    <Label Grid.Row="14" Grid.Column="0" Content="1|Огонь" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="15" Grid.Column="0" Content="1|Вода" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="16" Grid.Column="0" Content="1|Земля" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="17" Grid.Column="0" Content="1|Воздух" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="18" Grid.Column="0" Content="1|Хаос" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="19" Grid.Column="0" Content="1|Яд" Style="{StaticResource Label_Alt}" />
+
+                    <Label Grid.Row="20" Grid.Column="0" Content="Устойчивость к элементам" />
+                    <Label Grid.Row="21" Grid.Column="0" Content="2|Огонь" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="22" Grid.Column="0" Content="2|Вода" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="23" Grid.Column="0" Content="2|Земля" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="24" Grid.Column="0" Content="2|Воздух" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="25" Grid.Column="0" Content="2|Хаос" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="26" Grid.Column="0" Content="2|Яд" Style="{StaticResource Label_Alt}" />
+
+                    <Label Grid.Row="27" Grid.Column="0" Content="Устойчивость к урону от рас" />
+                    <Label Grid.Row="28" Grid.Column="0" Content="2|Гуманоиды" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="29" Grid.Column="0" Content="2|Животные" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="30" Grid.Column="0" Content="2|Растения" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="31" Grid.Column="0" Content="2|Нежить" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="32" Grid.Column="0" Content="2|Орки" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="33" Grid.Column="0" Content="2|Земноводные" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="34" Grid.Column="0" Content="2|Магические" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="35" Grid.Column="0" Content="2|Бесформенные" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="36" Grid.Column="0" Content="2|Чудовища" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="37" Grid.Column="0" Content="2|Насекомые" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="38" Grid.Column="0" Content="2|Механизмы" Style="{StaticResource Label_Alt}" />
+                </Grid>
+
+            </ScrollViewer>
+
+        </TabItem>
+
+        <TabItem Header="Прочее">
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+                <Grid Name="Grid_Tab_3" Style="{StaticResource Grid_Tab}">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"  />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="06" Grid.Column="0" Style="{StaticResource Border_Alt_Background}" />
+                    <Border Grid.Row="18" Grid.Column="0" Style="{StaticResource Border_Alt_Background}" />
+
+                    <Label Grid.Row="00" Grid.Column="0" Content="Урон в секунду" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="01" Grid.Column="0" Content="Сила исцеления" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="02" Grid.Column="0" Content="Сила получаемого исцеления" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="03" Grid.Column="0" Content="Вампиризм" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="04" Grid.Column="0" Content="EHP" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="05" Grid.Column="0" Content="EHP (PvP)" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="06" Grid.Column="0" Content="Урон по рассам" />
+                    <Label Grid.Row="07" Grid.Column="0" Content="3|Гуманоиды" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="08" Grid.Column="0" Content="3|Животные" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="09" Grid.Column="0" Content="3|Растения" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="10" Grid.Column="0" Content="3|Нежить" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="11" Grid.Column="0" Content="3|Орки" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="12" Grid.Column="0" Content="3|Земноводные" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="13" Grid.Column="0" Content="3|Магические" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="14" Grid.Column="0" Content="3|Бесформенные" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="15" Grid.Column="0" Content="3|Чудовища" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="16" Grid.Column="0" Content="3|Насекомые" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="17" Grid.Column="0" Content="3|Механизмы" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="18" Grid.Column="0" Content="Урон по элементам" />
+                    <Label Grid.Row="19" Grid.Column="0" Content="3|Огонь" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="20" Grid.Column="0" Content="3|Вода" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="21" Grid.Column="0" Content="3|Земля" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="22" Grid.Column="0" Content="3|Воздух" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="23" Grid.Column="0" Content="3|Хаос" Style="{StaticResource Label_Alt}" />
+                    <Label Grid.Row="24" Grid.Column="0" Content="3|Яд" Style="{StaticResource Label_Alt}" />
+
+                </Grid>
+
+            </ScrollViewer>
+
+        </TabItem>
+
+    </TabControl>
+
+</UserControl>

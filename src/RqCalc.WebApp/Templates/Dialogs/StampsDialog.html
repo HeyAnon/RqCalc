@@ -1,0 +1,57 @@
+﻿<div id="stampsModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div data-bind="with: dialogManager.stampModel">
+                    <div class="layer2">
+                        <table class="dialogTable">
+
+                            <thead class="dialogTableHeader">
+                                <tr>
+                                    <th class="dialogCenterHeader">Печать</th>
+                                    <th class="dialogCenterHeader">Бонусы</th>
+                                </tr>
+                            </thead>
+
+                            <tbody data-bind="foreach: mainGrid.items">
+                                <tr data-bind="click: selectRow, css: { selectedRow: isSelectedRow }">
+                                    <td class="modalIndent" data-bind="text: stamp.name"></td>
+                                    <td>
+                                        <div class="modalIndent" data-bind="template: { name: 'BonusCollectionControl' }"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="ComboBoxStamp">
+                        <span class="TextColor">
+                            Цвет:
+                        </span>
+
+                        <select class="dialogModal" data-bind="value:color, foreach: colors, style: { backgroundColor: color().argb }">
+                            <option data-bind="value: $data, style: { backgroundColor: argb }">
+                        </select>
+                        
+                        <span data-bind="visible: hasShared">
+                            <input type="checkbox" data-bind="checked: showShared" /><span class="TextColor">Показать печати других классов</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+
+                    <div class="checkbox_showLegacy TextColor" data-bind="with: dialogManager.stampModel">
+                        <div data-bind="visible: hasLegacy">
+                            <input type="checkbox" data-bind="checked: showLegacy" />Показать устаревшие <br />
+                        </div>
+                    </div>
+
+                    <button id="stampsBtnClear" class="btn btn-primary clearButton" data-dismiss="modal">Очистить</button>
+                    <button id="stampsBtnSuccess" class="btn btn-primary" data-dismiss="modal">Выбрать</button>
+                    <button id="stampsBtnCancel" class="btn btn-primary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

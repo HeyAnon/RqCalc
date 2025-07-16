@@ -1,0 +1,14 @@
+﻿<Window x:Class="RqCalc.Wpf.Windows.Dialog.BuffsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dialog="clr-namespace:RqCalc.Wpf.Controls.Dialog"
+        xmlns:windows="clr-namespace:RqCalc.Wpf.Controls.Windows"
+        Title="Бафы" Background="#30302C" ResizeMode="CanMinimize" FontFamily="Cambria" FontSize="14" WindowStartupLocation="CenterOwner" Height="450" Width="556">
+
+    <dialog:DialogControl Closed="DialogControl_OnClosed">
+
+        <windows:BuffsControl />
+
+    </dialog:DialogControl>
+
+</Window>

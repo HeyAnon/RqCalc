@@ -1,0 +1,49 @@
+﻿<Window x:Class="RqCalc.Wpf.Windows.Dialog.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="О калькуляторе..." Background="#30302C" ResizeMode="CanMinimize" FontFamily="Cambria" FontSize="14" WindowStartupLocation="CenterOwner" Height="227" Width="672">
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <Image Source="../../Resources/cat.jpg" Height="200" Width="200" Grid.RowSpan="4" />
+
+        <RichTextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" Padding="10" Background="Transparent" BorderThickness="0" Margin="0" Foreground="White">
+            <FlowDocument>
+                <Paragraph>
+                    Бла-бла. Данный калькулятор был собран из разношерстных кусков чужих калькуляторов, форума, соплей, слёз и ненависти.
+                </Paragraph>
+                <Paragraph>
+                    Можете слать ваши пожелания (и миллионы спонсорского бабла) на ники "Anon" и "Militrissa".
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+
+        <Label Grid.Row="1" Grid.Column="1" Padding="10" Content="{Binding Version}" ContentStringFormat="Версия: {0}" Foreground="Yellow" Background="Transparent" />
+        <Label Grid.Row="1" Grid.Column="2" Padding="10" Content="{Binding SerializerVersion}" ContentStringFormat="Serializer: {0}" Foreground="Yellow" Background="Transparent" />
+        
+        <TextBlock Grid.Row="1" Grid.Column="4" Padding="10" Background="Transparent" Margin="0" TextAlignment="Right">
+            <Hyperlink NavigateUri="http://stalkers-guild.ru/" Click="Button_Link_Click">
+                 Гильдия Stalkers
+            </Hyperlink>
+        </TextBlock>
+
+        <Button Grid.Row="3" Grid.Column="4" Width="120" Height="25" Margin="10" Click="Button_Click">ОК</Button>
+
+    </Grid>
+
+</Window>

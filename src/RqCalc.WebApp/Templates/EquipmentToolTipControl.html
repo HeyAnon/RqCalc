@@ -1,0 +1,80 @@
+﻿<span data-bind="visible: !hasToolTipData(), text: identity.slot.name"></span>
+
+<div data-bind="with: toolTipData, css: { toolTipData: hasToolTipData }" style="color: silver">
+
+    <span data-bind="text: displayName, style: { color: stampColor }"></span>
+
+    <div class="ToolTipHead_table">
+
+        <div class="ToolTipHead_cell" data-bind="text: equipment.type.name"></div>
+        <div class="ToolTipHead_cell2" data-bind="text: 'Класс ' + equipment.class.name"></div>
+
+    </div>
+
+    <div class="pure_table EquipmentClear" data-bind="foreach: cards">
+        <div class="pure_row">
+            <div class="pure_cell toolTipCard" data-bind="style: {'background-image': 'url('+ toolTipImage() +')'}"></div>
+            <div class="pure_cell">
+                <div data-bind="with: card">
+                    <span class="toolTipImg" data-bind="text: name"></span>
+                </div>
+
+                <div data-bind="ifnot: card">
+                    <span>Слот для карты</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div data-bind="visible: displayInfo().hasAttack, with: displayInfo" style="color: white">
+        <div data-bind="text: 'Aтака: ' + displayAttack"></div>
+        <div data-bind="text: 'Скорость атаки: ' + attackSpeed"></div>
+        <div data-bind="text: 'Урон в секунду: ' + dps"></div>
+    </div>
+
+    <div data-bind="visible: displayInfo().hasDefense, text: 'Защита: ' + displayInfo().displayDefense" style="color: white"></div>
+
+    <div class="ToolTipHeadHpBonus" data-bind="visible: displayInfo().hasHpBonus, text: '+' + displayInfo().hpBonus + ' к Здоровью'"></div>
+
+    <div data-bind="visible: displayInfo().hasAllStatBonus, text: '+' + displayInfo().allStatBonus + ' ко всем параметрам'" style="color: limegreen"></div>
+
+    <div data-bind="template: { name: 'BonusCollectionControl', data: equipmentBonuses }" style="color: peru"></div>
+
+    <div data-bind="with: stampVariant">
+        <div class="pure_table">
+            <div class="pure_row">
+                <div class="pure_cell toolTipStampLogo" data-bind="style: {'background-image': 'url('+ color.image +')'}"></div>
+                <div class="pure_cell toolTipStamp" data-bind="text: 'Печать: ' + stamp.name, style: { color: $parent.stampColor }"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div data-bind="template: { name: 'BonusCollectionControl', data: displayInfo().stampVariant }" style="color: peru"></div>
+    
+    <div data-bind="with: elixir">
+
+        <div class="pure_table">
+            <div class="pure_row">
+                <div class="pure_cell toolTipStampLogo" data-bind="style: {'background-image': 'url('+ $parent.elixirClockImage +')'}"></div>
+                <span class="pure_cell toolTipStamp" style="color: white">Временные улучшения:</span>
+            </div>
+        </div>
+        
+        <div data-bind="text: name" style="color: white"></div>
+
+        <div data-bind="template: { name: 'BonusCollectionControl' }" style="color: peru"></div>
+
+    </div>
+    
+
+
+
+    <div data-bind="text: 'Класс: ' + classCondition"></div>
+
+    <div>
+        <div class="ToolTipHead_cell" data-bind="text: 'Требуется уровень: ' + equipment.level"></div>
+        <div class="ToolTipHead_cell2" data-bind="text: 'Пол: ' + genderCondition"></div>
+    </div>
+</div>

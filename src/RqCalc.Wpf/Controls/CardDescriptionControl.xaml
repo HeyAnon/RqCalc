@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="RqCalc.Wpf.Controls.CardDescriptionControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:RqCalc.Wpf.Controls"
+             mc:Ignorable="d" 
+             Margin="0" Padding="0">
+
+    <StackPanel Margin="0">
+
+        <controls:BonusCollectionControl DataContext="{Binding Card}" VerticalAlignment="Center" Foreground="{Binding BonusForeground, RelativeSource={RelativeSource AncestorType={x:Type controls:CardDescriptionControl}}}" />
+        
+        <ItemsControl ItemsSource="{Binding BuffDescriptions}" Margin="0" Padding="0">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <controls:TextTemplateControl MessageForeground="{Binding MessageForeground, RelativeSource={RelativeSource AncestorType={x:Type controls:CardDescriptionControl}}}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+    </StackPanel>
+    
+</UserControl>

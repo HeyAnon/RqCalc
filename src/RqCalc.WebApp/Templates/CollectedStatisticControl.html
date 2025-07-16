@@ -1,0 +1,26 @@
+﻿<div class="layer2">
+    <table class="dialogTable collectionTable">
+        <thead class="dialogTableHeader">
+        <tr>
+            <th class="dialogCenterHeader">Коллекция</th>
+            <th class="dialogCenterHeader">Собрано</th>
+            <th class="dialogCenterHeader">Бонусы</th>
+        </tr>
+        </thead>
+        <tbody data-bind="foreach: groupModels">
+        <tr>
+            <td class="dialogRow2" data-bind="text:group.name"></td>
+            <td class="dialogRow2" data-bind="text: selectedCount() + ' из ' + selectedLimit"></td>
+            <td class="dialogRow2">
+                <div data-bind="template: { name: 'BonusCollectionControl' }"></div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<!--<div class="statistic_group" data-bind="foreach: groupModels">
+    <div data-bind="text:group.name"></div>
+    <div data-bind="text: 'Собрано' + selectedCount() + 'из' + selectedLimit"></div>
+</div>-->

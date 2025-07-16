@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Debug="true" Factory="Rq_Calc.ServiceFacade.JsonFacadeFactory" %>

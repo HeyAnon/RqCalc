@@ -1,0 +1,25 @@
+﻿<table class="general_Table">
+    <tr>
+        <td>
+            <table>
+                <tr>
+                    <td class="cell_code_label"><a target="_blank" data-bind="attr: { href: 'guildTalentBuild.html?code=' + code() }">Код:</a></td>
+                    <td class="cell_code_value" colspan="3"><textarea data-bind="value: code" style="height: 50px; width: 300px;" rows="12"></textarea></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<table>
+    <tbody data-bind="foreach: branches">
+        <tr>
+            <td data-bind="text: branch.name" style="color: white"></td>
+            <td class="ModalTalent">
+                <div data-bind="template: { name: 'GuildTalentBranchBodyControl' }"></div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div data-bind="text: 'Нераспределенные очки гильдийных талантов: ' + freeGuildTalents()" style="color: limegreen"></div>

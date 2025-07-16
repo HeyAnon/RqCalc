@@ -1,0 +1,8 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="Luxoft.Framework.Core.AnonymousTypeBuilder" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Framework.DataBase.Abstraction\Framework.DataBase.Abstraction.csproj" />
+  </ItemGroup>
+</Project>

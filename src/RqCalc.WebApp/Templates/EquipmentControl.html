@@ -1,0 +1,9 @@
+﻿<div class="ActiveImageControl pop-container" data-bind="click: switchEquipments, visible:isAllowed, style: {'background-image': 'url('+ image() +')'}">
+    <div class="popover" style="display: none" data-bind="template: { name: 'EquipmentToolTipControl' }"></div>
+</div>
+
+<div data-bind="with: data">
+    <input type="checkbox" class="active_checkbox" data-bind="visible: activate, checked: active" />
+</div>
+
+<div class="equipment_element img_elemen" data-bind="style: {'background-image': 'url('+ elementImage() +')'}"></div>

@@ -1,0 +1,17 @@
+﻿<Window x:Class="RqCalc.Wpf.Windows.LoadWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{Binding Version, StringFormat='Загрузка калькулятора. Версия: {0}'}"
+        Height="80" Width="280" Background="#30302C" ResizeMode="CanMinimize" FontFamily="Cambria" FontSize="14" WindowStartupLocation="CenterScreen" WindowStyle="None">
+    
+    <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Version}" ContentStringFormat="Загрузка калькулятора. Версия: {0}" />
+        <Label Grid.Row="1" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Status}" ContentStringFormat="Статус: {0}..." />
+    </Grid>
+</Window>

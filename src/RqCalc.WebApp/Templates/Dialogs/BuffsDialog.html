@@ -1,0 +1,58 @@
+﻿<div id="buffsModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+
+                <div class="container_buff">
+                    <ul class="nav nav-tabs general_tabs_buff">
+                        <li><a class="header_positive_buff_tabs" data-toggle="tab" href="#buffTab1">Свои</a></li>
+                        <li><a class="header_positive_buff_tabs" data-toggle="tab" href="#buffTab2">Общие</a></li>
+                        <li><a class="header_positive_buff_tabs" data-toggle="tab" href="#buffTab3">Карты</a></li>
+                        <li><a class="header_positive_buff_tabs" data-toggle="tab" href="#buffTab4">Печати</a></li>
+                        <li><a class="header_negative_buff_tabs" data-toggle="tab" href="#buffTab5">Дебафы</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div id="buffTab1" class="tab-pane fade in active">
+                            <div data-bind="with: dialogManager.buffsModel">
+                                <div data-bind="template: { name: 'BuffCollectionControl', data: classBuffs }"></div>
+                            </div>
+                        </div>
+
+                        <div id="buffTab2" class="tab-pane fade">
+                            <div data-bind="with: dialogManager.buffsModel">
+                                <div data-bind="template: { name: 'BuffCollectionControl', data: sharedPositiveBuffs }"></div>
+                            </div>
+                        </div>
+
+                        <div id="buffTab3" class="tab-pane fade">
+                            <div data-bind="with: dialogManager.buffsModel">
+                                <div data-bind="template: { name: 'BuffCollectionControl', data: cardBuffs }"></div>
+                            </div>
+                        </div>
+
+                        <div id="buffTab4" class="tab-pane fade">
+                            <div data-bind="with: dialogManager.buffsModel">
+                                <div data-bind="template: { name: 'BuffCollectionControl', data: stampBuffs }"></div>
+                            </div>
+                        </div>
+                        
+                        <div id="buffTab5" class="tab-pane fade">
+                            <div data-bind="with: dialogManager.buffsModel">
+                                <div data-bind="template: { name: 'BuffCollectionControl', data: sharedNegativeBuffs }"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="buffsBtnClear" class="btn btn-primary clearButton">Очистить</button>
+                    <button id="buffsBtnSuccess" class="btn btn-primary" data-dismiss="modal">Выбрать</button>
+                    <button id="buffsBtnCancel" class="btn btn-primary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

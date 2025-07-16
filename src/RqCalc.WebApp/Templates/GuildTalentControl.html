@@ -1,0 +1,23 @@
+﻿<div class="talent guildTalent pop-container" data-bind="click:increase, style: {'background-image': 'url('+ image() +')'}, css: { talentActivated: active }, event: { contextmenu: decrease }">
+
+    <span data-bind="visible: active, text: points" style="position: absolute; right: 0; bottom: 0; background: #00C000; padding: 1px; font-size: 10px; color: white"></span>
+
+    <div class="popover" style="display: none">
+        <div style="width: 280px; font-size: 13px">
+
+            <div data-bind="text: talent.name" style="color: #FFD711"></div>
+
+            <div data-bind="if: talent.active" style="color: LimeGreen">
+                Активное умение
+            </div>
+
+            <div data-bind="ifnot: talent.active" style="color: White">
+                Пассивное умение
+            </div>
+
+            <div data-bind="template: { name: 'TalentDescriptionControl', data: mainDescription }"></div>
+
+        </div>
+
+    </div>
+</div>

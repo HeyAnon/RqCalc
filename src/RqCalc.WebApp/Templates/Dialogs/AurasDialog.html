@@ -1,0 +1,92 @@
+﻿<div id="aurasModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content_aura">
+            <div class="modal-body">
+
+                <div class="container_aura">
+                    <ul class="nav nav-tabs general_tabs_aura">
+                        <li><a class="header_tabs" data-toggle="tab" href="#auraTab1">Основная</a></li>
+                        <li><a class="header_tabs" data-toggle="tab" href="#auraTab2">Групповые</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div id="auraTab1" class="tab-pane fade in active">
+                            <div data-bind="with: dialogManager.aurasModel">
+                                <div class="layer_aura">
+                                    <table class="dialogTable_aura">
+
+                                        <thead class="dialogTableHeader">
+                                            <tr>
+                                                <th class="dialogCenterHeader_aura" colspan="2">Аура</th>
+                                                <th class="dialogCenterHeader_aura">Бонусы</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody data-bind="foreach: primaryAura.mainGrid.items">
+                                            <tr data-bind="click: selectRow, css: { selectedRow: isSelectedRow }">
+                                                <td class="dialogRow modalEquipmentIndent">
+                                                    <div class="dialogItemImage" data-bind="style: {'background-image': 'url('+ image +')'}"></div>
+                                                </td>
+                                                <td class="dialogRow2" data-bind="text: name"></td>
+                                                <td>
+                                                    <div data-bind="template: { name: 'BonusCollectionControl' }"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="auraTab2" class="tab-pane fade">
+
+                            <div data-bind="with: dialogManager.aurasModel">
+                                <div class="layer_aura">
+                                    <table class="dialogTable_aura">
+                                        <thead class="dialogTableHeader">
+                                            <tr>
+                                                <th></th>
+                                                <th class="dialogCenterHeader_aura" colspan="2">Аура</th>
+                                                <th class="dialogCenterHeader_aura">С талантами</th>
+                                                <th class="dialogCenterHeader_aura">Бонусы</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody data-bind="foreach: sharedAuras.mainGrid.items">
+                                            <tr>
+                                                <td class="dialogRow">
+                                                    <input type="checkbox" data-bind="checked: active" />
+                                                </td>
+                                                <td>
+                                                    <div class="dialogItemImage" data-bind="style: {'background-image': 'url('+ image +')'}"></div>
+                                                </td>
+                                                <td class="dialogRow2" data-bind="text: name"></td>
+
+                                                <td class="dialogRow">
+                                                    <input type="checkbox" data-bind="checked: withTalents" />
+                                                </td>
+
+                                                <td class="dialogRow2">
+                                                    <div data-bind="template: { name: 'BonusCollectionControl', data: sharedBonuses }"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <button id="aurasBtnSuccess" class="btn btn-primary" data-dismiss="modal">Выбрать</button>
+                    <button id="aurasBtnCancel" class="btn btn-primary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

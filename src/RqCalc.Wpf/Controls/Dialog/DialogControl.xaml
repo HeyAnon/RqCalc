@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="RqCalc.Wpf.Controls.Dialog.DialogControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converts="clr-namespace:RqCalc.Wpf.Converts"
+             xmlns:base="clr-namespace:RqCalc.Wpf.Models.Window.Dialog._Base"
+             mc:Ignorable="d"
+             d:DesignHeight="300"
+             d:DesignWidth="330">
+
+    <UserControl.Resources>
+
+        <converts:CompositeValueConverter x:Key="IsClearConverter">
+
+            <converts:IsTypeConverter Type="base:IClearModel" />
+            <BooleanToVisibilityConverter />
+            
+        </converts:CompositeValueConverter>
+
+        <converts:CompositeValueConverter x:Key="IsLegacyConverter">
+
+            <converts:LegacyModelConverter />
+            <BooleanToVisibilityConverter />
+
+        </converts:CompositeValueConverter>
+
+        <converts:CompositeValueConverter x:Key="IsMultiSelectConverter">
+
+            <converts:IsTypeConverter Type="base:IMultiSelectModel" />
+            <BooleanToVisibilityConverter />
+
+        </converts:CompositeValueConverter>
+
+    </UserControl.Resources>
+
+    <Grid>
+
+        <Grid.Resources>
+
+            <Style TargetType="Button">
+                <Setter Property="Padding" Value="5" />
+            </Style>
+
+        </Grid.Resources>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.ColumnSpan="6" Margin="10 10 10 0" Name="Grid_Content_Place" />
+
+        <CheckBox Grid.Row="1" Grid.Column="0" Content="Показать устаревшие" Margin="10" Visibility="{Binding DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource IsLegacyConverter}}" IsChecked="{Binding ShowLegacy}" VerticalAlignment="Center" Foreground="White" />
+
+        <CheckBox Grid.Row="1" Grid.Column="1" Content="Все элементы" Margin="10" Visibility="{Binding DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource IsMultiSelectConverter}}" IsChecked="{Binding TotalSelected}" VerticalAlignment="Center" Foreground="White" />
+
+        <Button Grid.Row="1" Grid.Column="3" Content="Отчистить" Margin="10 10 100 10" Click="Button_Clear_Click" Visibility="{Binding DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource IsClearConverter}}" />
+
+        <Button Grid.Row="1" Grid.Column="4" Content="Выбрать"   Margin="10 10 5 10"   Click="Button_Ok_Click" />
+
+        <Button Grid.Row="1" Grid.Column="5" Content="Отмена"    Margin="5 10 10 10"   Click="Button_Cancel_Click" IsCancel="True" />
+
+    </Grid>
+    
+</UserControl>

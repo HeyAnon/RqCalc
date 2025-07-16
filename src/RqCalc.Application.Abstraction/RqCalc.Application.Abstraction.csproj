@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<RootNamespace>RqCalc.Application</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\RqCalc.Model\RqCalc.Model.csproj" />
+	</ItemGroup>
+
+</Project>

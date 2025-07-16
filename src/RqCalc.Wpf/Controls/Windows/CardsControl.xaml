@@ -1,0 +1,99 @@
+﻿<UserControl x:Class="RqCalc.Wpf.Controls.Windows.CardsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:extensions="clr-namespace:RqCalc.Wpf._Extensions"
+             xmlns:controls="clr-namespace:RqCalc.Wpf.Controls"
+             xmlns:local="clr-namespace:RqCalc.Wpf.Controls.Windows"
+             xmlns:converts="clr-namespace:RqCalc.Wpf.Converts"
+             xmlns:dialog="clr-namespace:RqCalc.Wpf.Models.Window.Dialog"
+             mc:Ignorable="d"
+             d:DesignHeight="500"
+             d:DesignWidth="930">
+    
+    <UserControl.Resources>
+        
+        <converts:ImageDataObjectConverter x:Key="ImageDataObjectConverter" />
+
+        <converts:CardDescriptionConverter x:Key="CardDescriptionConverter" />
+
+        <converts:CompositeValueConverter x:Key="IsMultiCardGroupConverter">
+
+            <converts:IsTypeConverter Type="dialog:MultiCardGroup" />
+            <BooleanToVisibilityConverter />
+
+        </converts:CompositeValueConverter>
+
+    </UserControl.Resources>
+
+
+
+    <ListView ItemsSource="{Binding CardGroups}" SelectedItem="{Binding CardGroup}" Background="Wheat">
+
+        <i:Interaction.Behaviors>
+            <extensions:ScrollIntoViewForListBox />
+        </i:Interaction.Behaviors>
+
+        <ListView.View>
+
+            <GridView>
+
+                <GridViewColumn Header="Карта" Width="330">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+
+                            <StackPanel Orientation="Horizontal">
+
+                                <Image Source="{Binding ActiveCard.Type, Converter={StaticResource ImageDataObjectConverter}}" VerticalAlignment="Center" />
+
+                                <TextBlock Text="{Binding Name}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="10 10 2 10" />
+
+                                <ComboBox ItemsSource="{Binding Cards}" Height="20" Margin="10" SelectedItem="{Binding ActiveCard}" Visibility="{Binding DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource IsMultiCardGroupConverter}}" DisplayMemberPath="Group.Value" />
+
+                            </StackPanel>
+
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+
+                <GridViewColumn Header="Бонусы" Width="600">
+
+                    <GridViewColumn.CellTemplate>
+
+                        <DataTemplate>
+
+                            <controls:CardDescriptionControl MessageForeground="#042271" BonusForeground="#042271">
+
+                                <controls:CardDescriptionControl.Style>
+
+                                    <Style TargetType="FrameworkElement">
+                                        <Setter Property="DataContext">
+                                            <Setter.Value>
+                                                <MultiBinding Converter="{StaticResource CardDescriptionConverter}">
+                                                    <Binding Path="DataContext" RelativeSource="{RelativeSource AncestorType={x:Type FrameworkElement}}" />
+                                                    <Binding Path="DataContext" RelativeSource="{RelativeSource AncestorType={x:Type local:CardsControl}}" />
+                                                    <Binding Path="ActiveCard" />
+                                                </MultiBinding>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+
+                                </controls:CardDescriptionControl.Style>
+                                
+                            </controls:CardDescriptionControl>
+
+                        </DataTemplate>
+
+                    </GridViewColumn.CellTemplate>
+
+                </GridViewColumn>
+
+            </GridView>
+
+        </ListView.View>
+
+    </ListView>
+
+</UserControl>

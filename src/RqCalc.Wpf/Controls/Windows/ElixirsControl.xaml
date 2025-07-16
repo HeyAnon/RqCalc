@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="RqCalc.Wpf.Controls.Windows.ElixirsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:extensions="clr-namespace:RqCalc.Wpf._Extensions"
+             xmlns:controls="clr-namespace:RqCalc.Wpf.Controls"
+             xmlns:converts="clr-namespace:RqCalc.Wpf.Converts"
+             mc:Ignorable="d"
+             d:DesignHeight="500"
+             d:DesignWidth="630">
+
+    <UserControl.Resources>
+        <converts:ImageDataObjectConverter x:Key="ImageDataObjectConverter" />
+    </UserControl.Resources>
+
+    <ListView ItemsSource="{Binding Elixirs}" SelectedItem="{Binding Elixir}" Background="Wheat">
+
+        <i:Interaction.Behaviors>
+            <extensions:ScrollIntoViewForListBox />
+        </i:Interaction.Behaviors>
+
+        <ListView.View>
+
+            <GridView>
+
+                <GridViewColumn Header="Эликсир"  Width="290">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+
+                            <StackPanel Orientation="Horizontal">
+
+                                <Image Source="{Binding DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource ImageDataObjectConverter}}" VerticalAlignment="Center" />
+
+                                <TextBlock Text="{Binding Name}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="10" />
+
+                            </StackPanel>
+
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+
+                <GridViewColumn Header="Бонусы" Width="280">
+
+                    <GridViewColumn.CellTemplate>
+
+                        <DataTemplate>
+
+                            <controls:BonusCollectionControl VerticalAlignment="Center" />
+
+                        </DataTemplate>
+
+                    </GridViewColumn.CellTemplate>
+
+                </GridViewColumn>
+
+            </GridView>
+
+        </ListView.View>
+
+    </ListView>
+
+</UserControl>

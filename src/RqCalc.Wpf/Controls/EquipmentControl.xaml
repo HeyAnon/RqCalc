@@ -1,0 +1,79 @@
+﻿<UserControl x:Class="RqCalc.Wpf.Controls.EquipmentControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:RqCalc.Wpf.Controls"
+             xmlns:converts="clr-namespace:RqCalc.Wpf.Converts"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.Resources>
+
+        <converts:ImageDataObjectConverter x:Key="ImageDataObjectConverter" />
+
+    </UserControl.Resources>
+    
+    <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <controls:ActiveImageControl Grid.RowSpan="2" Grid.ColumnSpan="2" ToolTipService.ShowDuration="6000000" ToolTipService.InitialShowDelay="0" CheckBoxIsCheckedBindingPath="DataModel.Active" CheckBoxVisibilityBindingPath="DataModel.Activate" IsGray="{Binding IsReverse}">
+
+            <controls:ActiveImageControl.Resources>
+
+                <Style TargetType="ToolTip">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ToolTip">
+                                <ContentPresenter />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+
+                <converts:EquipmentToolTipControlFactoryConverter x:Key="EquipmentToolTipControlFactoryConverter" />
+
+            </controls:ActiveImageControl.Resources>
+
+            <UserControl.Style>
+
+                <Style TargetType="UserControl">
+
+                    <Style.Triggers>
+
+                        <DataTrigger Binding="{Binding HasToolTipData}" Value="False">
+                            <Setter Property="ToolTip">
+                                <Setter.Value>
+                                    <StackPanel Background="#F520201C">
+                                        <Label Content="{Binding Identity.Slot.Name}" Foreground="White" />
+                                    </StackPanel>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+
+                        <DataTrigger Binding="{Binding HasToolTipData}" Value="True">
+                            <Setter Property="ToolTip" Value="{Binding ToolTipDataModel, Converter={StaticResource EquipmentToolTipControlFactoryConverter}}" />
+                        </DataTrigger>
+
+                    </Style.Triggers>
+
+                </Style>
+
+            </UserControl.Style>
+
+        </controls:ActiveImageControl>
+
+        <Image Grid.Row="1" Grid.Column="0" Source="{Binding ElementImage, Converter={StaticResource ImageDataObjectConverter}}" Width="12" Height="16" Stretch="Fill" Margin="1" />
+
+    </Grid>
+
+</UserControl>

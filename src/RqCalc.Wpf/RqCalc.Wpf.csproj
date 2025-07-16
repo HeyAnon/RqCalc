@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Framework.DataBase.Abstraction\Framework.DataBase.Abstraction.csproj" />
+    <ProjectReference Include="..\Framework.Reactive\Framework.Reactive.csproj" />
+    <ProjectReference Include="..\RqCalc.Application.Abstraction\RqCalc.Application.Abstraction.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Resource Include="Resources\*.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="System.Collections.ObjectModel" />
+  </ItemGroup>
+
+</Project>

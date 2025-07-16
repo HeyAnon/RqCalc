@@ -1,0 +1,12 @@
+﻿<div class="div_stat" data-bind="style: {'background-image': 'url('+ stat().image +')'}">
+    <span data-bind="visible: multiplicityValueVisible, text: multiplicityValue" style="position: absolute; right: 0; bottom: 0; background: #00C000; padding: 1px; font-size: 10px; color: white"></span>
+</div>
+<span data-bind="text: stat().progressName"></span>
+<div class="progress statProgress">
+    <div class="progress-bar progress-bar-success progress-bar-striped active"
+         role="progressbar"
+         aria-valuemin="0"
+         aria-valuemax="100"
+         data-bind="attr: {'aria-valuenow' : progressPercentValue }, style : { width : (progressPercentValue() + '%') }">
+    </div>
+</div>

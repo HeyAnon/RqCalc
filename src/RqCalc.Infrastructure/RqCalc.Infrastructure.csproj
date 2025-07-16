@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+
+		<PackageReference Include="Luxoft.Framework.DependencyInjection" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\RqCalc.Application\RqCalc.Application.csproj" />
+		<ProjectReference Include="..\RqCalc.DataBase.EntityFramework\RqCalc.DataBase.EntityFramework.csproj" />
+	</ItemGroup>
+</Project>

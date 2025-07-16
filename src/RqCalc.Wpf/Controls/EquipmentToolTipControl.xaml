@@ -1,0 +1,167 @@
+﻿<UserControl x:Class="RqCalc.Wpf.Controls.EquipmentToolTipControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:RqCalc.Wpf.Controls"
+             xmlns:converts="clr-namespace:RqCalc.Wpf.Converts"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="330" Background="#F520201C" Padding="10" FontFamily="Cambria" FontSize="14">
+
+    <UserControl.Resources>
+        <converts:StampColorConverter x:Key="StampColorConverter" />
+        <converts:ImageDataObjectConverter x:Key="ImageDataObjectConverter" />
+        <converts:EquipmentClassConditionsConverter x:Key="EquipmentClassConditionsConverter"/>
+        <converts:EquipmentGenderConditionsConverter x:Key="EquipmentGenderConditionsConverter"/>
+        
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+        <converts:CompositeValueConverter x:Key="NegateVisibilityConverter">
+
+            <converts:NegateConverter />
+            <BooleanToVisibilityConverter />
+
+        </converts:CompositeValueConverter>
+
+        <converts:DebugConverter x:Key="DebugConverter" />
+
+    </UserControl.Resources>
+    
+    <StackPanel>
+
+        <Label Content="{Binding DisplayName}" Foreground="{Binding StampColor, Converter={StaticResource StampColorConverter}}" />
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Column="0" Content="{Binding Equipment.Type.Name}" Foreground="Silver" />
+
+            <Label Grid.Column="2" Content="{Binding Class.Name}" ContentStringFormat="Класс {0}" Foreground="Silver" />
+            
+        </Grid>
+
+        <ItemsControl ItemsSource="{Binding CardList, Converter={StaticResource DebugConverter}}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+
+                    <Grid>
+
+                        <Grid.RowDefinitions >
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions >
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Image Grid.Row="0" Grid.Column="0" Source="{Binding ToolTipImage, Converter={StaticResource ImageDataObjectConverter}}" Width="12" Height="16" Stretch="Fill"  />
+
+                        <Label Grid.Row="0" Grid.Column="1" Content="{Binding Card.Name}" Foreground="LimeGreen" Visibility="{Binding HasCard, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                        <Label Grid.Row="0" Grid.Column="1" Content="Слот для карты" Foreground="Silver" Visibility="{Binding HasCard, Converter={StaticResource NegateVisibilityConverter}}" />
+
+                    </Grid>
+
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+
+        <Grid Visibility="{Binding HasAttack, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Content="{Binding DisplayAttack}" ContentStringFormat="Aтака: {0}" />
+            <Label Grid.Row="1" Grid.Column="0" Content="{Binding AttackSpeed}"   ContentStringFormat="Скорость атаки: {0}" />
+            <Label Grid.Row="2" Grid.Column="0" Content="{Binding Dps}"           ContentStringFormat="Урон в секунду: {0}" />
+
+            <Grid.Resources>
+
+                <Style TargetType="Label">
+                    <Setter Property="Foreground" Value="White" />
+                </Style>
+
+            </Grid.Resources>
+
+        </Grid>
+        
+        <Label Content="{Binding DisplayDefense}" ContentStringFormat="Защита: {0}" Visibility="{Binding HasDefense, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="White" />
+
+        <Label Content="{Binding HpBonus}" ContentStringFormat="+{0} к Здоровью" Foreground="LimeGreen" Visibility="{Binding HasHpBonus, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <Label Content="{Binding ResultInfo.Upgrade.AllStatBonus}" ContentStringFormat="+{0} ко всем параметрам" Foreground="LimeGreen" Visibility="{Binding HasAllStatBonus, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <controls:BonusCollectionControl DataContext="{Binding EquipmentBonuses}" Foreground="Peru" />
+
+        <Grid Visibility="{Binding HasStamp, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Image Grid.Row="0" Grid.Column="0" Source="{Binding StampVariant.Color, Converter={StaticResource ImageDataObjectConverter}}" />
+
+            <Label Grid.Row="0" Grid.Column="1" Content="{Binding StampVariant.Stamp.Name}" Foreground="{Binding StampVariant.Color, Converter={StaticResource StampColorConverter}}" ContentStringFormat="Печать {0}" />
+
+            <controls:BonusCollectionControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" DataContext="{Binding ResultInfo.StampVariant}" Foreground="Peru"  />
+
+        </Grid>
+
+        <StackPanel Orientation="Vertical" Visibility="{Binding HasElixir, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                <Image Source="{Binding ElixirClockImage, Converter={StaticResource ImageDataObjectConverter}}" Margin="5" VerticalAlignment="Center" />
+
+                <Label Foreground="White" VerticalContentAlignment="Center" Content="{Binding Elixir.Name}" ContentStringFormat="Временные улучшения: {0}"></Label>
+            </StackPanel>
+
+            <controls:BonusCollectionControl DataContext="{Binding Elixir}" Foreground="Peru"  />
+
+        </StackPanel>
+
+        <TextBlock Padding="5" Text="{Binding Equipment, Converter={StaticResource EquipmentClassConditionsConverter}, StringFormat='Класс: {0}'}" TextWrapping="WrapWithOverflow" Foreground="Silver" />
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Column="0" Content="{Binding Equipment.Level}" ContentStringFormat="Требуется уровень: {0}" Foreground="Silver" />
+
+            <Label Grid.Column="2" Content="{Binding Equipment, Converter={StaticResource EquipmentGenderConditionsConverter}}" ContentStringFormat="Пол: {0}" Foreground="Silver" />
+
+        </Grid>
+        
+    </StackPanel>
+
+</UserControl>

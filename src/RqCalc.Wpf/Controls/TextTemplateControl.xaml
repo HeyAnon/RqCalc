@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="RqCalc.Wpf.Controls.TextTemplateControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:extensions="clr-namespace:RqCalc.Wpf._Extensions"
+             xmlns:local="clr-namespace:RqCalc.Wpf.Controls"
+             xmlns:converts="clr-namespace:RqCalc.Wpf.Converts"
+             Padding="0" Margin="0">
+
+    <UserControl.Resources>
+        <converts:TextTemplateHeaderConverter x:Key="TextTemplateHeaderConverter" />
+    </UserControl.Resources>
+
+    <RichTextBox Background="Transparent" BorderThickness="0" Margin="0" Padding="0" IsReadOnly="True">
+        <FlowDocument extensions:FlowDocumentPagePadding.PagePadding="0">
+            <Paragraph>
+                <Run Text="{Binding Header, Converter={StaticResource TextTemplateHeaderConverter}, Mode=OneWay}" Foreground="{Binding HeaderForeground, RelativeSource={RelativeSource AncestorType={x:Type local:TextTemplateControl}}}" />
+                <Run Text="{Binding Message, Mode=OneWay}" Foreground="{Binding MessageForeground, RelativeSource={RelativeSource AncestorType={x:Type local:TextTemplateControl}}}" />
+            </Paragraph>
+        </FlowDocument>
+
+        <RichTextBox.Resources>
+            <Style TargetType="{x:Type Paragraph}">
+                <Setter Property="Margin" Value="0" />
+            </Style>
+        </RichTextBox.Resources>
+
+    </RichTextBox>
+
+</UserControl>

@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<ItemGroup>
+	  <PackageReference Include="Luxoft.Framework.ExpressionParsers" />
+	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Framework.DataBase.Abstraction\Framework.DataBase.Abstraction.csproj" />
+
+		<ProjectReference Include="..\RqCalc.Application.Abstraction\RqCalc.Application.Abstraction.csproj" />
+	</ItemGroup>
+
+</Project>

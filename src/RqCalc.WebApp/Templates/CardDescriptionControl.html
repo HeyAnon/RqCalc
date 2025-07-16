@@ -1,0 +1,5 @@
+﻿<div data-bind="template: { name: 'BonusCollectionControl', data: model.card }"></div>
+
+<div data-bind="foreach: model.buffs">
+    <div data-bind="template: { name: 'TextTemplateControl', data: { template: $data, alt: $parent.alt } }"></div>
+</div>

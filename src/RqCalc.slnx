@@ -1,0 +1,21 @@
+<Solution>
+
+  <Folder Name="/__SolutionItems/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="__SolutionItems/CommonAssemblyInfo.cs" />
+  </Folder>
+  <Project Path="Framework.DataBase.Abstraction/Framework.DataBase.Abstraction.csproj" />
+  <Project Path="Framework.DataBase/Framework.DataBase.csproj" />
+  <Project Path="Framework.Reactive/Framework.Reactive.csproj" />
+  <Project Path="RqCalc.Application.Abstraction/RqCalc.Application.Abstraction.csproj" />
+  <Project Path="RqCalc.Application/RqCalc.Application.csproj" />
+  <Project Path="RqCalc.DataBase.EntityFramework/RqCalc.DataBase.EntityFramework.csproj" />
+  <Project Path="RqCalc.Domain/RqCalc.Domain.csproj" />
+  <Project Path="RqCalc.Infrastructure/RqCalc.Infrastructure.csproj" />
+  <Project Path="RqCalc.Model/RqCalc.Model.csproj" />
+  <Project Path="RqCalc.Tests/RqCalc.Tests.csproj" />
+  <Project Path="RqCalc.Wpf/RqCalc.Wpf.csproj" />
+  <Project Path="RqCalc.WpfApp/RqCalc.WpfApp.csproj" />
+  
+</Solution>

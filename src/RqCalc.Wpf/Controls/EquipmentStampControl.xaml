@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="RqCalc.Wpf.Controls.EquipmentStampControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:RqCalc.Wpf.Controls"
+             xmlns:converts="clr-namespace:RqCalc.Wpf.Converts"
+             mc:Ignorable="d" BorderThickness="1" BorderBrush="Silver">
+
+    <UserControl.Resources>
+
+        <converts:StampColorConverter x:Key="StampColorConverter" />
+
+        <converts:ImageDataObjectConverter x:Key="ImageDataObjectConverter" />
+
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+        <converts:CompositeValueConverter x:Key="NegateVisibilityConverter">
+
+            <converts:NegateConverter />
+            <BooleanToVisibilityConverter />
+
+        </converts:CompositeValueConverter>
+
+    </UserControl.Resources>
+    
+    <Grid >
+        
+        <Grid.RowDefinitions >
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions >
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Content="{Binding Stamp.Name}" BorderThickness="1" BorderBrush="Silver" Visibility="{Binding HasStamp, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="{Binding StampColor, Converter={StaticResource StampColorConverter}}" ContentStringFormat="Печать {0}" />
+
+        <Label Grid.Row="0" Content="Нет печати"           BorderThickness="1" BorderBrush="Silver" Visibility="{Binding HasStamp, Converter={StaticResource NegateVisibilityConverter}}"    Foreground="White" />
+        
+
+        <Image Grid.Row="1" Source="{Binding StampImage, Converter={StaticResource ImageDataObjectConverter}}" Width="200" Height="200" Stretch="Fill" />
+
+        <Image Grid.Row="1" Source="{Binding Equipment, Converter={StaticResource ImageDataObjectConverter}}" Width="48" Height="48" Stretch="Fill" />
+
+        <controls:BonusCollectionControl Grid.Row="2" DataContext="{Binding StampVariant}" Foreground="Peru"  BorderThickness="1" BorderBrush="Silver" />
+        
+    </Grid>
+
+</UserControl>

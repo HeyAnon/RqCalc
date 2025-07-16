@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8995D914-3BDF-4535-877F-2FB5B2D6FB81}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Rq_Calc.Web</RootNamespace>
+    <AssemblyName>Rq_Calc.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>e74f6399</NuGetPackageImportStamp>
+    <TypeScriptToolsVersion>2.1</TypeScriptToolsVersion>
+    <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activation" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="guildTalentBuild.html" />
+    <Content Include="talentBuild.html" />
+    <Content Include="Templates\CollectedTabControl.html" />
+    <Content Include="Templates\CollectedStatisticControl.html" />
+    <Content Include="Templates\CollectedGroupControl.html" />
+    <Content Include="Templates\Dialogs\CollectionsDialog.html" />
+    <Content Include="Templates\GuildTalentBranchBodyControl.html" />
+    <Content Include="Templates\GuildTalentBuildControl.html" />
+    <Content Include="Templates\TalentBuildControl.html" />
+    <Content Include="Templates\BuffCollectionControl.html" />
+    <Content Include="Templates\CardDescriptionControl.html" />
+    <Content Include="Templates\CardControl.html" />
+    <Content Include="Templates\ActiveImageControl.html" />
+    <Content Include="Templates\BonusCollectionControl.html" />
+    <Content Include="Templates\Dialogs\AboutDialog.html" />
+    <Content Include="Templates\Dialogs\NewCharDialog.html" />
+    <Content Include="Templates\Dialogs\CardsDialog.html" />
+    <Content Include="Templates\Dialogs\StampsDialog.html" />
+    <Content Include="Templates\Dialogs\EquipmentsDialog.html" />
+    <Content Include="Templates\Dialogs\AurasDialog.html" />
+    <Content Include="Templates\Dialogs\BuffsDialog.html" />
+    <Content Include="Templates\Dialogs\TalentsDialog.html" />
+    <Content Include="Templates\Dialogs\GuildTalentsDialog.html" />
+    <Content Include="Templates\Dialogs\ConsumablesDialog.html" />
+    <Content Include="Templates\Dialogs\ElixirsDialog.html" />
+    <Content Include="Templates\EditStatBodyControl.html" />
+    <Content Include="Templates\EquipmentStampControl.html" />
+    <Content Include="Templates\DisplayStatBodyControl.html" />
+    <Content Include="Templates\GuildTalentControl.html" />
+    <Content Include="Templates\TextTemplateControl.html" />
+    <Content Include="Templates\TalentDescriptionControl.html" />
+    <Content Include="Templates\TalentControl.html" />
+    <Content Include="Templates\TalentBranchBodyControl.html" />
+    <Content Include="Templates\EquipmentToolTipControl.html" />
+    <Content Include="Templates\StatsControl.html" />
+    <Content Include="Templates\EquipmentsControl.html" />
+    <Content Include="Templates\StatControl.html" />
+    <Content Include="Templates\EditStatControl.html" />
+    <Content Include="Templates\EquipmentControl.html" />
+    <Content Include="_Images\About.png" />
+    <Content Include="_Images\cat.jpg" />
+    <Content Include="_Images\favicon.png" />
+    <Content Include="_Images\loading.gif" />
+    <Content Include="_Images\minus.png" />
+    <Content Include="_Images\NewChar.png" />
+    <Content Include="_Images\plus.png" />
+    <Content Include="_Images\up.png" />
+    <Content Include="_Scripts\GuildTalentBuildApplicationContextBase.js" />
+    <Content Include="_Scripts\TalentBuildApplicationContextBase.js" />
+    <Content Include="_Scripts\Facade.Address.js" />
+    <Content Include="_Scripts\Models\CollectedTabModel.js" />
+    <Content Include="_Scripts\Models\CollectedStatisticModel.js" />
+    <Content Include="_Scripts\Models\CollectedGroupModel.js" />
+    <Content Include="_Scripts\Models\Dialogs\CollectionsWindowModel.js" />
+    <Content Include="_Scripts\Models\GuildTalentBranchModel.js" />
+    <Content Include="_Scripts\Models\GuildTalentModel.js" />
+    <Content Include="_Scripts\Models\TextTemplateVariableType.js" />
+    <Content Include="_Scripts\GuildTalentBuildCalc.js" />
+    <Content Include="_Scripts\GuildTalentBuildApplicationContext.js" />
+    <Content Include="_Scripts\TalentBuildCalc.js" />
+    <Content Include="_Scripts\TalentBuildApplicationContext.js" />
+    <Content Include="_Scripts\CharacterApplicationContext.js" />
+    <Content Include="_Scripts\Models\UpdateModel.js" />
+    <Content Include="_Scripts\Models\Dialogs\CardsWindowModel.js" />
+    <Content Include="_Scripts\Models\Dialogs\StampsWindowModel.js" />
+    <Content Include="_Scripts\Models\Dialogs\EquipmentsWindowModel.js" />
+    <Content Include="_Scripts\Models\Dialogs\AurasWindowModel.js" />
+    <Content Include="_Scripts\Models\Dialogs\BuffsWindowModel.js" />
+    <Content Include="_Scripts\Models\Dialogs\TalentsWindowModel.js" />
+    <Content Include="_Scripts\Models\CardDescriptionModel.js" />
+    <Content Include="_Scripts\Models\StaticImageType.js" />
+    <Content Include="_Scripts\Models\TalentBranchModel.js" />
+    <Content Include="_Scripts\Models\TextTemplateModel.js" />
+    <Content Include="_Scripts\Models\TalentDescriptionModel.js" />
+    <Content Include="_Scripts\Models\TalentModel.js" />
+    <Content Include="_Scripts\Models\Dialogs\GuildTalentsWindowModel.js" />
+    <Content Include="_Scripts\Models\Dialogs\ConsumablesWindowModel.js" />
+    <Content Include="_Scripts\Models\Dialogs\ElixirsWindowModel.js" />
+    <Content Include="_Scripts\Models\DisplayStatModel.js" />
+    <Content Include="_Scripts\Models\CharacterStatEditModel.js" />
+    <Content Include="_Scripts\Models\ActiveImageModel.js" />
+    <Content Include="_Scripts\Models\EquipmentChangeModel.js" />
+    <Content Include="_Scripts\Models\EquipmentCardModel.js" />
+    <Content Include="_Scripts\Models\MainHelper.js" />
+    <Content Include="_Scripts\DialogManager.js" />
+    <Content Include="_Scripts\_Libs\indeterminate.js" />
+    <Content Include="_Scripts\_Libs\analytics.js" />
+    <Content Include="_Scripts\_Libs\Dialog.js" />
+    <Content Include="_Scripts\_Libs\GridModel.js" />
+    <Content Include="_Scripts\_Libs\ObjHelper.js" />
+    <Content Include="_Scripts\_Libs\Enumerable.js" />
+    <Content Include="_Scripts\_Libs\jquery.blockUI.js" />
+    <Content Include="_Scripts\_Libs\AsyncMonad.js" />
+    <Content Include="_Scripts\Models\CharacterChangeModel.js" />
+    <Content Include="_Scripts\Models\CharacterWindowModel.js" />
+    <Content Include="_Scripts\_Libs\LoadTemplates.js" />
+    <Content Include="_Scripts\Facade.js" />
+    <Content Include="_Scripts\CharacterCalc.js" />
+    <Content Include="_Styles\Default.css" />
+    <Content Include="index.html" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="_Styles\Modal.css" />
+    <Content Include="_Styles\Tooltip.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="_Scripts\Models\EquipmentDataChangeModel.js" />
+    <Content Include="_Scripts\Models\StatConst.js" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>25848</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:25898/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
